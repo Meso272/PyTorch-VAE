@@ -8,7 +8,10 @@ import torch.backends.cudnn as cudnn
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TestTubeLogger
 
+from pytorch_lightning.callbacks import ModelCheckpoint
 
+
+trainer = Trainer()
 parser = argparse.ArgumentParser(description='Generic runner for VAE models')
 parser.add_argument('--config',  '-c',
                     dest="filename",
@@ -41,15 +44,26 @@ model = vae_models[config['model_params']['name']](**config['model_params'])
 experiment = VAEXperiment(model,
                           config['exp_params'])
 
-runner = Trainer(default_root_dir=f"{tt_logger.save_dir}",
-                 min_epochs=1,
+# DEFAULTS used by the Trainer
+checkpoint_callback = ModelCheckpoint(
+    filepath=f"{tt_logger.save_dir}",
+    save_top_k=3,
+    verbose=True,
+    monitor='checkpoint_on',
+    mode='min',
+    prefix=''
+)
+
+runner = Trainer(min_epochs=1,
                  logger=tt_logger,
-                 log_save_interval=5,
+                 log_save_interval=100,
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
                  early_stop_callback = False,
+                 checkpoint_callback=checkpoint_callback,
                  **config['trainer_params'])
 
 print(f"======= Training {config['model_params']['name']} =======")
 runner.fit(experiment)
+runner.save_checkpoint("example.ckpt")
