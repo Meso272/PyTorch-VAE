@@ -46,7 +46,7 @@ experiment = VAEXperiment(model,
 
 # DEFAULTS used by the Trainer
 checkpoint_callback = ModelCheckpoint(
-    filepath=f"{tt_logger.save_dir}",
+    filepath="iwaeckpt/",
     save_top_k=3,
     verbose=True,
     monitor='checkpoint_on',
