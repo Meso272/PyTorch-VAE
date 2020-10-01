@@ -47,9 +47,9 @@ experiment = VAEXperiment(model,
 # DEFAULTS used by the Trainer
 checkpoint_callback = ModelCheckpoint(
     filepath="iwaeckpt/",
-    save_top_k=3,
+    save_top_k=1,
     verbose=True,
-    monitor='checkpoint_on',
+    monitor='val_loss',
     mode='min',
     prefix=''
 )
