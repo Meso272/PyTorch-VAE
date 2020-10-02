@@ -9,7 +9,7 @@ from torchvision import transforms
 import torchvision.utils as vutils
 from torchvision.datasets import CelebA
 from torch.utils.data import DataLoader
-
+from cesm import CLDHGH
 
 class VAEXperiment(pl.LightningModule):
 
@@ -61,8 +61,10 @@ class VAEXperiment(pl.LightningModule):
         tensorboard_logs = {'avg_val_loss': avg_loss}
         self.sample_images()
         return {'val_loss': avg_loss, 'log': tensorboard_logs}
-
+    
     def sample_images(self):
+        if self.params['dataset'] != 'celeba':
+            return
         # Get sample reconstruction image
         test_input, test_label = next(iter(self.sample_dataloader))
         test_input = test_input.to(self.curr_device)
@@ -141,6 +143,8 @@ class VAEXperiment(pl.LightningModule):
                              split = "train",
                              transform=transform,
                              download=True)
+        elif self.params['dataset'] == 'cesm':
+            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'])
         else:
             raise ValueError('Undefined dataset type')
 
@@ -155,10 +159,15 @@ class VAEXperiment(pl.LightningModule):
         transform = self.data_transforms()
 
         if self.params['dataset'] == 'celeba':
-            self.sample_dataloader =  DataLoader(CelebA(root = self.params['data_path'],
-                                                        split = "test",
-                                                        transform=transform,
-                                                        download=True),
+            celeba=CelebA(root = self.params['data_path'],split = "test",transform=transform,download=True)
+            self.sample_dataloader =  DataLoader(celeba,
+                                                 batch_size= 144,
+                                                 shuffle = True,
+                                                 drop_last=True)
+            self.num_val_imgs = len(self.sample_dataloader)
+        elif self.params['dataset'] == 'cesm':
+            dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'])
+            self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
                                                  drop_last=True)
