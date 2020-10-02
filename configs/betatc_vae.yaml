@@ -20,9 +20,10 @@ trainer_params:
   gpus: [1]
   #max_nb_epochs: 50
   max_epochs: 100
-  save_dir: "ckpts/BetaTCVAE"
+  
 
 logging_params:
+  ckpt_save_dir: "ckpts/BetaTCVAE"
   save_dir: "logs/"
   name: "BetaTCVAE"
   manual_seed: 1265

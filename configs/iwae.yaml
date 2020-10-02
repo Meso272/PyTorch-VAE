@@ -17,9 +17,10 @@ trainer_params:
   gpus: [5]
   
   max_epochs: 100
-  save_dir: "ckpts/IWAE"
   
+
 logging_params:
+  ckpt_save_dir: "ckpts/IWAE"
   save_dir: "logs/"
   name: "IWAE"
   manual_seed: 1265

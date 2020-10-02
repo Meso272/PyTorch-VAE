@@ -18,9 +18,10 @@ trainer_params:
   gpus: [7]
   #max_nb_epochs: 50
   max_epochs: 100
-  save_dir: "ckpts/MIWAE"
+
 
 logging_params:
+  ckpt_save_dir: "ckpts/MIWAE"
   save_dir: "logs/"
   name: "MIWAE"
   manual_seed: 1265

@@ -21,9 +21,10 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 100
   gradient_clip_val: 0.8
-  save_dir: "ckpts/InfoVAE"
+
 
 logging_params:
+  ckpt_save_dir: "ckpts/InfoVAE"
   save_dir: "logs/"
   name: "InfoVAE"
   manual_seed: 1265
