@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset
 import numpy as np
-class CLDHGH(dataset):
+class CLDHGH(Dataset):
     def __init__(self,path,start,end,size):
         height=1800
         width=3600
