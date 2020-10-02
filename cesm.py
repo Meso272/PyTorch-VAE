@@ -22,7 +22,7 @@ class CLDHGH(Dataset):
                     padx=size-pict.shape[0]
                     pady=size-pict.shape[1]
                     pict=np.pad(pict,((0,padx),(0,pady)))
-                    pict=np.expand_dims(pict,2)
+                    pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                     picts.append(pict)
         self.picts=np.array(picts)
