@@ -15,7 +15,7 @@ class DIPVAE(BaseVAE):
                  lambda_offdiag: float = 5.,
                  **kwargs) -> None:
         super(DIPVAE, self).__init__()
-
+        self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.lambda_diag = lambda_diag
         self.lambda_offdiag = lambda_offdiag
@@ -71,7 +71,7 @@ class DIPVAE(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= 3,
+                            nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 

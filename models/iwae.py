@@ -14,7 +14,7 @@ class IWAE(BaseVAE):
                  num_samples: int = 5,
                  **kwargs) -> None:
         super(IWAE, self).__init__()
-
+        self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.num_samples = num_samples
 
@@ -71,7 +71,7 @@ class IWAE(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= 3,
+                            nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 
