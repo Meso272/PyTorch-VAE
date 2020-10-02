@@ -46,7 +46,7 @@ experiment = VAEXperiment(model,
 
 # DEFAULTS used by the Trainer
 checkpoint_callback = ModelCheckpoint(
-    filepath=config['trainer_params']['save_dir'],
+    filepath=config['logging_params']['ckpt_save_dir'],
     save_top_k=-1,
     verbose=True,
     monitor='val_loss',
@@ -67,4 +67,4 @@ runner = Trainer(min_epochs=1,
 
 print(f"======= Training {config['model_params']['name']} =======")
 runner.fit(experiment)
-runner.save_checkpoint(config['trainer_params']['save_dir']+"/last.ckpt")
+runner.save_checkpoint(config['logging_params']['ckpt_save_dir']+"/last.ckpt")
