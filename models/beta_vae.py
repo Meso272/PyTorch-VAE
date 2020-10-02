@@ -20,7 +20,7 @@ class BetaVAE(BaseVAE):
                  loss_type:str = 'B',
                  **kwargs) -> None:
         super(BetaVAE, self).__init__()
-
+        self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.beta = beta
         self.gamma = gamma
@@ -81,7 +81,7 @@ class BetaVAE(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= 3,
+                            nn.Conv2d(hidden_dims[-1], out_channels=self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 
