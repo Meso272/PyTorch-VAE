@@ -189,6 +189,11 @@ class VAEXperiment(pl.LightningModule):
                                             transforms.ToTensor(),
                                             SetRange])
         else:
-            raise ValueError('Undefined dataset type')
+            transform = transforms.Compose([transforms.RandomHorizontalFlip(),
+                                            transforms.CenterCrop(148),
+                                            transforms.Resize(self.params['img_size']),
+                                            transforms.ToTensor(),
+                                            SetRange])
+            #raise ValueError('Undefined dataset type')
         return transform
 
