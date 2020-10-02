@@ -29,4 +29,4 @@ class CLDHGH(Dataset):
     def __len__(self):
         return self.picts.shape[0]
     def __getitem__(self,idx):
-        return self.picts[idx]
+        return self.picts[idx],0
