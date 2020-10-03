@@ -16,7 +16,7 @@ class WAE_MMD(BaseVAE):
                  latent_var: float = 2.,
                  **kwargs) -> None:
         super(WAE_MMD, self).__init__()
-
+        self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
         self.kernel_type = kernel_type
@@ -74,7 +74,7 @@ class WAE_MMD(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= 3,
+                            nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 

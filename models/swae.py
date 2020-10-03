@@ -18,7 +18,7 @@ class SWAE(BaseVAE):
                  projection_dist: str = 'normal',
                     **kwargs) -> None:
         super(SWAE, self).__init__()
-
+        self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
         self.p = wasserstein_deg
@@ -77,7 +77,7 @@ class SWAE(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= 3,
+                            nn.Conv2d(hidden_dims[-1], out_channels= self.in_channelss,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 
