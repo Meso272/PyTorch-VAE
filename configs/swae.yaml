@@ -22,7 +22,8 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  save_dir: "ckpts/SWAE"
+  ckpt_save_dir: "ckpts/SWAE"
+  save_dir: "logs/"
   name: "SWAE"
   manual_seed: 1265
 

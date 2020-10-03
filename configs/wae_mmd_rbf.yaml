@@ -20,7 +20,8 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  save_dir: "ckpts/WassersteinVAE_RBF"
+  ckpt_save_dir: "ckpts/WassersteinVAE_RBF"
+  save_dir: "logs/"
   name: "WassersteinVAE_RBF"
   manual_seed: 1265
 

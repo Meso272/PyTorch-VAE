@@ -18,6 +18,7 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  save_dir: "ckpts/VampVAE"
+  ckpt_save_dir: "ckpts/VampVAE"
+  save_dir: "logs/"
   name: "VampVAE"
   manual_seed: 1265

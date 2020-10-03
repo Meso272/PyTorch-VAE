@@ -18,6 +18,7 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  save_dir: "ckpts/VanillaVAE"
+  ckpt_save_dir: "ckpts/VanillaVAE"
+  save_dir: "logs/"
   name: "VanillaVAE"
   manual_seed: 1265

@@ -20,7 +20,8 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  save_dir: "ckpts/WassersteinVAE_IMQ"
+  ckpt_save_dir: "ckpts/WassersteinVAE_IMQ"
+  save_dir: "logs/"
   name: "WassersteinVAE_IMQ"
   manual_seed: 1265
 
