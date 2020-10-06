@@ -118,16 +118,16 @@ class VampVAE(BaseVAE):
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         mu, log_var = self.encode(input)
         z = self.reparameterize(mu, log_var)
-        return  [self.decode(z), input, mu, log_var, z]
+        return  [self.decode(z), input, z,mu, log_var]
 
     def loss_function(self,
                       *args,
                       **kwargs) -> dict:
         recons = args[0]
         input = args[1]
-        mu = args[2]
-        log_var = args[3]
-        z = args[4]
+        mu = args[3]
+        log_var = args[4]
+        z = args[2]
 
         kld_weight = kwargs['M_N'] # Account for the minibatch samples from the dataset
         recons_loss =F.mse_loss(recons, input)

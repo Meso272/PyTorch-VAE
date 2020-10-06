@@ -124,7 +124,7 @@ class IWAE(BaseVAE):
         log_var = log_var.repeat(self.num_samples, 1, 1).permute(1, 0, 2) # [B x S x D]
         z= self.reparameterize(mu, log_var) # [B x S x D]
         eps = (z - mu) / log_var # Prior samples
-        return  [self.decode(z), input, mu, log_var, z, eps]
+        return  [self.decode(z), input, z,mu, log_var, eps]
 
     def loss_function(self,
                       *args,
@@ -137,9 +137,9 @@ class IWAE(BaseVAE):
         """
         recons = args[0]
         input = args[1]
-        mu = args[2]
-        log_var = args[3]
-        z = args[4]
+        mu = args[3]
+        log_var = args[4]
+        z = args[2]
         eps = args[5]
 
         input = input.repeat(self.num_samples, 1, 1, 1, 1).permute(1, 0, 2, 3, 4) #[B x S x C x H x W]

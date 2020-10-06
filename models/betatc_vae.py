@@ -127,7 +127,7 @@ class BetaTCVAE(BaseVAE):
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         mu, log_var = self.encode(input)
         z = self.reparameterize(mu, log_var)
-        return  [self.decode(z), input, mu, log_var, z]
+        return  [self.decode(z), input, z,mu, log_var]
 
     def log_density_gaussian(self, x: Tensor, mu: Tensor, logvar: Tensor):
         """
@@ -154,9 +154,9 @@ class BetaTCVAE(BaseVAE):
             
         recons = args[0]
         input = args[1]
-        mu = args[2]
+        mu = args[4]
         log_var = args[3]
-        z = args[4]
+        z = args[2]
 
         weight = 1 #kwargs['M_N']  # Account for the minibatch samples from the dataset
 

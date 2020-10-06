@@ -19,7 +19,7 @@ exp_params:
 trainer_params:
   gpus: [4]
   #max_nb_epochs: 50
-  max_epochs: 100
+  max_epochs: 101
   gradient_clip_val: 0.8
 
 
