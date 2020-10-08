@@ -64,13 +64,13 @@ parser.add_argument('--quant',  '-q',type='str'
                    )
 parser.add_argument('--unpred',  '-u',type='str'
                    )
-parser.add_argument('--bits',  '-b',type='int'
+parser.add_argument('--bits',  '-b',type='int'，
                    default=32)
-parser.add_argument('--height',  '-h',type='int'
+parser.add_argument('--height',  '-h',type='int'，
                    default=1800)
-parser.add_argument('--width',  '-w',type='int'
+parser.add_argument('--width',  '-w',type='int'，
                    default=3600)
-parser.add_argument('--size','-s',type='int'
+parser.add_argument('--size','-s',type='int'，
                    default=64)
 args = parser.parse_args()
 
