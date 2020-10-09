@@ -123,7 +123,8 @@ if args.bits==32:
         bar=BitArray(float=element,length=32)   
         bs="".join([str(int(x)) for x in bar])
 
-        latents.append(int(r'0b'+ bs))
+        latents.append(eval(r'0b'+ bs))
+
 
     idx=0
     for x in range(0,height,size):
