@@ -120,7 +120,10 @@ if args.bits==32:
     temp_latents=zs.flatten()
     latents=[]
     for element in list(temp_latents):
-        latents.append(int(r'0b'+BitArray(float=element,length=32).tostring() ))
+        bar=BitArray(float=element,length=32)   
+        bs="".join([str(int(x)) for x in bar])
+
+        latents.append(int(r'0b'+ bs))
 
     idx=0
     for x in range(0,height,size):
