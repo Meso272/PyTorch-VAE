@@ -81,8 +81,8 @@ with open(args.filename, 'r') as file:
     except yaml.YAMLError as exc:
         print(exc)
 
-model = vae_models[config['model_params']['name']](**config['model_params'])
-test = VAEXperiment(model,config['exp_params']).load_from_checkpoint(args.ckpt)
+#model = vae_models[config['model_params']['name']](**config['model_params'])
+test = VAEXperiment.load_from_checkpoint(args.ckpt)
 
 array=np.fromfile(args.input,dtype=np.float32)
 height=args.height
