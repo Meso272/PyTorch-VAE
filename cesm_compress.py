@@ -64,6 +64,10 @@ parser.add_argument('--quant',  '-q',type=str
                    )
 parser.add_argument('--unpred',  '-u',type=str
                    )
+parser.add_argument('-recon',  '-r',type=str
+                   )
+parser.add_argument('--decomp',  '-d',type=str
+                   )
 parser.add_argument('--bits',  '-b',type=int,
                    default=32)
 parser.add_argument('--height',  '-hgt',type=int,
@@ -112,7 +116,7 @@ zs=outputs[2].detach().numpy()
 #predict=outputs[0].numpy()
 qs=[]
 us=[]
-#decomp=np.zeros((height,width),dtype=np.float32)
+recon=np.zeros((height,width),dtype=np.float32)
 eb=args.error*rng
 
 if args.bits==32:
@@ -136,15 +140,17 @@ if args.bits==32:
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
+                    recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
                     if quant==0:
                         us.append(decomp)
+                    array[a][b]=decomp
             idx=idx+1
 
 else:
     radius=2**args.bits
-    
+    rs=outputs[0].detach().numpy()
     zmin=np.min(zs)
     zmax=np.max(zs)
     latents=[]
@@ -164,10 +170,12 @@ else:
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
+                    recon[a][b]=rs[idx][0][a-x][b-y]
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
                     if quant==0:
                         us.append(decomp)
+                    array[a][b]=decomp
             idx=idx+1
 latents=np.array(latents,dtype=np.int32)
 quants=np.array(qs,dtype=np.int32)
@@ -175,3 +183,5 @@ unpreds=np.array(us,dtype=np.float32)
 latents.tofile(args.latents)
 quants.tofile(args.quant)
 unpreds.tofile(args.unpred)
+recon.tofile(args.recon)
+array.tofile(args.decomp)
