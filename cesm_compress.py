@@ -86,10 +86,11 @@ test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 
-array=np.fromfile(args.input,dtype=np.float32)
+
 height=args.height
 width=args.width
 size=args.size
+array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
 for x in range(0,height,size):
     for y in range(0,width,size):
         endx=min(x+size,height)
