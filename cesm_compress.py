@@ -113,9 +113,9 @@ zs=outputs[2]
 qs=[]
 us=[]
 #decomp=np.zeros((height,width),dtype=np.float32)
-eb=args.e*rng
+eb=args.error*rng
 
-if args.b==32:
+if args.bits==32:
     predict=outputs[0].numpy()
     temp_latents=zs.numpy().flatten()
     latents=[]
@@ -139,7 +139,7 @@ if args.b==32:
             idx=idx+1
 
 else:
-    radius=2**args.b
+    radius=2**args.bits
     zmin=np.min(zs.numpy())
     zmax=np.max(zs.numpy())
     latents=[]
