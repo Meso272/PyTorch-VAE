@@ -82,12 +82,12 @@ with open(args.filename, 'r') as file:
         print(exc)
 
 model = vae_models[config['model_params']['name']](**config['model_params'])
-test = VAEXperiment(model,config['exp_params']).load_from_checkpoint(args.k)
+test = VAEXperiment(model,config['exp_params']).load_from_checkpoint(args.ckpt)
 
-array=np.fromfile(args.i,dtype=np.float32)
-height=args.h
-width=args.w
-size=args.s
+array=np.fromfile(args.input,dtype=np.float32)
+height=args.height
+width=args.width
+size=args.size
 for x in range(0,height,size):
     for y in range(0,width,size):
         endx=min(x+size,height)
@@ -163,6 +163,6 @@ else:
 latents=np.array(latents,dtype=np.int32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
-latents.tofile(args.l)
-quants.tofile(args.q)
-unpreds.tofile(args.u)
+latents.tofile(args.latents)
+quants.tofile(args.quant)
+unpreds.tofile(args.unpred)
