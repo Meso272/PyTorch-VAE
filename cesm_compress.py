@@ -108,7 +108,7 @@ minimum=np.min(picts)
 maximum=np.max(picts)
 rng=maximum-minimum
 outputs=test(torch.from_numpy(picts))
-zs=outputs[2]
+zs=outputs[2].detach().numpy()
 #predict=outputs[0].numpy()
 qs=[]
 us=[]
@@ -116,8 +116,8 @@ us=[]
 eb=args.error*rng
 
 if args.bits==32:
-    predict=outputs[0].numpy()
-    temp_latents=zs.numpy().flatten()
+    predict=outputs[0].detach().numpy()
+    temp_latents=zs.flatten()
     latents=[]
     for element in list(temp_latents):
         latents.append(int('0b'+BitArray(float=element,length=32)))
@@ -140,15 +140,16 @@ if args.bits==32:
 
 else:
     radius=2**args.bits
-    zmin=np.min(zs.numpy())
-    zmax=np.max(zs.numpy())
+    
+    zmin=np.min(zs)
+    zmax=np.max(zs)
     latents=[]
     for i in range(zs.shape[0]):
         for j in range(zs.shape[1]):
             tmp=int((zs[i][j]-zmin)*radius/(zmax-zmin))
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
-    predict=test.model.decode(zs).numpy()
+    predict=test.model.decode(torch.from_numpy(zs)).detach().numpy()
     idx=0
     for x in range(0,height,size):
         for y in range(0,width,size):
