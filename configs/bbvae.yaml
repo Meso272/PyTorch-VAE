@@ -1,7 +1,7 @@
 model_params:
   name: 'BetaVAE'
   in_channels: 1
-  latent_dim: 64
+  latent_dim: 128
   loss_type: 'B'
   gamma: 10.0
   max_capacity: 25
@@ -23,7 +23,7 @@ trainer_params:
   
 
 logging_params:
-  ckpt_save_dir: "ckpts/BetaVAE_B"
+  ckpt_save_dir: "ckpts/BetaVAE_B128"
   save_dir: "logs/"
   name: "BetaVAE_B"
   manual_seed: 1265

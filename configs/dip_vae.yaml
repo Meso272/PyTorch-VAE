@@ -1,7 +1,7 @@
 model_params:
   name: 'DIPVAE'
   in_channels: 1
-  latent_dim: 64
+  latent_dim: 128
   lambda_diag: 0.05
   lambda_offdiag: 0.1
 
@@ -16,13 +16,13 @@ exp_params:
   scheduler_gamma: 0.97
 
 trainer_params:
-  gpus: [3]
+  gpus: [1]
   #max_nb_epochs: 50
   max_epochs: 101
   
 
 logging_params:
-  ckpt_save_dir: "ckpts/DIPVAE"
+  ckpt_save_dir: "ckpts/DIPVAE128"
   save_dir: "logs/"
   name: "DIPVAE"
   manual_seed: 1265

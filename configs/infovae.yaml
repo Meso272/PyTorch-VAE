@@ -1,7 +1,7 @@
 model_params:
   name: 'InfoVAE'
   in_channels: 1
-  latent_dim: 64
+  latent_dim: 128
   reg_weight: 110  # MMD weight
   kernel_type: 'imq'
   alpha: -9.0     # KLD weight
@@ -17,14 +17,14 @@ exp_params:
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [4]
+  gpus: [2]
   #max_nb_epochs: 50
   max_epochs: 101
   gradient_clip_val: 0.8
 
 
 logging_params:
-  ckpt_save_dir: "ckpts/InfoVAE"
+  ckpt_save_dir: "ckpts/InfoVAE128"
   save_dir: "logs/"
   name: "InfoVAE"
   manual_seed: 1265
