@@ -52,7 +52,7 @@ checkpoint_callback = ModelCheckpoint(
     #monitor='val_loss',
     mode='min',
     prefix='',
-    period=1
+    period=20
 )
 
 runner = Trainer(min_epochs=1,
