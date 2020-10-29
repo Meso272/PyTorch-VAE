@@ -10,6 +10,7 @@ import torchvision.utils as vutils
 from torchvision.datasets import CelebA
 from torch.utils.data import DataLoader
 from cesm import CLDHGH
+from exaalt import EXAALT
 
 class VAEXperiment(pl.LightningModule):
 
@@ -145,6 +146,8 @@ class VAEXperiment(pl.LightningModule):
                              download=True)
         elif self.params['dataset'] == 'cesm':
             dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'])
+        elif self.params['dataset'] == 'exaalt':
+            dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
         else:
             raise ValueError('Undefined dataset type')
 
@@ -167,6 +170,13 @@ class VAEXperiment(pl.LightningModule):
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'cesm':
             dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'])
+            self.sample_dataloader =  DataLoader(dataset,
+                                                 batch_size= 144,
+                                                 shuffle = True,
+                                                 drop_last=True)
+            self.num_val_imgs = len(self.sample_dataloader)
+        elif self.params['dataset'] == 'exaalt':
+            dataset=EXAALT(path=self.params['data_path'],start=4000,end=4400)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
