@@ -15,7 +15,7 @@ class WAE_MMD_1D(BaseVAE):
                  kernel_type: str = 'imq',
                  latent_var: float = 2.,
                  **kwargs) -> None:
-        super(WAE_MMD, self).__init__()
+        super(WAE_MMD_1D, self).__init__()
         self.in_dim=in_dim
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
