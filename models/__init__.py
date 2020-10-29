@@ -21,7 +21,7 @@ from .miwae import *
 from .vq_vae import *
 from .betatc_vae import *
 from .dip_vae import *
-
+from .wae_mmd_1d import *
 
 # Aliases
 VAE = VanillaVAE
@@ -40,6 +40,7 @@ vae_models = {'HVAE':HVAE,
               'BetaVAE':BetaVAE,
               'InfoVAE':InfoVAE,
               'WAE_MMD':WAE_MMD,
+              'WAE_MMD_1D':WAE_MMD_1D,
               'VampVAE': VampVAE,
               'GammaVAE':GammaVAE,
               'MSSIMVAE':MSSIMVAE,
