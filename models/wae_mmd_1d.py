@@ -60,7 +60,7 @@ class WAE_MMD_1D(BaseVAE):
         self.decoder = nn.Sequential(*modules)
 
         self.final_layer = nn.Sequential(
-                            nn.Conv2d(hidden_dims[-1], self.in_dim,),
+                            nn.Linear(hidden_dims[-1], self.in_dim),
                             nn.Tanh())
 
     def encode(self, input: Tensor) -> Tensor:
