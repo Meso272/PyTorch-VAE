@@ -11,7 +11,9 @@ class EXAALT(Dataset):
         filename="xx.dat" 
         filepath=os.path.join(path,filename)
         array=np.fromfile(filepath,dtype=np.float32).reshape((seq_num,seq_length))
-        self.array=array[start:end,:]
+        mx=np.max(array)
+        mi=np.min(array)
+        self.array=(array[start:end,:]-mi)/(mx-mi);
         
     def __len__(self):
         return self.array.shape[0]
