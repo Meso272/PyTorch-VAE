@@ -88,7 +88,7 @@ test.load_state_dict(checkpoint['state_dict'])
 
 num_instance=5423-4400
 ins_dim=3137
-array=np.fromfile(args.input,dtype=np.float32).reshape((num_instance,ins_dim))
+array=np.fromfile(args.input,dtype=np.float32).reshape((5423,ins_dim))
 mx=np.max(array)
 mi=np.min(array)
 array=array[4400:]
