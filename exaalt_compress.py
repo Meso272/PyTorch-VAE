@@ -86,14 +86,14 @@ checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 
 
-
-array=np.fromfile(args.input,dtype=np.float32).reshape((5423,3137))
+num_instance=5423-4400
+ins_dim=3137
+array=np.fromfile(args.input,dtype=np.float32).reshape((num_instance,ins_dim))
 mx=np.max(array)
 mi=np.min(array)
 array=array[4400:]
 input_array=(array-mi)/(mx-mi)
-num_instance=5423-4400
-ins_dim=3137
+
 
 
 minimum=np.min(array)
