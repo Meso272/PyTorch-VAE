@@ -40,13 +40,13 @@ class SWAE_1D(BaseVAE):
             in_dim = h_dim
 
         self.encoder = nn.Sequential(*modules)
-        self.fc_z = nn.Linear(hidden_dims[-1]*4, latent_dim)
+        self.fc_z = nn.Linear(hidden_dims[-1], latent_dim)
 
 
         # Build Decoder
         modules = []
 
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * 4)
+        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] )
 
         hidden_dims.reverse()
 
