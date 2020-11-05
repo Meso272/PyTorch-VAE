@@ -17,7 +17,7 @@ class SWAE_1D(BaseVAE):
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
                     **kwargs) -> None:
-        super(SWAE, self).__init__()
+        super(SWAE_1D, self).__init__()
         self.in_dim=in_dim
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
