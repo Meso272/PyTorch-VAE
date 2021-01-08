@@ -38,7 +38,8 @@ class SWAE_EXPAND(BaseVAE):
                  reg_weight,
                  wasserstein_deg,
                  num_projections,
-                 projection_dist).load_state_dict(state_dict=dct)
+                 projection_dist)
+        self.model.load_state_dict(state_dict=dct)
         for para in self.model.parameters():
             para.requires_grad = True
 
