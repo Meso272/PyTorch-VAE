@@ -49,6 +49,7 @@ vae_models = {'HVAE':HVAE,
               'JointVAE':JointVAE,
               'BetaTCVAE':BetaTCVAE,
               'FactorVAE':FactorVAE,
+              'SWAE_EXPAND':SWAE_EXPAND
               'LogCoshVAE':LogCoshVAE,
               'VanillaVAE':VanillaVAE,
               'ConditionalVAE':ConditionalVAE,
