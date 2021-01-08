@@ -5,7 +5,7 @@ model_params:
   reg_weight: 100
   wasserstein_deg: 2.0
   num_projections: 200
-  projection_dist: "normal", #"cauchy"
+  projection_dist: "normal" #"cauchy"
   pretrained_layers: "/home/jliu447/lossycompression/PyTorch-VAE/ckpts/SWAE128/last.ckpt"
 
 exp_params:
