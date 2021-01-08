@@ -28,7 +28,6 @@ class SWAE_EXPAND(BaseVAE):
         checkpoint = torch.load(pretrained_layers, map_location=lambda storage, loc: storage)
         self.model=SWAE(in_channels,
                  latent_dim,
-                 pretrained_layers,
                  hidden_dims,
                  reg_weight,
                  wasserstein_deg,
