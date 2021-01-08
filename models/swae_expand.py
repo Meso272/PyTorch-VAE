@@ -48,7 +48,7 @@ class SWAE_EXPAND(BaseVAE):
 
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         a = self.model(input)
-        return  a,input
+        return  a[0],input
     def loss_function(self,
                       *args,
                       **kwargs) -> dict:
