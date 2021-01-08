@@ -23,6 +23,7 @@ from .betatc_vae import *
 from .dip_vae import *
 from .wae_mmd_1d import *
 from .swae_1d import *
+from .swae_expand import * 
 # Aliases
 VAE = VanillaVAE
 GaussianVAE = VanillaVAE
