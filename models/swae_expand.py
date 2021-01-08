@@ -41,7 +41,7 @@ class SWAE_EXPAND(BaseVAE):
                  projection_dist)
         self.model.load_state_dict(state_dict=dct)
         for para in self.model.parameters():
-            para.requires_grad = True
+            para.requires_grad = False
 
 
     
