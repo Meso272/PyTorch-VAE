@@ -4,7 +4,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch import distributions as dist
 from .types_ import *
-
+from .swae import *
 
 class SWAE_EXPAND(BaseVAE):
 
@@ -18,7 +18,7 @@ class SWAE_EXPAND(BaseVAE):
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
                     **kwargs) -> None:
-        super(SWAE, self).__init__()
+        super(SWAE_EXPAND, self).__init__()
         self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
