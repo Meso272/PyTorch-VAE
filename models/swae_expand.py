@@ -25,8 +25,9 @@ class SWAE_EXPAND(BaseVAE):
         self.p = wasserstein_deg
         self.num_projections = num_projections
         self.proj_dist = projection_dist
+        checkpoint = torch.load(pretrained_layers, map_location=lambda storage, loc: storage)
+        self.model=SWAE.load_state_dict(checkpoint['state_dict'])
 
-        self.model=SWAE.load_from_checkpoint(pretrained_layers)
 
     
 
