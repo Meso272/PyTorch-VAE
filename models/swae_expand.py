@@ -27,7 +27,8 @@ class SWAE_EXPAND(BaseVAE):
         self.proj_dist = projection_dist
         checkpoint = torch.load(pretrained_layers, map_location=lambda storage, loc: storage)
         dct=checkpoint['state_dict']
-        for param in dct:
+        params=list(dct.keys())
+        for param in params:
             a=dct[param]
             dct[param[6:]]=a
             del dct[param]
