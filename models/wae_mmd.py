@@ -79,7 +79,7 @@ class WAE_MMD(BaseVAE):
                                        kernel_size=3,
                                        stride = 1,
                                        padding=1,
-                                       output_padding=1),##added layer
+                                       output_padding=0),##added layer
                             nn.ConvTranspose2d(hidden_dims[-1],
                                                hidden_dims[-1],
                                                kernel_size=3,
