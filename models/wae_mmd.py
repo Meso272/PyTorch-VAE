@@ -30,6 +30,8 @@ class WAE_MMD(BaseVAE):
         for h_dim in hidden_dims:
             modules.append(
                 nn.Sequential(
+                    nn.Conv2d(in_channels, out_channels=in_channels,
+                              kernel_size= 3, stride= 1, padding  = 1),###added layer
                     nn.Conv2d(in_channels, out_channels=h_dim,
                               kernel_size= 3, stride= 2, padding  = 1),
                     nn.BatchNorm2d(h_dim),
@@ -52,6 +54,12 @@ class WAE_MMD(BaseVAE):
             modules.append(
                 nn.Sequential(
                     nn.ConvTranspose2d(hidden_dims[i],
+                                       hidden_dims[i],
+                                       kernel_size=3,
+                                       stride = 1,
+                                       padding=1,
+                                       output_padding=1),##added layer
+                    nn.ConvTranspose2d(hidden_dims[i],
                                        hidden_dims[i + 1],
                                        kernel_size=3,
                                        stride = 2,
@@ -65,7 +73,13 @@ class WAE_MMD(BaseVAE):
 
         self.decoder = nn.Sequential(*modules)
 
-        self.final_layer = nn.Sequential(
+        self.final_layer_1 = nn.Sequential(
+                            nn.ConvTranspose2d(hidden_dims[-1],
+                                       hidden_dims[-1],
+                                       kernel_size=3,
+                                       stride = 1,
+                                       padding=1,
+                                       output_padding=1),##added layer
                             nn.ConvTranspose2d(hidden_dims[-1],
                                                hidden_dims[-1],
                                                kernel_size=3,
@@ -74,7 +88,8 @@ class WAE_MMD(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
-                            nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
+                            )
+        self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
 
@@ -97,13 +112,20 @@ class WAE_MMD(BaseVAE):
         result = self.decoder_input(z)
         result = result.view(-1, 512, 2, 2)
         result = self.decoder(result)
-        result = self.final_layer(result)
+        result = self.final_layer_1(result)
+        result = self.final_layer_2(result)
         return result
 
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         z = self.encode(input)
         return  [self.decode(z), input, z]
-
+    def get_features(self, input: Tensor, **kwargs)-> Tensor:
+        z=self.encode(input)
+        result = self.decoder_input(z)
+        result = result.view(-1, 512, 2, 2)
+        result = self.decoder(result)
+        result = self.final_layer_1(result)
+        return result
     def loss_function(self,
                       *args,
                       **kwargs) -> dict:
