@@ -1,5 +1,5 @@
 model_params:
-  name: 'SWAE'
+  name: 'SWAE_PLUS'
   in_channels: 1
   latent_dim: 64
   reg_weight: 100
