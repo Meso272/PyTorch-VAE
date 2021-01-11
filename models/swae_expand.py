@@ -17,7 +17,7 @@ class SWAE_EXPAND(BaseVAE):
                  wasserstein_deg: float= 2.,
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
-                 full_train:int=1
+                 full_train:int=1,
                     **kwargs) -> None:
         super(SWAE_EXPAND, self).__init__()
         self.in_channels=in_channels
