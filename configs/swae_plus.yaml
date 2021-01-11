@@ -22,9 +22,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts/SWAE_64_doublelayer"
+  ckpt_save_dir: "ckpts/SWAE_64_doublelayer_plus_reconlayers_doubleoutput"
   save_dir: "logs/"
-  name: "SWAE_64_doublelayer"
+  name: "SWAE_64_doublelayer_plus_reconlayers_doubleoutput"
   manual_seed: 1265
 
 

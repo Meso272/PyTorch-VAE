@@ -24,6 +24,7 @@ from .dip_vae import *
 from .wae_mmd_1d import *
 from .swae_1d import *
 from .swae_expand import * 
+from .swae_plus import *
 # Aliases
 VAE = VanillaVAE
 GaussianVAE = VanillaVAE
@@ -34,7 +35,8 @@ vae_models = {'HVAE':HVAE,
               'LVAE':LVAE,
               'IWAE':IWAE,
               'SWAE':SWAE,
-
+              'SWAE_PLUS':SWAE_PLUS,
+              'SWAE_EXPAND':SWAE_EXPAND,
               'SWAE_1D':SWAE_1D,
               'MIWAE':MIWAE,
               'VQVAE':VQVAE,

@@ -6,7 +6,7 @@ from torch import distributions as dist
 from .types_ import *
 
 
-class SWAE(BaseVAE):
+class SWAE_PLUS(BaseVAE):
 
     def __init__(self,
                  in_channels: int,
@@ -17,7 +17,7 @@ class SWAE(BaseVAE):
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
                     **kwargs) -> None:
-        super(SWAE, self).__init__()
+        super(SWAE_PLUS, self).__init__()
         self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
@@ -95,7 +95,28 @@ class SWAE(BaseVAE):
         self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
-        
+        modules=[]
+        modules.append(
+          nn.Sequential(
+            nn.Conv2d(self.in_channels, out_channels= 64,
+                                      kernel_size= 3, padding= 1),
+            nn.LeakyReLU())
+          )
+        for i in range(5):
+          modules.append(
+          nn.Sequential(
+            nn.Conv2d(64, out_channels= 64,
+                                      kernel_size= 3, padding= 1),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU())
+          )
+        modules.append(
+          nn.Sequential(
+            nn.Conv2d(64, out_channels= self.in_channels,
+                                      kernel_size= 3, padding= 1),
+            nn.Tanh())
+          )
+        self.final_layer_3=nn.Sequential(*modules)
 
     def encode(self, input: Tensor) -> Tensor:
         """
@@ -118,7 +139,7 @@ class SWAE(BaseVAE):
         result = self.decoder(result)
         result = self.final_layer_1(result)
         result= self.final_layer_2(result)
-        
+        result= self.final_layer_3(result)
         return result
 
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
