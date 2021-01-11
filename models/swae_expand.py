@@ -17,6 +17,7 @@ class SWAE_EXPAND(BaseVAE):
                  wasserstein_deg: float= 2.,
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
+                 full_train:int=1
                     **kwargs) -> None:
         super(SWAE_EXPAND, self).__init__()
         self.in_channels=in_channels
@@ -25,6 +26,8 @@ class SWAE_EXPAND(BaseVAE):
         self.p = wasserstein_deg
         self.num_projections = num_projections
         self.proj_dist = projection_dist
+        self.full_train=full_train
+
         checkpoint = torch.load(pretrained_layers, map_location=lambda storage, loc: storage)
         dct=checkpoint['state_dict']
         params=list(dct.keys())
@@ -41,14 +44,51 @@ class SWAE_EXPAND(BaseVAE):
                  projection_dist)
         self.model.load_state_dict(state_dict=dct)
         for para in self.model.parameters():
-            para.requires_grad = False
+            para.requires_grad = self.full_train
 
 
-    
+        modules=[]
+        modules.append(
+          nn.Sequential(
+            nn.Conv2d(self.in_channels, out_channels= 64,
+                                      kernel_size= 3, padding= 1),
+            nn.LeakyReLU())
+          )
+        for i in range(5):
+          modules.append(
+          nn.Sequential(
+            nn.Conv2d(64, out_channels= 64,
+                                      kernel_size= 3, padding= 1),
+            nn.BatchNorm2d(64),
+            nn.LeakyReLU())
+          )
+        modules.append(
+          nn.Sequential(
+            nn.Conv2d(64, out_channels= self.in_channels,
+                                      kernel_size= 3, padding= 1),
+            nn.Tanh())
+          )
+        self.final_layer_3=nn.Sequential(*modules)
+
+
+    def encode(self, input: Tensor) -> Tensor:
+        """
+        Encodes the input by passing through the encoder network
+        and returns the latent codes.
+        :param input: (Tensor) Input tensor to encoder [N x C x H x W]
+        :return: (Tensor) List of latent codes
+        """
+        return self.model.encode(input)
+
+    def decode(self, z: Tensor) -> Tensor:
+        result=self.model.decode(z)
+        decode=self.final_layer_3(result)
+        return result
 
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
-        a = self.model(input)
-        return  a[0],input
+        decode,inp,z = self.model(input)
+        decode=self.final_layer_3(decode)
+        return  decode,inp,z
     def loss_function(self,
                       *args,
                       **kwargs) -> dict:
