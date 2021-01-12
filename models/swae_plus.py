@@ -96,9 +96,20 @@ class SWAE_PLUS(BaseVAE):
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
         modules=[]
+        '''doubleout
+
         modules.append(
           nn.Sequential(
             nn.Conv2d(self.in_channels, out_channels= 64,
+                                      kernel_size= 3, padding= 1),
+            nn.LeakyReLU())
+          )
+          '''
+
+        #singleout
+        modules.append(
+          nn.Sequential(
+            nn.Conv2d(hidden_dims[-1], out_channels= 64,
                                       kernel_size= 3, padding= 1),
             nn.LeakyReLU())
           )
@@ -138,7 +149,7 @@ class SWAE_PLUS(BaseVAE):
         result = result.view(-1, 512, 2, 2)
         result = self.decoder(result)
         result = self.final_layer_1(result)
-        result= self.final_layer_2(result)
+        #result= self.final_layer_2(result)  ##doubleout
         result= self.final_layer_3(result)
         return result
 

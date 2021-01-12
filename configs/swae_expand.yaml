@@ -7,7 +7,7 @@ model_params:
   num_projections: 200
   projection_dist: "normal" #"cauchy"
   pretrained_layers: "/home/jliu447/lossycompression/PyTorch-VAE/ckpts/SWAE_64_doublelayer/last.ckpt"
-  full_train: 1
+  full_train: 0
 
 exp_params:
   dataset: cesm
@@ -24,9 +24,9 @@ trainer_params:
   max_epochs: 51
 
 logging_params:
-  ckpt_save_dir: "ckpts/SWAE_64_expand_doubleoutput_fulltrain"
+  ckpt_save_dir: "ckpts/SWAE_64_expand_doubleoutput_parttrain"
   save_dir: "logs/"
-  name: "SWAE_64_expand_doubleoutput_fulltrain"
+  name: "SWAE_64_expand_doubleoutput_parttrain"
   manual_seed: 1265
 
 
