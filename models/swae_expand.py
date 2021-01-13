@@ -51,7 +51,7 @@ class SWAE_EXPAND(BaseVAE):
         modules.append(
           nn.Sequential(
             #nn.Conv2d(self.in_channels, out_channels= 64,kernel_size= 3, padding= 1),#doubleout
-            nn.Conv2d(32, out_channels= 64,kernel_size= 3, padding= 1)#singleout
+            nn.Conv2d(32, out_channels= 64,kernel_size= 3, padding= 1),#singleout
             nn.LeakyReLU())
           )
         for i in range(5):
