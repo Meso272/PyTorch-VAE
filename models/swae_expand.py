@@ -50,8 +50,8 @@ class SWAE_EXPAND(BaseVAE):
         modules=[]
         modules.append(
           nn.Sequential(
-            #nn.Conv2d(self.in_channels, out_channels= 64,kernel_size= 3, padding= 1),#doubleout
-            nn.Conv2d(32, out_channels= 64,kernel_size= 3, padding= 1),#singleout
+            nn.Conv2d(self.in_channels, out_channels= 64,kernel_size= 3, padding= 1),#doubleout
+            #nn.Conv2d(32, out_channels= 64,kernel_size= 3, padding= 1),#singleout
             nn.LeakyReLU())
           )
         for i in range(5):
@@ -82,26 +82,29 @@ class SWAE_EXPAND(BaseVAE):
 
     def decode(self, z: Tensor) -> Tensor:
         #doubleout
-        '''
+        
         result=self.model.decode(z)
-        decode=self.final_layer_3(result)
-        '''
+        result=self.final_layer_3(result)
+        
         #singleout
+        '''
         result = self.model.decoder_input(z)
         result = result.view(-1, 512, 2, 2)
         result = self.model.decoder(result)
         result = self.model.final_layer_1(result)
         result = self.final_layer_3(result)
+        '''
         return result
 
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         #doubleout
-        '''
+        
         decode,inp,z = self.model(input)
         decode=self.final_layer_3(decode)
-        '''
+        return [decode,inp,z]
+        
         #singleout
-        z=self.encode(input)
+        #z=self.encode(input)
         
         return  [self.decode(z),input,z]
     def loss_function(self,
