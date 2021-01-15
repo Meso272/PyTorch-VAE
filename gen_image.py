@@ -2,6 +2,9 @@ import os
 ifolder="/home/jliu447/lossycompression/PyTorch-VAE/compress64_plus_expand"
 ofolder="/home/jliu447/lossycompression/PyTorch-VAE/images"
 for file in os.listdir(ifolder):
+    if "." not in file :
+        continue
+
     if file.split(".")[0][-1]!='r' and file.split(".")[0][-1]!='d':
         continue
     i=os.path.join(ifolder,file)
