@@ -1,7 +1,9 @@
 import os
 ifolder="/home/jliu447/lossycompression/PyTorch-VAE/compress64_plus_expand"
 ofolder="/home/jliu447/lossycompression/PyTorch-VAE/images"
-for file in os.listdir(ifolder):
+
+filelist=list(os.listdir(ifolder))
+for file in filelist:
 
     if "." not in file :
         continue
