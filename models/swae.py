@@ -30,7 +30,7 @@ class SWAE(BaseVAE):
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256, 512]
        
-        ratio=(input_size/(2**len(hidden_dims)))**2
+        ratio=int((input_size/(2**len(hidden_dims)))**2)
         # Build Encoder
         for h_dim in hidden_dims:
             modules.append(
