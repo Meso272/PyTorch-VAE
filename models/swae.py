@@ -25,12 +25,12 @@ class SWAE(BaseVAE):
         self.p = wasserstein_deg
         self.num_projections = num_projections
         self.proj_dist = projection_dist
-
+        
         modules = []
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256, 512]
-       
-        ratio=int((input_size/(2**len(hidden_dims)))**2)
+        self.last_fm_nums=hidden_dims[-1]
+        self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
         # Build Encoder
         for h_dim in hidden_dims:
             modules.append(
@@ -46,13 +46,13 @@ class SWAE(BaseVAE):
 
         self.encoder = nn.Sequential(*modules)
 
-        self.fc_z = nn.Linear(hidden_dims[-1]*ratio, latent_dim)
+        self.fc_z = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
 
 
         # Build Decoder
         modules = []
 
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * ratio)
+        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_fm_size*self.last_fm_size)
 
         hidden_dims.reverse()
 
@@ -117,7 +117,7 @@ class SWAE(BaseVAE):
 
     def decode(self, z: Tensor) -> Tensor:
         result = self.decoder_input(z)
-        result = result.view(-1, 512, 2, 2)
+        result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer_1(result)
         result= self.final_layer_2(result)
@@ -130,7 +130,7 @@ class SWAE(BaseVAE):
     def get_features(self, input: Tensor, **kwargs)-> Tensor:
         z=self.encode(input)
         result = self.decoder_input(z)
-        result = result.view(-1, 512, 2, 2)
+        result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer_1(result)
         return result
