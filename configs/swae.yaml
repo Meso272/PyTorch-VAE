@@ -1,6 +1,7 @@
 model_params:
   name: 'SWAE'
   in_channels: 1
+  input_size: 16
   latent_dim: 4
   reg_weight: 100
   hidden_dims: [16,32,64,128]
