@@ -11,6 +11,7 @@ class SWAE(BaseVAE):
     def __init__(self,
                  in_channels: int,
                  latent_dim: int,
+                 input_size:int,
                  hidden_dims: List = None,
                  reg_weight: int = 100,
                  wasserstein_deg: float= 2.,
@@ -28,7 +29,8 @@ class SWAE(BaseVAE):
         modules = []
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256, 512]
-
+       
+        ratio=(input_size/(2**len(hidden_dims)))**2
         # Build Encoder
         for h_dim in hidden_dims:
             modules.append(
@@ -43,13 +45,14 @@ class SWAE(BaseVAE):
             in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
-        self.fc_z = nn.Linear(hidden_dims[-1]*4, latent_dim)
+
+        self.fc_z = nn.Linear(hidden_dims[-1]*ratio, latent_dim)
 
 
         # Build Decoder
         modules = []
 
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * 4)
+        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * ratio)
 
         hidden_dims.reverse()
 
