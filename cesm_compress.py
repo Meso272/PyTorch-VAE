@@ -97,25 +97,27 @@ test.load_state_dict(checkpoint['state_dict'])
 height=args.height
 width=args.width
 size=args.size
-if args.mode=="c":
-    array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
-    picts=[]
-    for x in range(0,height,size):
-        for y in range(0,width,size):
-            endx=min(x+size,height)
-            endy=min(y+size,width)
-            pict=array[x:endx,y:endy]
-            padx=size-pict.shape[0]
-            pady=size-pict.shape[1]
-            pict=np.pad(pict,((0,padx),(0,pady)))
-            pict=np.expand_dims(pict,0)
+
+array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
+picts=[]
+for x in range(0,height,size):
+    for y in range(0,width,size):
+        endx=min(x+size,height)
+        endy=min(y+size,width)
+        pict=array[x:endx,y:endy]
+        padx=size-pict.shape[0]
+        pady=size-pict.shape[1]
+        pict=np.pad(pict,((0,padx),(0,pady)))
+        pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
-            picts.append(pict)
-    picts=np.array(picts)
-    minimum=np.min(picts)
-    maximum=np.max(picts)
-    rng=maximum-minimum
-    outputs=test(torch.from_numpy(picts))
+        picts.append(pict)
+picts=np.array(picts)
+minimum=np.min(picts)
+maximum=np.max(picts)
+rng=maximum-minimum
+outputs=test(torch.from_numpy(picts))
+
+if args.mode=="c":
     zs=outputs[2].detach().numpy()
     predict=outputs[0].detach().numpy()
     
