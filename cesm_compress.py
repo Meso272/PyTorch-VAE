@@ -121,7 +121,7 @@ if args.mode=="c":
     
 
 else:
-    zs=np.fromfile(args.input,dtype=np.float32).reshape((-1,args.lsize))
+    zs=np.fromfile(args.latents,dtype=np.float32).reshape((-1,args.lsize))
     predict=test.model.decode(torch.from_numpy(zs)).detach().numpy()
     
 #predict=outputs[0].numpy()
