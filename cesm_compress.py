@@ -54,19 +54,22 @@ parser.add_argument('--config',  '-c',
                     default='configs/vae.yaml')
 parser.add_argument('--ckpt',  '-k',type=str
                    )
+parser.add_argument('--mode',  '-m',type=str,default="c"
+                   )
+parser.add_argument('--lsize','-ls',type=int,default=0)
 parser.add_argument('--input',  '-i',type=str
                    )
-parser.add_argument('--error',  '-e',type=float
+parser.add_argument('--error',  '-e',type=float,default=1e-2
                    )
-parser.add_argument('--latents',  '-l',type=str
+parser.add_argument('--latents',  '-l',type=str,default=None
                    )
-parser.add_argument('--quant',  '-q',type=str
+parser.add_argument('--quant',  '-q',type=str,default=None
                    )
-parser.add_argument('--unpred',  '-u',type=str
+parser.add_argument('--unpred',  '-u',type=str,default=None
                    )
-parser.add_argument('-recon',  '-r',type=str
+parser.add_argument('-recon',  '-r',type=str,default=None
                    )
-parser.add_argument('--decomp',  '-d',type=str
+parser.add_argument('--decomp',  '-d',type=str,default=None
                    )
 parser.add_argument('--bits',  '-b',type=int,
                    default=32)
@@ -94,40 +97,52 @@ test.load_state_dict(checkpoint['state_dict'])
 height=args.height
 width=args.width
 size=args.size
-array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
-picts=[]
-for x in range(0,height,size):
-    for y in range(0,width,size):
-        endx=min(x+size,height)
-        endy=min(y+size,width)
-        pict=array[x:endx,y:endy]
-        padx=size-pict.shape[0]
-        pady=size-pict.shape[1]
-        pict=np.pad(pict,((0,padx),(0,pady)))
-        pict=np.expand_dims(pict,0)
+if args.mode=="c":
+    array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
+    picts=[]
+    for x in range(0,height,size):
+        for y in range(0,width,size):
+            endx=min(x+size,height)
+            endy=min(y+size,width)
+            pict=array[x:endx,y:endy]
+            padx=size-pict.shape[0]
+            pady=size-pict.shape[1]
+            pict=np.pad(pict,((0,padx),(0,pady)))
+            pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
-        picts.append(pict)
-picts=np.array(picts)
-minimum=np.min(picts)
-maximum=np.max(picts)
-rng=maximum-minimum
-outputs=test(torch.from_numpy(picts))
-zs=outputs[2].detach().numpy()
+            picts.append(pict)
+    picts=np.array(picts)
+    minimum=np.min(picts)
+    maximum=np.max(picts)
+    rng=maximum-minimum
+    outputs=test(torch.from_numpy(picts))
+    zs=outputs[2].detach().numpy()
+    predict=outputs[0].detach().numpy()
+    
+
+else:
+    zs=np.fromfile(args.input,dtype=np.float32).reshape((-1,args.lsize))
+    predict=test.model.decode(torch.from_numpy(zs)).detach().numpy()
+    
 #predict=outputs[0].numpy()
+print(zs.size)
 qs=[]
 us=[]
 recon=np.zeros((height,width),dtype=np.float32)
 eb=args.error*rng
 
 if args.bits==32:
-    predict=outputs[0].detach().numpy()
+    
     temp_latents=zs.flatten()
+    '''
     latents=[]
     for element in list(temp_latents):
         bar=BitArray(float=element,length=32)   
         bs="".join([str(int(x)) for x in bar])
 
         latents.append(eval(r'0b'+ bs))
+    '''
+    latents=temp_latents
 
 
     idx=0
@@ -177,11 +192,17 @@ else:
                         us.append(decomp)
                     array[a][b]=decomp
             idx=idx+1
-latents=np.array(latents,dtype=np.int32)
+
+latents=np.array(latents,dtype=np.float32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
-latents.tofile(args.latents)
-quants.tofile(args.quant)
-unpreds.tofile(args.unpred)
-recon.tofile(args.recon)
-array.tofile(args.decomp)
+if args.latents!=None and args.mode=="c":
+    latents.tofile(args.latents)
+if args.quant!=None:
+    quants.tofile(args.quant)
+if args.unpred!=None:
+    unpreds.tofile(args.unpred)
+if args.recon!=None:
+    recon.tofile(args.recon)
+if args.decomp!=None:
+    array.tofile(args.decomp)
