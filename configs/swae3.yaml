@@ -13,7 +13,7 @@ exp_params:
   dataset: cesm
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 16
-  batch_size: 144 # Better to have a square number
+  batch_size: 64 # Better to have a square number
   LR: 0.005
   weight_decay: 0.0
   scheduler_gamma: 0.95
@@ -24,9 +24,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs144_3264128256"
+  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs64_3264128256"
   save_dir: "logs/"
-  name: "SWAE_1616_4_doublelayer_bs144_3264128256"
+  name: "SWAE_1616_4_doublelayer_bs64_3264128256"
   manual_seed: 1265
 
 
