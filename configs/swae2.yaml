@@ -4,7 +4,7 @@ model_params:
   input_size: 16
   latent_dim: 4
   reg_weight: 100
-  hidden_dims: [16,32,64,128]
+  hidden_dims: [16,32,64,128,256]
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
@@ -13,7 +13,7 @@ exp_params:
   dataset: cesm
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 16
-  batch_size: 576 # Better to have a square number
+  batch_size: 144 # Better to have a square number
   LR: 0.005
   weight_decay: 0.0
   scheduler_gamma: 0.95
@@ -24,9 +24,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs576"
+  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs144_163264128256"
   save_dir: "logs/"
-  name: "SWAE_1616_4_doublelayer_bs576"
+  name: "SWAE_1616_4_doublelayer_bs144_163264128256"
   manual_seed: 1265
 
 
