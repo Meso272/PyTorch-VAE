@@ -11,7 +11,7 @@ class SWAE(BaseVAE):
     def __init__(self,
                  in_channels: int,
                  latent_dim: int,
-                 input_size:int,
+                 input_size:int = 64,
                  hidden_dims: List = None,
                  reg_weight: int = 100,
                  wasserstein_deg: float= 2.,
