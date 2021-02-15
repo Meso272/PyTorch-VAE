@@ -14,19 +14,19 @@ exp_params:
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 16
   batch_size: 64 # Better to have a square number
-  LR: 0.001
+  LR: 0.009
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [2]
+  gpus: [4]
   #max_nb_epochs: 50
   max_epochs: 201
 
 logging_params:
-  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs64_3264128256_lr1"
+  ckpt_save_dir: "ckpts/SWAE_1616_4_doublelayer_bs64_3264128256_lr9"
   save_dir: "logs/"
-  name: "SWAE_1616_4_doublelayer_bs64_3264128256_lr1"
+  name: "SWAE_1616_4_doublelayer_bs64_3264128256_lr9"
   manual_seed: 1265
 
 
