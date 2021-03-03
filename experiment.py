@@ -143,13 +143,13 @@ class VAEXperiment(pl.LightningModule):
             dataset = CelebA(root = self.params['data_path'],
                              split = "train",
                              transform=transform,
-                             download=True)
+                             download=True,num_workers=0)
         elif self.params['dataset'] == 'cesm':
-            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'])
+            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],num_workers=0)
         elif self.params['dataset'] == 'exaalt':
-            dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
+            dataset=EXAALT(path=self.params['data_path'],start=0,end=4000,num_workers=0)
         elif self.params['dataset'] == 'aramco':
-            dataset=ARAMCO(path=self.params['data_path'],start=1400,end=1500,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
+            dataset=ARAMCO(path=self.params['data_path'],start=1400,end=1500,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512,num_workers=0)
         else:
             raise ValueError('Undefined dataset type')
 
@@ -164,28 +164,28 @@ class VAEXperiment(pl.LightningModule):
         transform = self.data_transforms()
 
         if self.params['dataset'] == 'celeba':
-            celeba=CelebA(root = self.params['data_path'],split = "test",transform=transform,download=True)
+            celeba=CelebA(root = self.params['data_path'],split = "test",transform=transform,download=True,num_workers=0)
             self.sample_dataloader =  DataLoader(celeba,
                                                  batch_size= 144,
                                                  shuffle = True,
                                                  drop_last=True)
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'cesm':
-            dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'])
+            dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'],num_workers=0)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
                                                  drop_last=True)
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'exaalt':
-            dataset=EXAALT(path=self.params['data_path'],start=4000,end=4400)
+            dataset=EXAALT(path=self.params['data_path'],start=4000,end=4400,num_workers=0)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
                                                  drop_last=True)
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'aramco':
-            dataset=ARAMCO(path=self.params['data_path'],start=1500,end=1510,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
+            dataset=ARAMCO(path=self.params['data_path'],start=1500,end=1510,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512,num_workers=0)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
