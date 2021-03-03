@@ -11,7 +11,7 @@ from torchvision.datasets import CelebA
 from torch.utils.data import DataLoader
 from cesm import CLDHGH
 from exaalt import EXAALT
-
+from aramco import ARAMCO
 class VAEXperiment(pl.LightningModule):
 
     def __init__(self,
