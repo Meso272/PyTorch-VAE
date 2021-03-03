@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 import numpy as np
 import os
-class CLDHGH(Dataset):
+class ARAMCO(Dataset):
     def __init__(self,path,start,end,size,global_max=None,global_min=None,norm_min=0):
         size_x=449
         size_y=449
