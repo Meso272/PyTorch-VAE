@@ -19,10 +19,12 @@ from .logcosh_vae import *
 from .swae import *
 from .miwae import *
 from .vq_vae import *
+
 from .betatc_vae import *
 from .dip_vae import *
 from .wae_mmd_1d import *
 from .swae_1d import *
+from .swae_3d import *
 from .swae_expand import * 
 from .swae_plus import *
 # Aliases
@@ -38,6 +40,7 @@ vae_models = {'HVAE':HVAE,
               'SWAE_PLUS':SWAE_PLUS,
               'SWAE_EXPAND':SWAE_EXPAND,
               'SWAE_1D':SWAE_1D,
+              'SWAE_3D':SWAE_3D,
               'MIWAE':MIWAE,
               'VQVAE':VQVAE,
               'DFCVAE':DFCVAE,

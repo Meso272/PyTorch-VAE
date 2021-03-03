@@ -148,6 +148,8 @@ class VAEXperiment(pl.LightningModule):
             dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'])
         elif self.params['dataset'] == 'exaalt':
             dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
+        elif self.params['dataset'] == 'aramco':
+            dataset=ARAMCO(path=self.params['data_path'],start=1400,end=1500,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
         else:
             raise ValueError('Undefined dataset type')
 
@@ -177,6 +179,13 @@ class VAEXperiment(pl.LightningModule):
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'exaalt':
             dataset=EXAALT(path=self.params['data_path'],start=4000,end=4400)
+            self.sample_dataloader =  DataLoader(dataset,
+                                                 batch_size= 144,
+                                                 shuffle = True,
+                                                 drop_last=True)
+            self.num_val_imgs = len(self.sample_dataloader)
+        elif self.params['dataset'] == 'aramco':
+            dataset=ARAMCO(path=self.params['data_path'],start=1500,end=1510,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
