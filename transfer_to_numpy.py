@@ -24,7 +24,7 @@ while(1):
     final[tuple(curidx)]=raw[i]
     i+=1
     curidx[-1]+=1
-    curdim=dim-1
+    curdim=dims-1
     while(curdim>0):
         if curidx[curdim]<dim[curdim] and curidx[curdim]-curblock[curdim]<block_size:
             break
@@ -33,7 +33,7 @@ while(1):
         curidx[curdim]+=1
     if curidx[0]>=dim[0] or curidx[0]-curblock[0]>=block_size:
         curblock[-1]+=block_size
-        curdim=dim-1
+        curdim=dims-1
         while(curdim>0):
             if curblock[curdim]<dim[curdim]:
                 break
