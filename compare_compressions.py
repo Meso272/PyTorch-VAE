@@ -15,8 +15,8 @@ pred1=np.fromfile(predfile1,dtype=np.float32).reshape(tuple(dim))
 
 pred2=np.fromfile(predfile2,dtype=np.float32).reshape(tuple(dim))
 curblock=[0 for _ in range(dims)]
-1win=0
-2win=0
+win1=0
+win2=0
 while(1):
 
     orislice=np.array(ori)
@@ -31,9 +31,9 @@ while(1):
     mse1=np.square(np.subtract(orislice.flatten(),pred1slice.flatten())).mean()
     mse2=np.square(np.subtract(orislice.flatten(),pred2slice.flatten())).mean()
     if mse1<mse2:
-        1win+=1
+        win1+=1
     else:
-        2win+=1
+        win2+=1
     curblock[-1]+=block_size
     curdim=dims-1
     while(curdim>0):
@@ -47,6 +47,6 @@ while(1):
         break
     
 
-print(1win)
-print(2win)
+print(win1)
+print(win2)
 
