@@ -19,18 +19,20 @@ win1=0
 win2=0
 while(1):
 
-    orislice=np.array(ori)
-    pred1slice=np.array(pred1)
-    pred2slice=np.array(pred2)
+    orislice=list(ori)
+    pred1slice=list(pred1)
+    pred2slice=list(pred2)
 
     for i,start in enumerate(curblock):
         end=min(dim[i],start+block_size)
-        print(start)
-        print(end)
+        #print(start)
+        #print(end)
         orislice=orislice[start:end]
         pred1slice=pred1slice[start:end]
         pred2slice=pred2slice[start:end]
-    print(orislice.shape)
+    orislice=np.array(orislice)
+    pred1slice=np.array(pred1slice)
+    pred2slice=np.array(pred2slice)
     mse1=np.square(np.subtract(orislice.flatten(),pred1slice.flatten())).mean()
     mse2=np.square(np.subtract(orislice.flatten(),pred2slice.flatten())).mean()
     if mse1<mse2:
