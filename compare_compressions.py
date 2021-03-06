@@ -25,6 +25,8 @@ while(1):
 
     for i,start in enumerate(curblock):
         end=min(dim[i],start+block_size)
+        print(start)
+        print(end)
         orislice=orislice[start:end]
         pred1slice=pred1slice[start:end]
         pred2slice=pred2slice[start:end]
