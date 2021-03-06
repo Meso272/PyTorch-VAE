@@ -21,7 +21,11 @@ i=0
 curblock=[0 for _ in range(dims)]
 curidx=list(curblock)
 while(1):
-    final[tuple(curidx)]=raw[i]
+    try:
+        final[tuple(curidx)]=raw[i]
+    except:
+        print(curidx)
+        print(i)
     i+=1
     curidx[-1]+=1
     curdim=dims-1
