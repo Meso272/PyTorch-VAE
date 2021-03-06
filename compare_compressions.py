@@ -14,20 +14,21 @@ ori=np.fromfile(orifile,dtype=np.float32).reshape(tuple(dim))
 pred1=np.fromfile(predfile1,dtype=np.float32).reshape(tuple(dim))
 
 pred2=np.fromfile(predfile2,dtype=np.float32).reshape(tuple(dim))
+print(ori.shape)
 curblock=[0 for _ in range(dims)]
 win1=0
 win2=0
 while(1):
 
-    orislice=list(ori)
-    pred1slice=list(pred1)
-    pred2slice=list(pred2)
+    orislice=np.array(ori)
+    pred1slice=np.array(pred1)
+    pred2slice=np.array(pred2)
 
     for i,start in enumerate(curblock):
         end=min(dim[i],start+block_size)
         #print(start)
         #print(end)
-        orislice=orislice[start:end]
+        orislice=orislice[start:end,:]
         pred1slice=pred1slice[start:end]
         pred2slice=pred2slice[start:end]
     orislice=np.array(orislice)
