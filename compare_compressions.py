@@ -24,7 +24,7 @@ while(1):
     pred2slice=np.array(pred2)
 
     for i,start in enumerate(curblock):
-        end=min(dim[i],curblock+block_size)
+        end=min(dim[i],start+block_size)
         orislice=orislice[start:end]
         pred1slice=pred1slice[start:end]
         pred2slice=pred2slice[start:end]
