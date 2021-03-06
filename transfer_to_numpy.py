@@ -21,11 +21,9 @@ i=0
 curblock=[0 for _ in range(dims)]
 curidx=list(curblock)
 while(1):
-    try:
-        final[tuple(curidx)]=raw[i]
-    except:
-        print(curidx)
-        print(i)
+
+    final[tuple(curidx)]=raw[i]
+   
     i+=1
     curidx[-1]+=1
     curdim=dims-1
@@ -44,9 +42,10 @@ while(1):
             curblock[curdim]=0
             curdim-=1
             curblock[curdim]+=block_size
+        curidx=list(curblock)
     if curblock[0]>=dim[0]:
         break
-    curidx=list(curblock)
+    
 
 print(i)
 final.tofile(ofile)
