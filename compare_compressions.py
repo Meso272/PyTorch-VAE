@@ -28,12 +28,12 @@ while(1):
         end=min(dim[i],start+block_size)
         #print(start)
         #print(end)
-        orislice=orislice[start:end,:]
-        pred1slice=pred1slice[start:end]
-        pred2slice=pred2slice[start:end]
-    orislice=np.array(orislice)
-    pred1slice=np.array(pred1slice)
-    pred2slice=np.array(pred2slice)
+        orislice=orislice.take(axis=i,indices=range(start,end))
+        pred1slice=pred1slice.take(axis=i,indices=range(start,end))
+        pred2slice=pred2slice.take(axis=i,indices=range(start,end))
+    #orislice=np.array(orislice)
+    #pred1slice=np.array(pred1slice)
+    #pred2slice=np.array(pred2slice)
     mse1=np.square(np.subtract(orislice.flatten(),pred1slice.flatten())).mean()
     mse2=np.square(np.subtract(orislice.flatten(),pred2slice.flatten())).mean()
     if mse1<mse2:
