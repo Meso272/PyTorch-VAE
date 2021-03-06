@@ -19,7 +19,7 @@ curblock=[0 for _ in range(dims)]
 win1=0
 win2=0
 while(1):
-
+    print(curblock)
     orislice=np.array(ori)
     pred1slice=np.array(pred1)
     pred2slice=np.array(pred2)
