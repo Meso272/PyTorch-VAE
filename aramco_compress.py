@@ -139,7 +139,7 @@ else:
 print(zs.size)
 qs=[]
 us=[]
-recon=np.zeros((height,width),dtype=np.float32)
+recon=np.zeros((xsize,ysize,zsize),dtype=np.float32)
 eb=args.error*rng
 
 if args.bits==32:
