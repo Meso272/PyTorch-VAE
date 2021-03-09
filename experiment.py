@@ -149,7 +149,7 @@ class VAEXperiment(pl.LightningModule):
         elif self.params['dataset'] == 'exaalt':
             dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
         elif self.params['dataset'] == 'aramco':
-            dataset=ARAMCO(path=self.params['data_path'],start=1400,end=1500,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
+            dataset=ARAMCO(path=self.params['data_path'],start=1400,end=1450,size=self.params['img_size'],global_max=0.0386,global_min=-0.0512)
         else:
             raise ValueError('Undefined dataset type')
 
