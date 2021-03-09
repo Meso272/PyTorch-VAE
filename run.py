@@ -41,8 +41,11 @@ if __name__=='__main__':
     cudnn.benchmark = False
 
     model = vae_models[config['model_params']['name']](**config['model_params'])
-    model = nn.DataParallel(model)
-    model= model.cuda()
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print (torch.cuda.current_device())
+    if torch.cuda.device_count() > 1:
+        model = nn.DataParallel(model)
+    model= model.to(device)
     experiment = VAEXperiment(model,
                               config['exp_params'])
 
