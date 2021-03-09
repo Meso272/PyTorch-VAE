@@ -56,11 +56,11 @@ class ARAMCO(Dataset):
         padz=self.size-pict.shape[2]
         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
         pict=np.expand_dims(pict,0)
-            if self.global_max!=None:
-                if self.norm_min==0:
-                    pict=(pict-self.global_min)/(self.global_max-self.global_min)
-                else:
-                    pict=(pict-self.global_min)*2/(self.global_max-self.global_min)-1
+        if self.global_max!=None:
+            if self.norm_min==0:
+                pict=(pict-self.global_min)/(self.global_max-self.global_min)
+            else:
+                pict=(pict-self.global_min)*2/(self.global_max-self.global_min)-1
         if self.cache_count<self.cache_size:
             
 
