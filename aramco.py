@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import os
 class ARAMCO(Dataset):
-    def __init__(self,path,start,end,size,global_max=None,global_min=None,norm_min=0):
+    def __init__(self,path,start,end,size,global_max=None,global_min=None,norm_min=0,cache_size=None):
         size_x=449
         size_y=449
         size_z=235
