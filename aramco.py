@@ -25,26 +25,7 @@ class ARAMCO(Dataset):
         self.path=path
         
         #print(array)
-            for x in range(0,size_x,size):
-                for y in range(0,size_y,size):
-                    for z in range(0,size_z,size):
-                        endx=min(x+size,size_x)
-                        endy=min(y+size,size_y)
-                        endz=min(z+size,size_z)
-                        pict=array[x:endx,y:endy,z:endz]
-                        padx=size-pict.shape[0]
-                        pady=size-pict.shape[1]
-                        padz=size-pict.shape[2]
-                        pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
-                        pict=np.expand_dims(pict,0)
-                        if global_max!=None:
-                            if norm_min==0:
-                                 pict=(pict-global_min)/(global_max-global_min)
-                            else:
-                                pict=(pict-global_min)*2/(global_max-global_min)-1
-                    #print(array[x:x+size,y:y+size])
-                        picts.append(pict)
-        self.picts=np.array(picts)
+      
         
     def __len__(self):
         return self.len
