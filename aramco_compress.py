@@ -125,15 +125,15 @@ with torch.no_grad():
     outputs=test(torch.from_numpy(picts).to('cuda'))
 
 if args.mode=="c":
-    zs=outputs[2].detach().numpy()
-    predict=outputs[0].detach().numpy()
+    zs=outputs[2].cpu().detach().numpy()
+    predict=outputs[0].cpu().detach().numpy()
     
 
 else:
     zs=np.fromfile(args.latents,dtype=np.float32).reshape((-1,args.lsize))
     with torch.no_grad():
     
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).detach().numpy()
+        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     
 #predict=outputs[0].numpy()
 print(zs.size)
@@ -179,7 +179,7 @@ if args.bits==32:
 
 else:
     radius=2**args.bits
-    rs=outputs[0].detach().numpy()
+    rs=outputs[0].cpu().detach().numpy()
     zmin=np.min(zs)
     zmax=np.max(zs)
     latents=[]
@@ -189,7 +189,7 @@ else:
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).detach().numpy()
+        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     idx=0
     for x in range(0,xsize,size):
         for y in range(0,ysize,size):
