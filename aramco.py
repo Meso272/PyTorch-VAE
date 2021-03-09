@@ -8,6 +8,8 @@ class ARAMCO(Dataset):
         self.size_y=449
         self.size_z=235
         self.size=size
+        self.start=start
+        self.end=end
         self.x_length=((self.size_x-1)//size+1)
         self.y_length=((self.size_y-1)//size+1)
         self.z_length=((self.size_z-1)//size+1)
@@ -33,7 +35,7 @@ class ARAMCO(Dataset):
         if idx in self.cache:
             return self.cache[idx],0
 
-        block_idx=idx//self.per_file_block_num
+        block_idx=idx//self.per_file_block_num+self.start
         local_idx=idx % self.per_file_block_num
         x_idx=local_idx//(self.y_length*self.z_length)
         temp_idx=local_idx % (self.y_length*self.z_length)
