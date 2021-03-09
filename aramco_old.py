@@ -6,9 +6,6 @@ class ARAMCO(Dataset):
         size_x=449
         size_y=449
         size_z=235
-        self.per_file_block_num=((size_x-1)//size+1)*((size_y-1)//size+1)*((size_z-1)//size+1)
-        self.x_length=
-        self.len=(end-start)*self.per_file_block_num
         picts=[]
         for i in range(start,end):
             s=str(i)
@@ -32,7 +29,7 @@ class ARAMCO(Dataset):
                         pict=np.expand_dims(pict,0)
                         if global_max!=None:
                             if norm_min==0:
-                                 pict=(pict-global_min)/(global_max-global_min)
+                                pict=(pict-global_min)/(global_max-global_min)
                             else:
                                 pict=(pict-global_min)*2/(global_max-global_min)-1
                     #print(array[x:x+size,y:y+size])
@@ -40,9 +37,6 @@ class ARAMCO(Dataset):
         self.picts=np.array(picts)
         
     def __len__(self):
-        return self.len
+        return self.picts.shape[0]
     def __getitem__(self,idx):
-        block=idx//self.per_file_block_num
-        local_idx=idx % self.per_file_block_num
-
         return self.picts[idx],0
