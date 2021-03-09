@@ -27,14 +27,15 @@ class ARAMCO(Dataset):
                         padz=size-pict.shape[2]
                         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
                         pict=np.expand_dims(pict,0)
+                        if global_max!=None:
+                            if norm_min==0:
+                                pict=(pict-global_min)/(global_max-global_min)
+                            else:
+                                pict=(pict-global_min)*2/(global_max-global_min)-1
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)
         self.picts=np.array(picts)
-        if global_max!=None:
-            if norm_min==0:
-                self.picts=(self.picts-global_min)/(global_max-global_min)
-            else:
-                self.picts=(self.picts-global_min)*2/(global_max-global_min)-1
+        
     def __len__(self):
         return self.picts.shape[0]
     def __getitem__(self,idx):
