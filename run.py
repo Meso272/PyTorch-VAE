@@ -47,7 +47,7 @@ if __name__=='__main__':
     #device = torch.device("cuda:0" if USE_CUDA else "cpu")
     
    
-    model = nn.DataParallel(model)
+    #model = nn.DataParallel(model)
     #model= model.to(device)
     experiment = VAEXperiment(model,
                               config['exp_params'])
