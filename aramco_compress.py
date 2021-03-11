@@ -83,6 +83,8 @@ parser.add_argument('--size','-s',type=int,
                    default=64)
 args = parser.parse_args()
 
+global_max=0.0386
+global_min=-0.0512
 
 with open(args.filename, 'r') as file:
     try:
@@ -113,8 +115,10 @@ for x in range(0,xsize,size):
             padx=size-pict.shape[0]
             pady=size-pict.shape[1]
             padz=size-pict.shape[2]
+
             pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
             pict=np.expand_dims(pict,0)
+            pict=(pict-global_min)/(global_max-global_min)
                     #print(array[x:x+size,y:y+size])
             picts.append(pict)
 picts=np.array(picts)
@@ -169,6 +173,7 @@ if args.bits==32:
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
                             pred=predict[idx][0][a-x][b-y][c-z]
+                            pred=pred*(global_max-global_min)+global_min
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                             qs.append(quant)
@@ -203,6 +208,7 @@ else:
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
                             pred=predict[idx][0][a-x][b-y][c-z]
+                            pred=pred*(global_max-global_min)+global_min
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                             qs.append(quant)
