@@ -123,8 +123,8 @@ with torch.no_grad():
     outputs=test(torch.from_numpy(picts).to('cuda'))
 
 if args.mode=="c":
-    zs=outputs[2].detach().numpy()
-    predict=outputs[0].detach().numpy()
+    zs=outputs[2].cpu().detach().numpy()
+    predict=outputs[0].cpu().detach().numpy()
     
 
 else:
