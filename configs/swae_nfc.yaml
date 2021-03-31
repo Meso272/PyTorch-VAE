@@ -4,7 +4,7 @@ model_params:
   input_size: 16
   latent_dim: 4
   reg_weight: 100
-  hidden_dims: [16,32,64,128]
+  hidden_dims: [4,8,8,4]
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
@@ -19,14 +19,14 @@ exp_params:
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [0,1]
+  gpus: [2,3]
   #max_nb_epochs: 50
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_new/SWAE_1616_4_doublelayer_bs64"
+  ckpt_save_dir: "ckpts_new/SWAE_1616_4_doublelayer_nfc_bs64_4884"
   save_dir: "logs/"
-  name: "SWAE_1616_4_doublelayer_bs64"
+  name: "SWAE_1616_4_doublelayer_nfc_bs64_4884"
   manual_seed: 1265
 
 

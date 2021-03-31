@@ -145,7 +145,7 @@ class VAEXperiment(pl.LightningModule):
                              transform=transform,
                              download=True)
         elif self.params['dataset'] == 'cesm':
-            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'])
+            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],normalize=True)
         elif self.params['dataset'] == 'exaalt':
             dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
         elif self.params['dataset'] == 'aramco':
@@ -171,7 +171,7 @@ class VAEXperiment(pl.LightningModule):
                                                  drop_last=True)
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] == 'cesm':
-            dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'])
+            dataset=CLDHGH(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'],normalize=True)
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,

@@ -17,9 +17,11 @@ class SWAE(BaseVAE):
                  wasserstein_deg: float= 2.,
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
+                 use_fc=True,
                     **kwargs) -> None:
         super(SWAE, self).__init__()
         self.in_channels=in_channels
+        self.use_fc=use_fc
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
         self.p = wasserstein_deg
@@ -45,8 +47,8 @@ class SWAE(BaseVAE):
             in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
-
-        self.fc_z = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
+        if self.use_fc:
+            self.fc_z = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
 
 
         # Build Decoder
@@ -112,7 +114,8 @@ class SWAE(BaseVAE):
 
         # Split the result into mu and var components
         # of the latent Gaussian distribution
-        z = self.fc_z(result)
+        if self.use_fc:
+            z = self.fc_z(result)
         return z
 
     def decode(self, z: Tensor) -> Tensor:

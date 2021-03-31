@@ -79,6 +79,7 @@ parser.add_argument('--width',  '-w',type=int,
                    default=3600)
 parser.add_argument('--size','-s',type=int,
                    default=64)
+parser.add_argument('--normalize','-n',type=int,default=1)
 args = parser.parse_args()
 
 
@@ -108,6 +109,8 @@ for x in range(0,height,size):
         padx=size-pict.shape[0]
         pady=size-pict.shape[1]
         pict=np.pad(pict,((0,padx),(0,pady)))
+        if normalize:
+            pict=pict*2-1
         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
         picts.append(pict)
@@ -157,6 +160,8 @@ if args.bits==32:
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
+                    if normalize:
+                        pred=(pred+1)/2
                     recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
@@ -187,7 +192,9 @@ else:
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
-                    recon[a][b]=rs[idx][0][a-x][b-y]
+                    if normalize:
+                        pred=(pred+1)/2
+                    recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
                     if quant==0:

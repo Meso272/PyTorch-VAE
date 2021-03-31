@@ -116,10 +116,13 @@ for x in range(0,xsize,size):
             pady=size-pict.shape[1]
             padz=size-pict.shape[2]
 
-            pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
+            
             pict=np.expand_dims(pict,0)
+
             pict=(pict-global_min)/(global_max-global_min)
+            pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
                     #print(array[x:x+size,y:y+size])
+            pict=pict*2-1
             picts.append(pict)
 picts=np.array(picts)
 minimum=np.min(picts)
@@ -173,6 +176,7 @@ if args.bits==32:
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
                             pred=predict[idx][0][a-x][b-y][c-z]
+                            pred=(pred+1)/2
                             pred=pred*(global_max-global_min)+global_min
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
@@ -208,6 +212,7 @@ else:
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
                             pred=predict[idx][0][a-x][b-y][c-z]
+                            pred=(pred+1)/2
                             pred=pred*(global_max-global_min)+global_min
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
