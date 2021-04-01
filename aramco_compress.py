@@ -80,7 +80,7 @@ parser.add_argument('--ysize',  '-y',type=int,
 parser.add_argument('--zsize',  '-z',type=int,
                    default=235)
 parser.add_argument('--size','-s',type=int,
-                   default=64)
+                   default=16)
 args = parser.parse_args()
 
 global_max=0.0386

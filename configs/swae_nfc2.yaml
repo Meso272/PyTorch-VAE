@@ -2,12 +2,13 @@ model_params:
   name: 'SWAE'
   in_channels: 1
   input_size: 32
-  latent_dim: 4
+  latent_dim: 16
   reg_weight: 100
   hidden_dims: [4,8,8,16,16]
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
+  use_fc: False
 
 exp_params:
   dataset: cesm

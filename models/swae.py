@@ -53,8 +53,8 @@ class SWAE(BaseVAE):
 
         # Build Decoder
         modules = []
-
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_fm_size*self.last_fm_size)
+        if self.use_fc:
+            self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_fm_size*self.last_fm_size)
 
         hidden_dims.reverse()
 
@@ -119,7 +119,8 @@ class SWAE(BaseVAE):
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        result = self.decoder_input(z)
+        if self.use_fc:
+            result = self.decoder_input(z)
         result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer_1(result)
