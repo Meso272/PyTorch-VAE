@@ -28,7 +28,7 @@ class LowerBound(Function):
 
 class GDN(nn.Module):
     """Generalized divisive normalization layer.
-    y[i] = x[i] / sqrt(beta[i] + sum_j(gamma[j, i] * x[j]))
+    y[i] = x[i] / sqrt(beta[i] + sum_j(gamma[j, i] * x[j]^2))
     """
   
     def __init__(self,
@@ -99,4 +99,76 @@ class GDN(nn.Module):
 
         if unfold:
             outputs = outputs.view(bs, ch, d, w, h)
+        return outputs
+
+
+
+class GDN3D(nn.Module):#unconfirmed
+    """Generalized divisive normalization layer.
+    y[i] = x[i] / sqrt(beta[i] + sum_j(gamma[j, i] * x[j]^2))
+    """
+  
+    def __init__(self,
+                 ch,
+                 device='cuda',
+                 inverse=False,
+                 beta_min=1e-6,
+                 gamma_init=.1,
+                 reparam_offset=2**-18):
+        super(GDN3D, self).__init__()
+        self.inverse = inverse
+        self.beta_min = beta_min
+        self.gamma_init = gamma_init
+        self.reparam_offset = torch.FloatTensor([reparam_offset])
+
+        self.build(ch, torch.device(device))
+  
+    def build(self, ch, device):
+        self.pedestal = self.reparam_offset**2
+        self.beta_bound = (self.beta_min + self.reparam_offset**2)**.5
+        self.gamma_bound = self.reparam_offset
+  
+        # Create beta param
+        beta = torch.sqrt(torch.ones(ch)+self.pedestal)
+        self.beta = nn.Parameter(beta.to(device))
+
+        # Create gamma param
+        eye = torch.eye(ch)
+        g = self.gamma_init*eye
+        g = g + self.pedestal
+        gamma = torch.sqrt(g)
+
+        self.gamma = nn.Parameter(gamma.to(device))
+        self.pedestal = self.pedestal.to(device)
+
+    def forward(self, inputs):
+        # Assert internal parameters to same device as input
+        self.beta = self.beta.to(inputs.device)
+        self.gamma = self.gamma.to(inputs.device)
+        self.pedestal = self.pedestal.to(inputs.device)
+
+        
+
+        _, ch, _, _ = inputs.size()
+
+        # Beta bound and reparam
+        beta = LowerBound.apply(self.beta, self.beta_bound)
+        beta = beta**2 - self.pedestal 
+
+        # Gamma bound and reparam
+        gamma = LowerBound.apply(self.gamma, self.gamma_bound)
+        gamma = gamma**2 - self.pedestal
+        gamma  = gamma.view(ch, ch, 1, 1)
+
+        # Norm pool calc
+        norm_ = nn.functional.conv3d(inputs**2, gamma, beta)
+        norm_ = torch.sqrt(norm_)
+  
+        # Apply norm
+        if self.inverse:
+            outputs = inputs * norm_
+        else:
+            outputs = inputs / norm_
+
+        
         return outputs
