@@ -144,7 +144,7 @@ else:
     
 #predict=outputs[0].numpy()
 print(zs.size)
-print(predict.size)
+
 qs=[]
 us=[]
 recon=np.zeros((xsize,ysize,zsize),dtype=np.float32)

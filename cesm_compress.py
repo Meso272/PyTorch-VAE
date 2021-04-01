@@ -136,6 +136,7 @@ else:
     
 #predict=outputs[0].numpy()
 print(zs.size)
+print(predict.size)
 qs=[]
 us=[]
 recon=np.zeros((height,width),dtype=np.float32)
@@ -169,6 +170,7 @@ if args.bits==32:
                     if args.normalize:
                         orig=(orig+1)/2
                         pred=(pred+1)/2
+                    
                     recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
