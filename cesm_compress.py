@@ -93,8 +93,7 @@ with open(args.filename, 'r') as file:
 model = vae_models[config['model_params']['name']](**config['model_params'])
 test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
-#test.load_state_dict(checkpoint['state_dict'])
-test=checkpoint
+test.load_state_dict(checkpoint['state_dict'])
 test=test.cuda()
 
 
