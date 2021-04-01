@@ -175,6 +175,8 @@ if args.bits==32:
                     for b in range(y,endy):
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
+                            orig=(orig+1)/2
+                            orig=orig*(global_max-global_min)+global_min
                             pred=predict[idx][0][a-x][b-y][c-z]
                             pred=(pred+1)/2
                             pred=pred*(global_max-global_min)+global_min
@@ -211,6 +213,8 @@ else:
                     for b in range(y,endy):
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
+                            orig=(orig+1)/2
+                            orig=orig*(global_max-global_min)+global_min
                             pred=predict[idx][0][a-x][b-y][c-z]
                             pred=(pred+1)/2
                             pred=pred*(global_max-global_min)+global_min

@@ -15,9 +15,7 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 
 def quantize(data,pred,error_bound):
     radius=32768
-    print(data)
-    print(pred)
-    print(error_bound)
+    
     diff = data - pred
     quant_index = (int) (abs(diff)/ error_bound) + 1
     #print(quant_index)
@@ -167,7 +165,9 @@ if args.bits==32:
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
+                   
                     if args.normalize:
+                        orig=(orig+1)/2
                         pred=(pred+1)/2
                     recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
@@ -201,6 +201,7 @@ else:
                     orig=picts[idx][0][a-x][b-y]
                     pred=predict[idx][0][a-x][b-y]
                     if args.normalize:
+                        orig=(orig+1)/2
                         pred=(pred+1)/2
                     recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
