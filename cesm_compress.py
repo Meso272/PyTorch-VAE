@@ -135,7 +135,7 @@ else:
         predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     
 #predict=outputs[0].numpy()
-print(zs.size)
+print(zs.shape)
 print(predict.size)
 qs=[]
 us=[]
