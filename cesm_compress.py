@@ -15,6 +15,9 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 
 def quantize(data,pred,error_bound):
     radius=32768
+    print(data)
+    print(pred)
+    print(error_bound)
     diff = data - pred
     quant_index = (int) (abs(diff)/ error_bound) + 1
     #print(quant_index)
