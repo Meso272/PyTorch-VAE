@@ -4,7 +4,80 @@ from torch import nn
 from torch.nn import functional as F
 from torch import distributions as dist
 from .types_ import *
+class GDN(nn.Module):
+    """Generalized divisive normalization layer.
+    y[i] = x[i] / sqrt(beta[i] + sum_j(gamma[j, i] * x[j]))
+    """
+  
+    def __init__(self,
+                 ch,
+                 device='cuda',
+                 inverse=False,
+                 beta_min=1e-6,
+                 gamma_init=.1,
+                 reparam_offset=2**-18):
+        super(GDN, self).__init__()
+        self.inverse = inverse
+        self.beta_min = beta_min
+        self.gamma_init = gamma_init
+        self.reparam_offset = torch.FloatTensor([reparam_offset])
 
+        self.build(ch, torch.device(device))
+  
+    def build(self, ch, device):
+        self.pedestal = self.reparam_offset**2
+        self.beta_bound = (self.beta_min + self.reparam_offset**2)**.5
+        self.gamma_bound = self.reparam_offset
+  
+        # Create beta param
+        beta = torch.sqrt(torch.ones(ch)+self.pedestal)
+        self.beta = nn.Parameter(beta.to(device))
+
+        # Create gamma param
+        eye = torch.eye(ch)
+        g = self.gamma_init*eye
+        g = g + self.pedestal
+        gamma = torch.sqrt(g)
+
+        self.gamma = nn.Parameter(gamma.to(device))
+        self.pedestal = self.pedestal.to(device)
+
+    def forward(self, inputs):
+        # Assert internal parameters to same device as input
+        self.beta = self.beta.to(inputs.device)
+        self.gamma = self.gamma.to(inputs.device)
+        self.pedestal = self.pedestal.to(inputs.device)
+
+        unfold = False
+        if inputs.dim() == 5:
+            unfold = True
+            bs, ch, d, w, h = inputs.size() 
+            inputs = inputs.view(bs, ch, d*w, h)
+
+        _, ch, _, _ = inputs.size()
+
+        # Beta bound and reparam
+        beta = LowerBound.apply(self.beta, self.beta_bound)
+        beta = beta**2 - self.pedestal 
+
+        # Gamma bound and reparam
+        gamma = LowerBound.apply(self.gamma, self.gamma_bound)
+        gamma = gamma**2 - self.pedestal
+        gamma  = gamma.view(ch, ch, 1, 1)
+
+        # Norm pool calc
+        norm_ = nn.functional.conv2d(inputs**2, gamma, beta)
+        norm_ = torch.sqrt(norm_)
+  
+        # Apply norm
+        if self.inverse:
+            outputs = inputs * norm_
+        else:
+            outputs = inputs / norm_
+
+        if unfold:
+            outputs = outputs.view(bs, ch, d, w, h)
+        return outputs
 
 class SWAE(BaseVAE):
 
@@ -18,6 +91,8 @@ class SWAE(BaseVAE):
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
                  use_fc=True,
+                 actv='leakyrelu',
+                 norm='bn',
                     **kwargs) -> None:
         super(SWAE, self).__init__()
         self.in_channels=in_channels
@@ -41,9 +116,21 @@ class SWAE(BaseVAE):
                               kernel_size= 3, stride= 1, padding  = 1),###added layer
                     nn.Conv2d(in_channels, out_channels=h_dim,
                               kernel_size= 3, stride= 2, padding  = 1),
-                    nn.BatchNorm2d(h_dim),
-                    nn.LeakyReLU())
+                    
+                    )
             )
+            if norm=='bn':
+                modules.append(nn.Sequential(nn.BatchNorm2d(h_dim)))
+
+            else:
+                pass
+
+
+            if actv=='leakyrelu':
+                modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='gdn':
+                modules.append(nn.Sequential(GDN(h_dim)))
+        
             in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
@@ -73,15 +160,27 @@ class SWAE(BaseVAE):
                                        stride = 2,
                                        padding=1,
                                        output_padding=1),
-                    nn.BatchNorm2d(hidden_dims[i + 1]),
-                    nn.LeakyReLU())
+                    )
             )
+
+            if norm=='bn':
+                modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[i + 1])))
+
+            else:
+                pass
+
+
+            if actv=='leakyrelu':
+                modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='gdn':
+                modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
 
 
 
         self.decoder = nn.Sequential(*modules)
+        modules=[]
 
-        self.final_layer_1 = nn.Sequential(
+        modules.append ( nn.Sequential(
                             nn.ConvTranspose2d(hidden_dims[-1],
                                        hidden_dims[-1],
                                        kernel_size=3,
@@ -94,9 +193,22 @@ class SWAE(BaseVAE):
                                                stride=2,
                                                padding=1,
                                                output_padding=1),
-                            nn.BatchNorm2d(hidden_dims[-1]),
-                            nn.LeakyReLU(),
-                            )
+                            
+                            ) )
+        if norm=='bn':
+            modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[-1])))
+
+        else:
+            pass
+
+
+        if actv=='leakyrelu':
+            modules.append(nn.Sequential(nn.LeakyReLU()))
+        elif actv=='gdn':
+            modules.append(nn.Sequential(GDN(hidden_dims[-1],inverse=True)))
+
+        self.final_layer_1=nn.Sequential(*modules)
+
         self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())

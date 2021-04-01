@@ -17,8 +17,12 @@ class SWAE_3D(BaseVAE):
                  wasserstein_deg: float= 2.,
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
+                 use_fc=True,
+                 actv='leakyrelu',
+                 norm='bn',
                     **kwargs) -> None:
         super(SWAE_3D, self).__init__()
+        self.use_fc=use_fc
         self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
@@ -39,20 +43,30 @@ class SWAE_3D(BaseVAE):
                               kernel_size= 3, stride= 1, padding  = 1),###added layer
                     nn.Conv3d(in_channels, out_channels=h_dim,
                               kernel_size= 3, stride= 2, padding  = 1),
-                    nn.BatchNorm3d(h_dim),
-                    nn.LeakyReLU())
+                   )
             )
+            if norm=='bn':
+                modules.append(nn.Sequential(nn.BatchNorm3d(h_dim)))
+
+            else:
+                pass
+
+
+            if actv=='leakyrelu':
+                modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='gdn':
+                modules.append(nn.Sequential(GDN(h_dim)))
             in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
-
-        self.fc_z = nn.Linear(hidden_dims[-1]*(self.last_fm_size**3), latent_dim)
+        if self.use_fc:
+            self.fc_z = nn.Linear(hidden_dims[-1]*(self.last_fm_size**3), latent_dim)
 
 
         # Build Decoder
         modules = []
-
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * (self.last_fm_size**3))
+        if self.use_fc:
+            self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * (self.last_fm_size**3))
 
         hidden_dims.reverse()
 
@@ -71,15 +85,27 @@ class SWAE_3D(BaseVAE):
                                        stride = 2,
                                        padding=1,
                                        output_padding=1),
-                    nn.BatchNorm3d(hidden_dims[i + 1]),
-                    nn.LeakyReLU())
+                    )
             )
+            if norm=='bn':
+                modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[i + 1])))
+
+            else:
+                pass
+
+
+            if actv=='leakyrelu':
+                modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='gdn':
+                modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
 
 
 
         self.decoder = nn.Sequential(*modules)
 
-        self.final_layer_1 = nn.Sequential(
+        modules=[]
+
+        modules.append ( nn.Sequential(
                             nn.ConvTranspose3d(hidden_dims[-1],
                                        hidden_dims[-1],
                                        kernel_size=3,
@@ -92,9 +118,22 @@ class SWAE_3D(BaseVAE):
                                                stride=2,
                                                padding=1,
                                                output_padding=1),
-                            nn.BatchNorm3d(hidden_dims[-1]),
-                            nn.LeakyReLU(),
-                            )
+                            
+                            ) )
+        if norm=='bn':
+            modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[-1])))
+
+        else:
+            pass
+
+
+        if actv=='leakyrelu':
+            modules.append(nn.Sequential(nn.LeakyReLU()))
+        elif actv=='gdn':
+            modules.append(nn.Sequential(GDN(hidden_dims[-1],inverse=True)))
+
+        self.final_layer_1=nn.Sequential(*modules)
+
         self.final_layer_2=nn.Sequential(nn.Conv3d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
@@ -112,11 +151,17 @@ class SWAE_3D(BaseVAE):
 
         # Split the result into mu and var components
         # of the latent Gaussian distribution
-        z = self.fc_z(result)
+        if self.use_fc:
+            z = self.fc_z(result)
+        else:
+            z =result
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        result = self.decoder_input(z)
+        if self.use_fc:
+            result = self.decoder_input(z)
+        else:
+            result=z
         result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer_1(result)
