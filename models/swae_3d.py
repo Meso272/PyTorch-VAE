@@ -55,6 +55,8 @@ class SWAE_3D(BaseVAE):
 
             if actv=='leakyrelu':
                 modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='prelu':
+                modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
                 modules.append(nn.Sequential(GDN3D(h_dim)))
             in_channels = h_dim
@@ -97,6 +99,8 @@ class SWAE_3D(BaseVAE):
 
             if actv=='leakyrelu':
                 modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='prelu':
+                modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
                 modules.append(nn.Sequential(GDN3D(hidden_dims[i + 1],inverse=True)))
 
@@ -130,6 +134,8 @@ class SWAE_3D(BaseVAE):
 
         if actv=='leakyrelu':
             modules.append(nn.Sequential(nn.LeakyReLU()))
+        elif actv=='prelu':
+            modules.append(nn.Sequential(nn.PReLU()))
         elif actv=='gdn':
             modules.append(nn.Sequential(GDN3D(hidden_dims[-1],inverse=True)))
 

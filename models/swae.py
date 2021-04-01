@@ -56,6 +56,8 @@ class SWAE(BaseVAE):
 
             if actv=='leakyrelu':
                 modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='prelu':
+                modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
                 modules.append(nn.Sequential(GDN(h_dim)))
         
@@ -100,6 +102,8 @@ class SWAE(BaseVAE):
 
             if actv=='leakyrelu':
                 modules.append(nn.Sequential(nn.LeakyReLU()))
+            elif actv=='prelu':
+                modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
                 modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
 
@@ -132,6 +136,8 @@ class SWAE(BaseVAE):
 
         if actv=='leakyrelu':
             modules.append(nn.Sequential(nn.LeakyReLU()))
+        elif actv=='prelu':
+            modules.append(nn.Sequential(nn.PReLU()))
         elif actv=='gdn':
             modules.append(nn.Sequential(GDN(hidden_dims[-1],inverse=True)))
 
