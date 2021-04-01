@@ -116,6 +116,8 @@ class SWAE(BaseVAE):
         # of the latent Gaussian distribution
         if self.use_fc:
             z = self.fc_z(result)
+        else:
+            z= result
         return z
 
     def decode(self, z: Tensor) -> Tensor:
