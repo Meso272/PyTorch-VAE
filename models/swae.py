@@ -123,6 +123,8 @@ class SWAE(BaseVAE):
     def decode(self, z: Tensor) -> Tensor:
         if self.use_fc:
             result = self.decoder_input(z)
+        else:
+            result= z
         result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer_1(result)
