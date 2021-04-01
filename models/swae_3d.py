@@ -4,6 +4,7 @@ from torch import nn
 from torch.nn import functional as F
 from torch import distributions as dist
 from .types_ import *
+from gdn import *
 
 
 class SWAE_3D(BaseVAE):
