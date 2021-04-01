@@ -67,7 +67,11 @@ for i in range(orig.size):
         r=min(r,args.global_max)
     if args.global_min!=None:
         r=max(r,args.global_min)
-
+    print(o)
+    print(r)
+    print(o-r)
+    print(eb)
+    print(woshinibaba)
 
     quant,decomp=quantize(o,r,eb)
     qs.append(quant)
