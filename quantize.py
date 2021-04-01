@@ -71,7 +71,7 @@ for i in range(orig.size):
     print(r)
     print(o-r)
     print(eb)
-    print(woshinibaba)
+    print("woshinibaba")
 
     quant,decomp=quantize(o,r,eb)
     qs.append(quant)
