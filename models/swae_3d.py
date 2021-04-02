@@ -171,7 +171,7 @@ class SWAE_3D(BaseVAE):
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        iif self.encoder_final_layer=='fc':
+        if self.encoder_final_layer=='fc':
             result = self.decoder_input(z)
         else:
             result= z
