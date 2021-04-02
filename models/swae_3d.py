@@ -173,6 +173,7 @@ class SWAE_3D(BaseVAE):
     def decode(self, z: Tensor) -> Tensor:
         if self.encoder_final_layer=='fc':
             result = self.decoder_input(z)
+            result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size,self.last_fm_size)
         else:
             result= z
             result = result.view(-1, self.latent_dim/(self.last_fm_size**3), self.last_fm_size, self.last_fm_size, self.last_fm_size)
