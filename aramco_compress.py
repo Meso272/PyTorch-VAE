@@ -86,7 +86,7 @@ args = parser.parse_args()
 global_max=0.0386
 global_min=-0.0512
 
-with open(args.filename, 'rb') as file:
+with open(args.filename, 'r') as file:
     try:
         config = yaml.safe_load(file)
     except yaml.YAMLError as exc:
