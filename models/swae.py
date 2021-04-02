@@ -76,7 +76,7 @@ class SWAE(BaseVAE):
                 elif actv=='gdn':
                     modules.append(nn.Sequential(GDN(h_dim)))
         
-                in_channels = h_dim
+            in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
         if self.use_fc:
