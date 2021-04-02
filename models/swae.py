@@ -18,14 +18,14 @@ class SWAE(BaseVAE):
                  wasserstein_deg: float= 2.,
                  num_projections: int = 50,
                  projection_dist: str = 'normal',
-                 use_fc=True,
+                 encoder_final_layer='fc',
                  actv='leakyrelu',
                  norm='bn',
                  struct='new',
                     **kwargs) -> None:
         super(SWAE, self).__init__()
         self.in_channels=in_channels
-        self.use_fc=use_fc
+        self.encoder_final_layer=encoder_final_layer
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
         self.p = wasserstein_deg
@@ -77,17 +77,23 @@ class SWAE(BaseVAE):
                     modules.append(nn.Sequential(GDN(h_dim)))
         
             in_channels = h_dim
-
+        if self.encoder_final_layer=='conv':
+            modules.append(nn.Sequential( nn.Conv2d(hidden_dims[-1], out_channels=latent_dim/(self.last_fm_size**2),
+                                  kernel_size= 1, stride= 1, padding  = 1) ) )
         self.encoder = nn.Sequential(*modules)
-        if self.use_fc:
+        if self.encoder_final_layer=='fc':
             self.fc_z = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
+        
 
 
         # Build Decoder
-        modules = []
-        if self.use_fc:
+        if self.encoder_final_layer=='fc':
             self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_fm_size*self.last_fm_size)
-
+        elif self.encoder_final_layer=='conv':
+            self.decoder_input = nn.ConvTranspose2d(latent_dim/(self.last_fm_size**2), out_channels=hidden_dims[-1],
+                                  kernel_size= 1, stride= 1, padding  = 1,output_padding=0)
+        modules = []
+        
         hidden_dims.reverse()
    
         for i in range(len(hidden_dims) - 1):
@@ -220,18 +226,20 @@ class SWAE(BaseVAE):
 
         # Split the result into mu and var components
         # of the latent Gaussian distribution
-        if self.use_fc:
+        if self.encoder_final_layer=='fc':
             z = self.fc_z(result)
         else:
             z= result
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        if self.use_fc:
+        if self.encoder_final_layer=='fc':
             result = self.decoder_input(z)
         else:
             result= z
-        result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
+            result = result.view(-1, self.latent_dim/(self.last_fm_size**2), self.last_fm_size, self.last_fm_size)
+            if self.encoder_final_layer=='conv':
+                result = self.decoder_input(result)
         result = self.decoder(result)
         result = self.final_layer_1(result)
         result= self.final_layer_2(result)
@@ -241,7 +249,7 @@ class SWAE(BaseVAE):
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         z = self.encode(input)
         return  [self.decode(z), input, z]
-    def get_features(self, input: Tensor, **kwargs)-> Tensor:
+    def get_features(self, input: Tensor, **kwargs)-> Tensor:##need correction
         z=self.encode(input)
         result = self.decoder_input(z)
         result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)

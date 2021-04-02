@@ -27,7 +27,7 @@ trainer_params:
 logging_params:
   ckpt_save_dir: "ckpts_new/SWAE_1616_4_doublelayer_prelu_bs64"
   save_dir: "logs/"
-  name: "SWAE_1616_4_doublelayer_gdn_bs64"
+  name: "SWAE_1616_4_doublelayer_prelu_bs64"
   manual_seed: 1265
 
 
