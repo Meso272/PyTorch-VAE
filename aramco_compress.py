@@ -144,7 +144,7 @@ if args.mode=="c":
 else:
     zs=np.fromfile(args.latents,dtype=np.float32)
     if args.transpose:
-        zs=zs.reshape((args.lsize,-1).transpose())
+        zs=zs.reshape((args.lsize,-1)).transpose()
     else:
         zs=zs.reshape((-1,args.lsize))
     with torch.no_grad():
