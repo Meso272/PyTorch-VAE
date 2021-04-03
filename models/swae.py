@@ -152,7 +152,7 @@ class SWAE(BaseVAE):
                 elif actv=='gdn':
                     modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
 
-
+     
 
         self.decoder = nn.Sequential(*modules)
         
@@ -213,7 +213,8 @@ class SWAE(BaseVAE):
         self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
-        
+        if self.quant_mode==1:
+          self.rounder=Round_1()
 
     def encode(self, input: Tensor) -> Tensor:
         """
@@ -232,7 +233,7 @@ class SWAE(BaseVAE):
         else:
             z= result
         if self.quant_mode==1:
-          z=Round_1(z)
+          z=self.rounder(z)
         return z
 
     def decode(self, z: Tensor) -> Tensor:
