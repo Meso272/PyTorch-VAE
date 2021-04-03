@@ -23,7 +23,7 @@ class SWAE_3D(BaseVAE):
                  norm='bn',
                     **kwargs) -> None:
         super(SWAE_3D, self).__init__()
-        self.use_fc=use_fc
+        self.encoder_final_layer=encoder_final_layer
         self.in_channels=in_channels
         self.latent_dim = latent_dim
         self.reg_weight = reg_weight
