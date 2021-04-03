@@ -96,8 +96,9 @@ model = vae_models[config['model_params']['name']](**config['model_params'])
 test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
-
-#test=test.cuda()
+test=test.model
+test=test.cuda()
+test.eval()
 xsize=args.xsize
 ysize=args.ysize
 zsize=args.zsize
@@ -130,7 +131,7 @@ minimum=np.min(picts)
 maximum=np.max(picts)
 rng=maximum-minimum
 with torch.no_grad():
-    outputs=test(torch.from_numpy(picts))#.to('cuda'))
+    outputs=test(torch.from_numpy(picts).to('cuda'))
 
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
@@ -141,7 +142,7 @@ else:
     zs=np.fromfile(args.latents,dtype=np.float32).reshape((-1,args.lsize))
     with torch.no_grad():
     
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     
 #predict=outputs[0].numpy()
 print(zs.shape)
@@ -202,7 +203,7 @@ else:
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     idx=0
     for x in range(0,xsize,size):
         for y in range(0,ysize,size):
