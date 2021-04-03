@@ -152,7 +152,7 @@ class SWAE_3D(BaseVAE):
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
         if self.quant_mode==1:
-          self.rounder=Round_1()
+          self.rounder=Round_1
         
 
     def encode(self, input: Tensor) -> Tensor:
@@ -172,7 +172,7 @@ class SWAE_3D(BaseVAE):
         else:
             z =result
         if self.quant_mode==1:
-          z=self.rounder(z)
+          z=self.rounder.apply(z)
         return z
 
     def decode(self, z: Tensor) -> Tensor:
