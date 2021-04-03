@@ -133,7 +133,7 @@ else:
     zs=np.fromfile(args.latents,dtype=np.float32).reshape((-1,args.lsize))
     with torch.no_grad():
     
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     
 #predict=outputs[0].numpy()
 print(zs.shape)
@@ -192,7 +192,7 @@ else:
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
-        predict=test.model.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
     idx=0
     for x in range(0,height,size):
         for y in range(0,width,size):
