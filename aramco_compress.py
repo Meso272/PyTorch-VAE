@@ -97,7 +97,7 @@ test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 
-test=test.cuda()
+#test=test.cuda()
 xsize=args.xsize
 ysize=args.ysize
 zsize=args.zsize
@@ -130,7 +130,7 @@ minimum=np.min(picts)
 maximum=np.max(picts)
 rng=maximum-minimum
 with torch.no_grad():
-    outputs=test(torch.from_numpy(picts).to('cuda'))
+    outputs=test(torch.from_numpy(picts))#.to('cuda'))
 
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
