@@ -98,7 +98,7 @@ checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 test=test.model
 test=test.cuda()
-test.eval()
+#test.eval()
 xsize=args.xsize
 ysize=args.ysize
 zsize=args.zsize
