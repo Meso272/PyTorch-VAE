@@ -6,7 +6,7 @@ from torch.nn import functional as F
 from torch import distributions as dist
 from .types_ import *
 from .gdn import *
-
+from .quants import *
 class SWAE(BaseVAE):
 
     def __init__(self,
@@ -22,6 +22,7 @@ class SWAE(BaseVAE):
                  actv='leakyrelu',
                  norm='bn',
                  struct='new',
+                 quant_mode=0,
                     **kwargs) -> None:
         super(SWAE, self).__init__()
         self.in_channels=in_channels
@@ -31,7 +32,7 @@ class SWAE(BaseVAE):
         self.p = wasserstein_deg
         self.num_projections = num_projections
         self.proj_dist = projection_dist
-        
+        self.quant_mode=quant_mode
         modules = []
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256, 512]
@@ -230,6 +231,8 @@ class SWAE(BaseVAE):
             z = self.fc_z(result)
         else:
             z= result
+        if self.quant_mode==1:
+          z=Round_1(z)
         return z
 
     def decode(self, z: Tensor) -> Tensor:

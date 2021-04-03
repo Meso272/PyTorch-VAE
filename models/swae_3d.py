@@ -5,7 +5,7 @@ from torch.nn import functional as F
 from torch import distributions as dist
 from .types_ import *
 from .gdn import *
-
+from .quants import *
 
 class SWAE_3D(BaseVAE):
 
@@ -21,6 +21,7 @@ class SWAE_3D(BaseVAE):
                  encoder_final_layer='fc',
                  actv='leakyrelu',
                  norm='bn',
+                 quant_mode=0,
                     **kwargs) -> None:
         super(SWAE_3D, self).__init__()
         self.encoder_final_layer=encoder_final_layer
@@ -168,6 +169,8 @@ class SWAE_3D(BaseVAE):
             z = self.fc_z(result)
         else:
             z =result
+        if self.quant_mode==1:
+          z=Round_1(z)
         return z
 
     def decode(self, z: Tensor) -> Tensor:
