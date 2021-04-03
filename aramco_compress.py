@@ -81,6 +81,8 @@ parser.add_argument('--zsize',  '-z',type=int,
                    default=235)
 parser.add_argument('--size','-s',type=int,
                    default=16)
+parser.add_argument('--transpose','-t',type=int,
+                   default=0)
 args = parser.parse_args()
 
 global_max=0.0386
@@ -135,11 +137,16 @@ with torch.no_grad():
 
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
+
     predict=outputs[0].cpu().detach().numpy()
     
 
 else:
-    zs=np.fromfile(args.latents,dtype=np.float32).reshape((-1,args.lsize))
+    zs=np.fromfile(args.latents,dtype=np.float32)
+    if args.transpose:
+        zs=zs.reshape((args.lsize,-1).transpose())
+    else:
+        zs=zs.reshape((-1,args.lsize))
     with torch.no_grad():
     
         predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
@@ -154,7 +161,7 @@ eb=args.error*rng
 
 if args.bits==32:
     
-    temp_latents=zs.flatten()
+   
     '''
     latents=[]
     for element in list(temp_latents):
@@ -163,7 +170,7 @@ if args.bits==32:
 
         latents.append(eval(r'0b'+ bs))
     '''
-    latents=temp_latents
+    latents=zs
 
 
     idx=0
@@ -234,6 +241,8 @@ latents=np.array(latents,dtype=np.float32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
 if args.latents!=None and args.mode=="c":
+    if args.transpose:
+        latents=latents.transpose()
     latents.tofile(args.latents)
 if args.quant!=None:
     quants.tofile(args.quant)
