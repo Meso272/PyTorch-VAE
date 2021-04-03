@@ -61,7 +61,7 @@ class SWAE_3D(BaseVAE):
                 modules.append(nn.Sequential(GDN3D(h_dim)))
             in_channels = h_dim
         if self.encoder_final_layer=='conv':
-            modules.append(nn.Sequential( nn.Conv3d(hidden_dims[-1], out_channels=latent_dim/(self.last_fm_size**3),
+            modules.append(nn.Sequential( nn.Conv3d(hidden_dims[-1], out_channels=latent_dim//(self.last_fm_size**3),
                                   kernel_size= 1, stride= 1, padding  = 1) ) )
         self.encoder = nn.Sequential(*modules)
         if self.encoder_final_layer=='fc':
@@ -72,7 +72,7 @@ class SWAE_3D(BaseVAE):
         if self.encoder_final_layer=='fc':
             self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * (self.last_fm_size**3))
         elif self.encoder_final_layer=='conv':
-            self.decoder_input = nn.ConvTranspose3d(latent_dim/(self.last_fm_size**3), out_channels=hidden_dims[-1],
+            self.decoder_input = nn.ConvTranspose3d(latent_dim//(self.last_fm_size**3), out_channels=hidden_dims[-1],
                                   kernel_size= 1, stride= 1, padding  = 1,output_padding=0)
         modules = []
         
@@ -176,7 +176,7 @@ class SWAE_3D(BaseVAE):
             result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size,self.last_fm_size)
         else:
             result= z
-            result = result.view(-1, self.latent_dim/(self.last_fm_size**3), self.last_fm_size, self.last_fm_size, self.last_fm_size)
+            result = result.view(-1, self.latent_dim//(self.last_fm_size**3), self.last_fm_size, self.last_fm_size, self.last_fm_size)
             if self.encoder_final_layer=='conv':
                 result = self.decoder_input(result)
         result = self.decoder(result)
