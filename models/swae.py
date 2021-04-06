@@ -61,7 +61,7 @@ class SWAE(BaseVAE):
         if struct=="resnet":
             fc_out=latent_dim if resnet_fc else 0
             
-            encoder=[ResNet_Encoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,default_conv1=True,in_channels=first_channel,avg_pooling=resnet_pooling,fc_out=fc_out,norm=norm_map[norm],actv=norm_map[actv])]
+            encoder=[ResNet_Encoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,default_conv1=True,in_channels=first_channel,avg_pooling=resnet_pooling,fc_out=fc_out,norm=norm_map[norm],actv=actv_map[actv])]
             if not resnet_fc:
                 if encoder_final_layer=='conv':
                     encoder.append( nn.Conv2d(hidden_dims[-1], out_channels=latent_dim//(self.last_fm_size**2),
@@ -77,7 +77,7 @@ class SWAE(BaseVAE):
             if actv=='gdn':
               actv='igdn'
             self.encoder=nn.Sequential(*encoder)
-            self.decoder=Resnet_Decoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,default_convout=True,norm=norm_map[norm],actv=norm_map[actv])
+            self.decoder=Resnet_Decoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,default_convout=True,norm=norm_map[norm],actv=actv_map[actv])
             return 
 
       
