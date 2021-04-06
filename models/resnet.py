@@ -56,12 +56,12 @@ class BasicBlock_Decode(nn.Module):
         self.actv=actv
         #residual function
         self.residual_function = nn.Sequential(
-            nn.DeConv2d(in_channels*BasicBlock_Decode.expansion, in_channels , kernel_size=3, padding=1, output_padding=0,bias=False),
+            nn.ConvTranspose2d(in_channels*BasicBlock_Decode.expansion, in_channels , kernel_size=3, padding=1, output_padding=0,bias=False),
 
             norm(in_channels),
             actv(inplace=True),
             
-            nn.DeConv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, output_padding=1, bias=False),
+            nn.ConvTranspose2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, output_padding=1, bias=False),
             norm(out_channels)
         )
 
@@ -72,7 +72,7 @@ class BasicBlock_Decode(nn.Module):
         #use 1*1 convolution to match the dimension
         if stride != 1 or in_channels != BasicBlock.expansion * out_channels:
             self.shortcut = nn.Sequential(
-                nn.DeConv2d(in_channels, out_channels * BasicBlock.expansion, kernel_size=1, stride=stride, output_padding=1,bias=False),
+                nn.ConvTranspose2d(in_channels, out_channels * BasicBlock.expansion, kernel_size=1, stride=stride, output_padding=1,bias=False),
                 norm(out_channels * BasicBlock.expansion)
             )
 
