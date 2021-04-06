@@ -77,7 +77,7 @@ class SWAE(BaseVAE):
             if actv=='gdn':
               actv='igdn'
             self.encoder=nn.Sequential(*encoder)
-            self.decoder=Resnet_Decoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,default_convout=True,norm=norm_map[norm],actv=actv_map[actv])
+            self.decoder=ResNet_Decoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,default_convout=True,norm=norm_map[norm],actv=actv_map[actv])
             return 
 
       
