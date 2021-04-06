@@ -70,10 +70,10 @@ class BasicBlock_Decode(nn.Module):
 
         #the shortcut output dimension is not the same with residual function
         #use 1*1 convolution to match the dimension
-        if stride != 1 or in_channels != BasicBlock.expansion * out_channels:
+        if stride != 1 or in_channels *BasicBlock_Decode.expansion !=  out_channels:
             self.shortcut = nn.Sequential(
-                nn.ConvTranspose2d(in_channels, out_channels * BasicBlock.expansion, kernel_size=1, stride=stride, output_padding=1,bias=False),
-                norm(out_channels * BasicBlock.expansion)
+                nn.ConvTranspose2d(in_channels*BasicBlock_Decode.expansion, out_channels , kernel_size=1, stride=stride, padding=0,output_padding=1,bias=False),
+                norm(out_channels)
             )
 
     def forward(self, x):
@@ -163,18 +163,40 @@ class ResNet_Encoder(nn.Module):
 
     def forward(self, x):
         output=x
+        print("i")
+        print(output.shape)
         if self.conv1!=None:
             output = self.conv1(output)
+            print("conv1")
+            print(output.shape)
         output = self.conv2_x(output)
+        print("conv2")
+        print(output.shape)
         output = self.conv3_x(output)
+        print("conv3")
+        print(output.shape)
         output = self.conv4_x(output)
+        print("conv4")
+
+        print(output.shape)
+        print("conv5")
+
         output = self.conv5_x(output)
+        print("conv3")
+       
+
+        print(output.shape)
         if self.avg_pool!=None:
             output = self.avg_pool(output)
+            print("pool")
+
+            print(output.shape)
         if self.fc!=None:
             output = output.view(output.size(0), -1)
             output = self.fc(output)
+            print("fc")
 
+            print(output.shape)
         return output
 
 
@@ -245,18 +267,39 @@ class ResNet_Decoder(nn.Module):
 
     def forward(self, x):
         output=x
+        print("decoder")
+
+        print(output.shape)
+
         if self.fc!=None:
             output = self.fc(output)
             output= output.view(output.size(0), self.in_channels,1,1)
+            print("dfc")
+
+            print(output.shape)
         if self.up_sampling!=None:
             output=self.up_sampling(output)
+            print("umsampling")
+
+            print(output.shape)
         output = self.deconv1_x(output)
+        print("deconv1")
+
+        print(output.shape)
         output = self.deconv2_x(output)
+        print("deconv2")
+        print(output.shape)
         output = self.deconv3_x(output)
+        print("deconv3")
+        print(output.shape)
         output = self.deconv4_x(output)
+        print("deconv4")
+        print(output.shape)
         
         if self.convout!=None:
             output=self.convout(output)
+            print("out")
+            print(output.shape)
         return output
 '''
 def resnet18():
