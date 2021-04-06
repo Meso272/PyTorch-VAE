@@ -8,9 +8,6 @@ from .types_ import *
 from .gdn import *
 from .quants import *
 from .resnet import *
-from functools import partial
-norm_map={"bn":nn.BatchNorm2d,"gdn":GDN,"no":nn.Identity,"igdn":partial(GDN,inverse=True)}
-actv_map={"relu":nn.ReLU,"leakyrelu":nn.LeakyReLU,"prelu":nn.PReLU,"no":nn.Identity}
 class SWAE(BaseVAE):
 
     def __init__(self,
@@ -27,13 +24,8 @@ class SWAE(BaseVAE):
                  norm='bn',
                  struct='new',
                  quant_mode=0,
-                 resblock_num=[2,2,2,2],
-                 first_channel=16,
-                 resnet_pooling=True,
-                 resnet_fc=True,
                     **kwargs) -> None:
         super(SWAE, self).__init__()
-        self.struct=struct
         self.in_channels=in_channels
         self.encoder_final_layer=encoder_final_layer
         self.latent_dim = latent_dim
@@ -44,47 +36,15 @@ class SWAE(BaseVAE):
         self.quant_mode=quant_mode
         modules = []
         if hidden_dims is None:
-            hidden_dims = [16,32,64,128]
+            hidden_dims = [32, 64, 128, 256, 512]
         self.last_fm_nums=hidden_dims[-1]
-        
-        
-        self.last_resnet_size=int( input_size/(2**len(hidden_dims)) )
-        if struct=='resnet' and resnet_pooling:
-            self.last_fm_size=1
-        else:
-            self.last_fm_size=self.last_resnet_size
-        self.resnet_pooling=resnet_pooling
-        self.resnet_fc=resnet_fc
-        if self.quant_mode==1:
-            self.rounder=Round_1
+        self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
+
+
+
        # Build Encoder
-        if struct=="resnet":
-            fc_out=latent_dim if resnet_fc else 0
-            
-            encoder=[ResNet_Encoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,default_conv1=True,in_channels=first_channel,avg_pooling=resnet_pooling,fc_out=fc_out,norm=norm_map[norm],actv=norm_map[actv])]
-            if not resnet_fc:
-                if encoder_final_layer=='conv':
-                    encoder.append( nn.Conv2d(hidden_dims[-1], out_channels=latent_dim//(self.last_fm_size**2),
-                                  kernel_size= 1, stride= 1, padding  = 0) )
-                    self.decoder_input = nn.ConvTranspose2d(latent_dim//(self.last_fm_size**2), out_channels=hidden_dims[-1],
-                                  kernel_size= 1, stride= 1, padding  = 0,output_padding=0)
-                elif encoder_final_layer=='fc':
-                    self.fc_z=nn.Linear(hidden_dims[-1]*self.last_resnet_size*self.last_resnet_size, latent_dim)
-                    self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_resnet_size*self.last_resnet_size)
-            
-
-            hidden_dims.reverse()
-            if actv=='gdn':
-              actv='igdn'
-            self.encoder=nn.Sequential(*encoder)
-            self.decoder=Resnet_Decoder(BasicBlock,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,,default_convout=True,norm=norm_map[norm],actv=norm_map[actv])
-
-
-
-
-
-
-            return 
+        #if struct=="resnet":
+        #pass
 
       
         for h_dim in hidden_dims:
@@ -128,7 +88,7 @@ class SWAE(BaseVAE):
             in_channels = h_dim
         if self.encoder_final_layer=='conv':
             modules.append(nn.Sequential( nn.Conv2d(hidden_dims[-1], out_channels=latent_dim//(self.last_fm_size**2),
-                                  kernel_size= 1, stride= 1, padding  = 0) ) )
+                                  kernel_size= 1, stride= 1, padding  = 1) ) )
         self.encoder = nn.Sequential(*modules)
         if self.encoder_final_layer=='fc':
             self.fc_z = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
@@ -140,7 +100,7 @@ class SWAE(BaseVAE):
             self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * self.last_fm_size*self.last_fm_size)
         elif self.encoder_final_layer=='conv':
             self.decoder_input = nn.ConvTranspose2d(latent_dim//(self.last_fm_size**2), out_channels=hidden_dims[-1],
-                                  kernel_size= 1, stride= 1, padding  = 0,output_padding=0)
+                                  kernel_size= 1, stride= 1, padding  = 1,output_padding=0)
         modules = []
         
         hidden_dims.reverse()
@@ -261,7 +221,8 @@ class SWAE(BaseVAE):
         self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
-        
+        if self.quant_mode==1:
+          self.rounder=Round_1
 
     def encode(self, input: Tensor) -> Tensor:
         """
@@ -275,7 +236,7 @@ class SWAE(BaseVAE):
 
         # Split the result into mu and var components
         # of the latent Gaussian distribution
-        if self.encoder_final_layer=='fc' and (self.struct!='resnet' or not self.resnet_fc):
+        if self.encoder_final_layer=='fc':
             z = self.fc_z(result)
         else:
             z= result
@@ -284,21 +245,17 @@ class SWAE(BaseVAE):
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        if self.encoder_final_layer=='fc'
-            if(self.struct!='resnet' or not self.resnet_fc):
-                result = self.decoder_input(z)
-                result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
-            else:
-                result=z
+        if self.encoder_final_layer=='fc':
+            result = self.decoder_input(z)
+            result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         else:
             result= z
             result = result.view(-1, self.latent_dim//(self.last_fm_size**2), self.last_fm_size, self.last_fm_size)
             if self.encoder_final_layer=='conv':
                 result = self.decoder_input(result)
         result = self.decoder(result)
-        if self.struct!='resnet':
-            result = self.final_layer_1(result)
-            result= self.final_layer_2(result)
+        result = self.final_layer_1(result)
+        result= self.final_layer_2(result)
         
         return result
 
