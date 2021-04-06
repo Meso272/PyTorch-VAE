@@ -77,7 +77,7 @@ class BasicBlock_Decode(nn.Module):
             )
 
     def forward(self, x):
-        return self.actv(self.residual_function(x) + self.shortcut(x))
+        return self.actv()(self.residual_function(x) + self.shortcut(x))
 '''
 class BottleNeck(nn.Module):
     """Residual block for resnet over 50 layers
