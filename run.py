@@ -29,7 +29,7 @@ if __name__=='__main__':
 
      
     gpus=config['trainer_params']['gpus']
-
+    
     os.environ['CUDA_VISIBLE_DEVICES']=','.join([str(idx) for idx in gpus])
 
     tt_logger = TestTubeLogger(
