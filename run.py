@@ -71,7 +71,7 @@ if __name__=='__main__':
                  num_sanity_val_steps=5,
                  early_stop_callback = False,
                  checkpoint_callback=checkpoint_callback,
-                 distributed_backend='horovod',
+                 distributed_backend='dp',
                  **config['trainer_params'])
 
     print(f"======= Training {config['model_params']['name']} =======")
