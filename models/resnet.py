@@ -203,13 +203,13 @@ class ResNet_Decoder(nn.Module):
         self.out_channels = channel_list[1]*block.expansion
         
 
-        self.deconv1_x = self._make_layer(block, channel_list[0], num_block[0], 2)
+        self.deconv1_x = self._make_layer(block, channel_list[0], num_block[0], 2,norm,actv)
         self.out_channels = channel_list[2]*block.expansion
-        self.deconv2_x = self._make_layer(block, channel_list[1], num_block[1], 2)
+        self.deconv2_x = self._make_layer(block, channel_list[1], num_block[1], 2,norm,actv)
         self.out_channels = channel_list[3]*block.expansion
-        self.deconv3_x = self._make_layer(block, channel_list[2], num_block[2], 2)
+        self.deconv3_x = self._make_layer(block, channel_list[2], num_block[2], 2,norm,actv)
         self.out_channels = last_channel
-        self.deconv4_x = self._make_layer(block, channel_list[3], num_block[3], 2)
+        self.deconv4_x = self._make_layer(block, channel_list[3], num_block[3], 2,norm,actv)
 
         if default_convout:
             self.convout=self.Sequential(nn.Conv2d(last_channel, 1, kernel_size=3, padding=1, bias=False),nn.Tanh())
