@@ -1,7 +1,7 @@
 import yaml
 import argparse
 import numpy as np
-
+import os
 from models import *
 from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
@@ -11,6 +11,7 @@ from pytorch_lightning.loggers import TestTubeLogger
 from pytorch_lightning.callbacks import ModelCheckpoint
     
 if __name__=='__main__':
+
     trainer = Trainer()
     parser = argparse.ArgumentParser(description='Generic runner for VAE models')
     parser.add_argument('--config',  '-c',
@@ -26,6 +27,10 @@ if __name__=='__main__':
         except yaml.YAMLError as exc:
             print(exc)
 
+     
+    gpus=config['trainer_params']['gpus']
+
+    os.environ['CUDA_VISIBLE_DEVICES']=','.join(gpus)
 
     tt_logger = TestTubeLogger(
         save_dir=config['logging_params']['save_dir'],

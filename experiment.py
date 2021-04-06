@@ -157,7 +157,7 @@ class VAEXperiment(pl.LightningModule):
         return DataLoader(dataset,
                           batch_size= self.params['batch_size'],
                           shuffle = True,
-                          drop_last=True)
+                          drop_last=True,num_workers=8)
 
     @data_loader
     def val_dataloader(self):
