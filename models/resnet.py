@@ -164,7 +164,7 @@ class ResNet_Encoder(nn.Module):
     def forward(self, x):
         output=x
         #print("i")
-        #print(output.shape)
+        print(output.shape)
         if self.conv1!=None:
             output = self.conv1(output)
             #print("conv1")
