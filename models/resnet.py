@@ -247,7 +247,7 @@ class ResNet_Decoder(nn.Module):
         output=x
         if self.fc!=None:
             output = self.fc(output)
-            output= output.view(output.size(0), self.in_channels,self.first_size,self.first_size)
+            output= output.view(output.size(0), self.in_channels,1,1)
         if self.up_sampling!=None:
             output=self.up_sampling(output)
         output = self.deconv1_x(output)
