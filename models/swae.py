@@ -278,7 +278,7 @@ class SWAE(BaseVAE):
         return z
 
     def decode(self, z: Tensor) -> Tensor:
-        if self.encoder_final_layer=='fc'
+        if self.encoder_final_layer=='fc':
             if(self.struct!='resnet' or not self.resnet_fc):
                 result = self.decoder_input(z)
                 result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
