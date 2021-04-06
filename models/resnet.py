@@ -212,7 +212,7 @@ class ResNet_Decoder(nn.Module):
         self.deconv4_x = self._make_layer(block, channel_list[3], num_block[3], 2,norm,actv)
 
         if default_convout:
-            self.convout=self.Sequential(nn.Conv2d(last_channel, 1, kernel_size=3, padding=1, bias=False),nn.Tanh())
+            self.convout=nn.Sequential(nn.Conv2d(last_channel, 1, kernel_size=3, padding=1, bias=False),nn.Tanh())
         else:
             self.convout=convout
         
