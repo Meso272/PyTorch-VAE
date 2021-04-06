@@ -36,7 +36,7 @@ class BasicBlock(nn.Module):
             )
 
     def forward(self, x):
-        return self.actv(self.residual_function(x) + self.shortcut(x))
+        return self.actv()(self.residual_function(x) + self.shortcut(x))
 
 
 
