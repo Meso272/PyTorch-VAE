@@ -83,6 +83,8 @@ parser.add_argument('--size','-s',type=int,
 parser.add_argument('--normalize','-n',type=int,default=1)
 parser.add_argument('--transpose','-t',type=int,
                    default=0)
+parser.add_argument('--eval','-v',type=int,
+                   default=0)
 args = parser.parse_args()
 
 
@@ -93,12 +95,14 @@ with open(args.filename, 'r') as file:
         print(exc)
 
 model = vae_models[config['model_params']['name']](**config['model_params'])
+
 test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 test=test.model
 test=test.cuda()
-#test.eval()
+if args.eval:
+    test.eval()
 
 height=args.height
 width=args.width
