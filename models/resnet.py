@@ -59,7 +59,7 @@ class BasicBlock_Decode(nn.Module):
             nn.ConvTranspose2d(in_channels*BasicBlock_Decode.expansion, in_channels , kernel_size=3, padding=1, output_padding=0,bias=False),
 
             norm(in_channels),
-            actv(inplace=True),
+            actv(),
             
             nn.ConvTranspose2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, output_padding=stride-1, bias=False),
             norm(out_channels)
