@@ -14,7 +14,7 @@ class BasicBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1,norm=nn.BatchNorm2d,actv=nn.ReLU):
         super().__init__()
         self.norm=norm
-        self.actv=actv
+        self.actv=actv()
         #residual function
         self.residual_function = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False),
@@ -36,7 +36,7 @@ class BasicBlock(nn.Module):
             )
 
     def forward(self, x):
-        return self.actv()(self.residual_function(x) + self.shortcut(x))
+        return self.actv(self.residual_function(x) + self.shortcut(x))
 
 
 
