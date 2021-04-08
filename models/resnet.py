@@ -53,7 +53,7 @@ class BasicBlock_Decode(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1,norm=nn.BatchNorm2d,actv=nn.ReLU):
         super().__init__()
         self.norm=norm
-        self.actv=actv
+        self.actv=actv()
         #residual function
         self.residual_function = nn.Sequential(
             nn.ConvTranspose2d(in_channels*BasicBlock_Decode.expansion, in_channels , kernel_size=3, padding=1, output_padding=0,bias=False),
@@ -77,7 +77,7 @@ class BasicBlock_Decode(nn.Module):
             )
 
     def forward(self, x):
-        return self.actv()(self.residual_function(x) + self.shortcut(x))
+        return self.actv(self.residual_function(x) + self.shortcut(x))
 '''
 class BottleNeck(nn.Module):
     """Residual block for resnet over 50 layers
