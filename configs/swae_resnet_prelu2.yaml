@@ -10,7 +10,7 @@ model_params:
   projection_dist: "normal" #"cauchy"
   struct: 'resnet'
   encoder_final_layer: 'fc'
-  actv: 'relu'
+  actv: 'prelu'
   resblock_num: [2,2,2,2]
   first_channel: 16
   resnet_pooling: True
@@ -20,19 +20,19 @@ exp_params:
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 16
   batch_size: 64 # Better to have a square number
-  LR: 0.005
+  LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [0,1,2,3]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_new/SWAE_1616_4_resnet_bs64_4g"
+  ckpt_save_dir: "ckpts_new/SWAE_1616_4_resnet_prelu_bs64_lr0.01"
   save_dir: "logs/"
-  name: "SWAE_1616_4_resnet_bs64_4g"
+  name: "SWAE_1616_4_resnet_prelu_bs64_lr0.01"
   manual_seed: 1265
 
 
