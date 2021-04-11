@@ -189,7 +189,7 @@ class VQVAE(BaseVAE):
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         encoding = self.encode(input)[0]
         quantized_inputs, vq_loss = self.vq_layer(encoding)
-        return [self.decode(quantized_inputs), input, vq_loss]
+        return [self.decode(quantized_inputs), input, quantized_inputs,vq_loss]
 
     def loss_function(self,
                       *args,
@@ -201,7 +201,7 @@ class VQVAE(BaseVAE):
         """
         recons = args[0]
         input = args[1]
-        vq_loss = args[2]
+        vq_loss = args[3]
 
         recons_loss = F.mse_loss(recons, input)
 

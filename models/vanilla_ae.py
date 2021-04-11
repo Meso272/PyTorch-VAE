@@ -11,7 +11,7 @@ class VanillaAE(BaseVAE):
     def __init__(self,
                  in_channels: int,
                  latent_dim: int,
-                 input_size:int = 64,
+                 input_size:int = 16,
 
                  hidden_dims: List = None,
                  **kwargs) -> None:
@@ -22,9 +22,11 @@ class VanillaAE(BaseVAE):
         
         modules = []
         if hidden_dims is None:
-            hidden_dims = [32, 64, 128, 256, 512]
+            hidden_dims = [16,32,64,128]
         self.last_fm_nums=hidden_dims[-1]
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
+
+        
         # Build Encoder
         for h_dim in hidden_dims:
             modules.append(

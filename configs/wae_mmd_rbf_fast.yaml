@@ -1,14 +1,18 @@
 model_params:
-  name: 'VanillaVAE'
+  name: 'WAE_MMD'
   in_channels: 1
+  input_size: 16
   latent_dim: 4
+  hidden_dims: [16,32,64,128]
+  reg_weight: 5000
+  kernel_type: 'rbf'
 
 exp_params:
   dataset: cesm
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 16
-  batch_size: 64 # Better to have a square number
-  LR: 0.01 #orig 0.005
+  batch_size: 144 # Better to have a square number
+  LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
@@ -18,7 +22,11 @@ trainer_params:
   max_epochs: 50
 
 logging_params:
-  ckpt_save_dir: "ckpts/VanillaVAE"
+  ckpt_save_dir: "ckpts/WAERBF"
   save_dir: "logs/"
-  name: "VanillaVAE"
+  name: "WAERBF"
   manual_seed: 1265
+
+
+
+

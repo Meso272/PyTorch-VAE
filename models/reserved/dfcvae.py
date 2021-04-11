@@ -12,8 +12,10 @@ class DFCVAE(BaseVAE):
                  in_channels: int,
                  latent_dim: int,
                  hidden_dims: List = None,
+                 input_size:int = 16,
                  alpha:float = 1,
                  beta:float = 0.5,
+                 quant_mode=0,
                  **kwargs) -> None:
         super(DFCVAE, self).__init__()
 

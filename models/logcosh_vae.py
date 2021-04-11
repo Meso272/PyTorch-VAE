@@ -3,7 +3,7 @@ import torch.nn.functional as F
 from models import BaseVAE
 from torch import nn
 from .types_ import *
-
+from .quants import *
 
 class LogCoshVAE(BaseVAE):
 
@@ -11,8 +11,10 @@ class LogCoshVAE(BaseVAE):
                  in_channels: int,
                  latent_dim: int,
                  hidden_dims: List = None,
+                 input_size:int = 16,
                  alpha: float = 100.,
                  beta: float = 10.,
+                 quant_mode=0,
                  **kwargs) -> None:
         super(LogCoshVAE, self).__init__()
         self.in_channels=in_channels
@@ -20,30 +22,38 @@ class LogCoshVAE(BaseVAE):
         self.alpha = alpha
         self.beta = beta
 
-        modules = []
+        self.quant_mode=quant_mode
+        if self.quant_mode==1:
+            self.rounder=Round_1
         if hidden_dims is None:
-            hidden_dims = [32, 64, 128, 256, 512]
+           hidden_dims = [16,32,64,128]
+        self.last_fm_nums=hidden_dims[-1]
+        self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
 
         # Build Encoder
         for h_dim in hidden_dims:
             modules.append(
                 nn.Sequential(
-                    nn.Conv2d(in_channels, out_channels=h_dim,
-                              kernel_size= 3, stride= 2, padding  = 1),
-                    nn.BatchNorm2d(h_dim),
-                    nn.LeakyReLU())
-            )
+                        nn.Conv2d(in_channels, out_channels=in_channels,
+                                  kernel_size= 3, stride= 1, padding  = 1),###added layer
+                        nn.Conv2d(in_channels, out_channels=h_dim,
+                                  kernel_size= 3, stride= 2, padding  = 1),
+                        nn.BatchNorm2d(h_dim),
+                        nn.Sequential(nn.LeakyReLU())
+                    
+                        )
+                )
             in_channels = h_dim
 
         self.encoder = nn.Sequential(*modules)
-        self.fc_mu = nn.Linear(hidden_dims[-1]*4, latent_dim)
-        self.fc_var = nn.Linear(hidden_dims[-1]*4, latent_dim)
+        self.fc_mu = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
+        self.fc_var = nn.Linear(hidden_dims[-1]*self.last_fm_size*self.last_fm_size, latent_dim)
 
 
         # Build Decoder
         modules = []
 
-        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1] * 4)
+        self.decoder_input = nn.Linear(latent_dim, hidden_dims[-1]  * self.last_fm_size*self.last_fm_size)
 
         hidden_dims.reverse()
 
@@ -51,18 +61,33 @@ class LogCoshVAE(BaseVAE):
             modules.append(
                 nn.Sequential(
                     nn.ConvTranspose2d(hidden_dims[i],
-                                       hidden_dims[i + 1],
-                                       kernel_size=3,
-                                       stride = 2,
-                                       padding=1,
-                                       output_padding=1),
+                                        hidden_dims[i],
+                                        kernel_size=3,
+                                        stride = 1,
+                                        padding=1,
+                                        output_padding=0),##added layer
+                    nn.ConvTranspose2d(hidden_dims[i],
+                                        hidden_dims[i + 1],
+                                        kernel_size=3,
+                                        stride = 2,
+                                        padding=1,
+                                        output_padding=1),
                     nn.BatchNorm2d(hidden_dims[i + 1]),
-                    nn.LeakyReLU())
+                    nn.LeakyReLU()
+                )
             )
+
+
 
         self.decoder = nn.Sequential(*modules)
 
         self.final_layer = nn.Sequential(
+                            nn.ConvTranspose2d(hidden_dims[-1],
+                                       hidden_dims[-1],
+                                       kernel_size=3,
+                                       stride = 1,
+                                       padding=1,
+                                       output_padding=0),##added layer
                             nn.ConvTranspose2d(hidden_dims[-1],
                                                hidden_dims[-1],
                                                kernel_size=3,
@@ -71,6 +96,7 @@ class LogCoshVAE(BaseVAE):
                                                output_padding=1),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU(),
+
                             nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),
                             nn.Tanh())
@@ -100,7 +126,7 @@ class LogCoshVAE(BaseVAE):
         :return: (Tensor) [B x C x H x W]
         """
         result = self.decoder_input(z)
-        result = result.view(-1, 512, 2, 2)
+        result = result.view(-1, self.last_fm_nums, self.last_fm_size, self.last_fm_size)
         result = self.decoder(result)
         result = self.final_layer(result)
         return result
@@ -120,7 +146,7 @@ class LogCoshVAE(BaseVAE):
     def forward(self, input: Tensor, **kwargs) -> List[Tensor]:
         mu, log_var = self.encode(input)
         z = self.reparameterize(mu, log_var)
-        return  [self.decode(z), input, mu, log_var]
+        return  [self.decode(z), input, z,mu, log_var]
 
     def loss_function(self,
                       *args,
@@ -134,8 +160,8 @@ class LogCoshVAE(BaseVAE):
         """
         recons = args[0]
         input = args[1]
-        mu = args[2]
-        log_var = args[3]
+        mu = args[3]
+        log_var = args[4]
 
         kld_weight = kwargs['M_N'] # Account for the minibatch samples from the dataset
         t = recons - input

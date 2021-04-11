@@ -3,14 +3,14 @@ from models import BaseVAE
 from torch import nn
 from torch.nn import functional as F
 from .types_ import *
-
+from .quants import *
 
 class WAE_MMD(BaseVAE):
 
     def __init__(self,
                  in_channels: int,
                  latent_dim: int,
-                 input_size:int = 64,
+                 input_size:int = 16,
                  hidden_dims: List = None,
                  reg_weight: int = 100,
                  kernel_type: str = 'imq',
@@ -23,9 +23,11 @@ class WAE_MMD(BaseVAE):
         self.kernel_type = kernel_type
         self.z_var = latent_var
 
-        modules = []
+        self.quant_mode=quant_mode
+        if self.quant_mode==1:
+            self.rounder=Round_1
         if hidden_dims is None:
-            hidden_dims = [32, 64, 128, 256,512]
+           hidden_dims = [16,32,64,128]
         self.last_fm_nums=hidden_dims[-1]
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
 

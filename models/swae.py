@@ -46,7 +46,8 @@ class SWAE(BaseVAE):
         if hidden_dims is None:
             hidden_dims = [16,32,64,128]
         self.last_fm_nums=hidden_dims[-1]
-        
+        if self.quant_mode==1:
+            self.rounder=Round_1
         
         self.last_resnet_size=int( input_size/(2**len(hidden_dims)) )
         if struct=='resnet' and resnet_pooling:
@@ -55,8 +56,7 @@ class SWAE(BaseVAE):
             self.last_fm_size=self.last_resnet_size
         self.resnet_pooling=resnet_pooling
         self.resnet_fc=resnet_fc
-        if self.quant_mode==1:
-            self.rounder=Round_1
+        
        # Build Encoder
         if struct=="resnet":
             fc_out=latent_dim if resnet_fc else 0

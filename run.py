@@ -26,7 +26,9 @@ if __name__=='__main__':
             config = yaml.safe_load(file)
         except yaml.YAMLError as exc:
             print(exc)
-
+    ckpt_save_dir=config['logging_params']['ckpt_save_dir']
+    if not os.path.exists(ckpt_save_dir):
+        os.mkdir(ckpt_save_dir)
      
     #gpus=config['trainer_params']['gpus']
     #print(','.join([str(idx) for idx in gpus]))
