@@ -19,12 +19,12 @@ if __name__=='__main__':
                     help =  'path to the config file',
                     default='configs/vae.yaml')
     parser.add_argument('--checkpoint',  '-k',
-                    dest="filename",
+            
                     metavar='FILE',
                     help =  'path to the checkpoint file',
                     )
     args = parser.parse_args()
-    with open(args.filename, 'r') as file:
+    with open(args.config, 'r') as file:
         try:
             config = yaml.safe_load(file)
         except yaml.YAMLError as exc:
