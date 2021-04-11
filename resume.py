@@ -24,7 +24,7 @@ if __name__=='__main__':
                     help =  'path to the checkpoint file',
                     )
     args = parser.parse_args()
-    with open(args.config, 'r') as file:
+    with open(args.filename, 'r') as file:
         try:
             config = yaml.safe_load(file)
         except yaml.YAMLError as exc:
