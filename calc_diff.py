@@ -18,5 +18,5 @@ last=0
 for i in range(n):
     t[i]=o[i]-last
     last=o[i]
-t=t+np.min(t)
+t=t-np.min(t)
 t.tofile(tar)
