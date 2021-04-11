@@ -85,6 +85,8 @@ parser.add_argument('--transpose','-t',type=int,
                    default=0)
 parser.add_argument('--eval','-v',type=int,
                    default=0)
+parser.add_argument('--qlatent','-ql',type=int,
+                   default=0)
 args = parser.parse_args()
 
 
@@ -223,8 +225,11 @@ else:
                         us.append(decomp)
                     array[a][b]=decomp
             idx=idx+1
-
-latents=np.array(latents,dtype=np.float32)
+if args.qlatent:
+   latents=np.array(latents,dtype=np.int32)
+   latents=latents-np.min(latents)
+else:
+   latents=np.array(latents,dtype=np.float32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
 if args.latents!=None and args.mode=="c":
