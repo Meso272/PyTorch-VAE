@@ -22,7 +22,7 @@ for i,eb in enumerate(ebs):
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
-        comm="zfp -s -i %s -z out.dat -f -2 3600 1800 -a %f &2>temp.txt" % (filepath,eb)
+        comm="zfp -s -i %s -z out.dat -f -2 3600 1800 -a %f &>temp.txt" % (filepath,eb)
         os.system(comm)
         
         
