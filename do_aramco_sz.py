@@ -11,8 +11,8 @@ for i,eb in enumerate(ebs):
     cr[i+1][0]=eb
     psnr[i+1][0]=eb
     for j in range(1510,1601,10):
-        cr[0][j-51]=j
-        psnr[0][j-51]=j
+        cr[0][(j-1510)//10+1]=j
+        psnr[0][(j-1510)//10+1]=j
         filename="aramco-snapshot-%s.f32" % str(j)
         filepath=os.path.join(datafolder,filename)
         comm="sz -z -f -i %s -M REL -R %f -3 235 449 449" % (filepath,eb)
@@ -26,8 +26,8 @@ for i,eb in enumerate(ebs):
             
             r=eval(lines[7].split('=')[1])
             
-            cr[i+1][j-51]=r
-            psnr[i+1][j-51]=p
+            cr[i+1][(j-1510)//10+1]=r
+            psnr[i+1][(j-1510)//10+1]=p
 
         comm="rm -f %s" % szpath
         os.system(comm)

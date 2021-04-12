@@ -15,9 +15,9 @@ for i,eb in enumerate(ebs):
     psnr[i+1][0]=eb
     maxpwerr[i+1][0]=eb
     for j in range(1510,1601,10):
-        cr[0][j-51]=j
-        psnr[0][j-51]=j
-        maxpwerr[0][j-51]=j
+        cr[0][(j-1510)//10+1]=j
+        psnr[0][(j-1510)//10+1]=j
+        maxpwerr[0][(j-1510)//10+1]=j
         filename="aramco-snapshot-%s.f32" % str(j)
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
@@ -38,9 +38,9 @@ for i,eb in enumerate(ebs):
             #print(p)
             #print(r)
             #print(e)
-            cr[i+1][j-51]=r
-            psnr[i+1][j-51]=p
-            maxpwerr[i+1][j-51]=e
+            cr[i+1][(j-1510)//10+1]=r
+            psnr[i+1][(j-1510)//10+1]=p
+            maxpwerr[i+1][(j-1510)//10+1]=e
 
         os.system("rm -f out.dat")
         os.system("rm -f temp.txt")
