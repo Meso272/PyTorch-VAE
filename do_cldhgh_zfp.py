@@ -28,11 +28,11 @@ for i,eb in enumerate(ebs):
         
         with open("temp.txt","r") as f:
             line=f.read()
-            p=eval(line.split('')[12].split('=')[1])
+            p=eval(line.split(' ')[12].split('=')[1])
             
-            r=eval(line.split('')[7].split('=')[1])
+            r=eval(line.split(' ')[7].split('=')[1])
 
-            e=eval(line.split('')[11].split('=')[1])/rng
+            e=eval(line.split(' ')[11].split('=')[1])/rng
             print(p)
             print(r)
             print(e)
