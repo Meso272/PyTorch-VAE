@@ -10,7 +10,7 @@ model_params:
 exp_params:
   dataset: cesm
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
-  img_size: 64
+  img_size: 16
   batch_size: 64 # Better to have a square number
   LR: 0.001 #orig 0.0005
   weight_decay: 0.0
