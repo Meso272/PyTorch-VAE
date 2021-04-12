@@ -5,8 +5,8 @@ datafolder="/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
 
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 
-cr=np.zeros((12,29),dtype=np.float32)
-psnr=np.zeros((12,29),dtype=np.float32)
+cr=np.zeros((29,12),dtype=np.float32)
+psnr=np.zeros((29,12),dtype=np.float32)
 for i,eb in enumerate(ebs):
     cr[i+1][0]=eb
     psnr[i+1][0]=eb
