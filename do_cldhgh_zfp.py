@@ -35,9 +35,9 @@ for i,eb in enumerate(ebs):
             r=eval(line.split(' ')[7].split('=')[1])
 
             e=eval(line.split(' ')[11].split('=')[1])/rng
-            print(p)
-            print(r)
-            print(e)
+            #print(p)
+            #print(r)
+            #print(e)
             cr[i+1][j-51]=r
             psnr[i+1][j-51]=p
             maxpwerr[i+1][j-51]=e
