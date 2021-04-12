@@ -20,7 +20,7 @@ for i,eb in enumerate(ebs):
         maxpwerr[0][j-51]=j
         filename="CLDHGH_%s.dat" % str(j)
         filepath=os.path.join(datafolder,filename)
-        arr=np.fromfile(filename,dtype=np.float32)
+        arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
         comm="zfp -s -i %s -z out.dat -f -2 3600 1800 -a %f>temp.txt" % (filepath,eb)
         os.system(comm)
