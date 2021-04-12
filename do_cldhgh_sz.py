@@ -23,9 +23,9 @@ for i,eb in enumerate(ebs):
         with open("temp.txt","r") as f:
             lines=f.read().splitlines()
             p=eval(lines[4].split(',')[0].split('=')[1])
-            print(p)
+            
             r=eval(lines[7].split('=')[1])
-            print(r)
+            
             cr[i+1][j-51]=r
             psnr[i+1][j-51]=p
 
