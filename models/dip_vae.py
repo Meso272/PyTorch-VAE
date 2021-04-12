@@ -29,7 +29,7 @@ class DIPVAE(BaseVAE):
            hidden_dims = [16,32,64,128]
         self.last_fm_nums=hidden_dims[-1]
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
-
+        modules = []
         # Build Encoder
         # Build Encoder
         for h_dim in hidden_dims:
