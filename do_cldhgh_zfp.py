@@ -22,14 +22,12 @@ for i,eb in enumerate(ebs):
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
-        comm="zfp -s -i %s -z out.dat -f -2 3600 1800 -a %f>temp.txt" % (filepath,eb)
-        os.system(comm)
+        comm="zfp -s -i %s -z out.dat -f -2 3600 1800 -a %f >temp.txt" % (filepath,eb)
+        #os.system(comm)
         
         
-        with open("temp.txt","r") as f:
+        with os.popen(comm) as f:
             line=f.read()
-            print('baba')
-            print(line)
             #print(line[0])
             p=eval(line.split(' ')[12].split('=')[1])
             
