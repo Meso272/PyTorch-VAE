@@ -1,7 +1,7 @@
 import os
 import numpy as np 
 import sys
-fieldname=sys.argv[0]
+fieldname=sys.argv[1]
 datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % fieldname
 
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
