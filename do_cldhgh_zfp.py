@@ -46,6 +46,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f temp.txt")
 
 
-np.savetxt("sz_cldhgh_cr.txt",cr,delimiter='\t')
-np.savetxt("sz_cldhgh_psnr.txt",psnr,delimiter='\t')
-np.savetxt("sz_cldhgh_maxpwerr.txt",maxpwerr,delimiter='\t')
+np.savetxt("zfp_cldhgh_cr.txt",cr,delimiter='\t')
+np.savetxt("zfp_cldhgh_psnr.txt",psnr,delimiter='\t')
+np.savetxt("zfp_cldhgh_maxpwerr.txt",maxpwerr,delimiter='\t')
