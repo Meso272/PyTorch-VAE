@@ -31,10 +31,10 @@ class SWAE_3D(BaseVAE):
         self.p = wasserstein_deg
         self.num_projections = num_projections
         self.proj_dist = projection_dist
-        
+        self.quant_mode=quant_mode
         modules = []
         if hidden_dims is None:
-            hidden_dims = [32, 64, 128, 256, 512]
+            hidden_dims = [32, 64, 128, 256]
         self.last_fm_nums=hidden_dims[-1]
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
         # Build Encoder
