@@ -29,7 +29,7 @@ for i,eb in enumerate(ebs):
         with open("temp.txt","r") as f:
             line=f.read()
             print(line)
-            print(line[10])
+            print(line[0])
             p=eval(line.split(' ')[12].split('=')[1])
             
             r=eval(line.split(' ')[7].split('=')[1])
