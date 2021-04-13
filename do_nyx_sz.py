@@ -21,11 +21,16 @@ for i,eb in enumerate(ebs):
         comm="sz -x -f -i %s -s %s -3 512 512 512 -a>temp.txt" % (filepath,szpath)
         os.system(comm)
         with open("temp.txt","r") as f:
-            lines=f.read().splitlines()
-            print(lines)
-            p=eval(lines[4].split(',')[0].split('=')[1])
-            
-            r=eval(lines[7].split('=')[1])
+            #lines=f.read().splitlines()
+            #print(lines)
+            try:
+                p=eval(lines[4].split(',')[0].split('=')[1])
+            except:
+                p=0
+            try:
+                r=eval(lines[7].split('=')[1])
+            except:
+                r=0
             
             cr[i+1][j+1]=r
             psnr[i+1][j+1]=p
