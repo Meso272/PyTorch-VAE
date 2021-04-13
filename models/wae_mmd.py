@@ -33,6 +33,7 @@ class WAE_MMD(BaseVAE):
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
 
         # Build Encoder
+        modules = []
         for h_dim in hidden_dims:
             modules.append(
                 nn.Sequential(
