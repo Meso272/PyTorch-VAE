@@ -15,7 +15,7 @@ for i,eb in enumerate(ebs):
     cr[i+1][0]=eb
     psnr[i+1][0]=eb
     maxpwerr[i+1][0]=eb
-    for j,field in enumerate(fileds):
+    for j,field in enumerate(fields):
         cr[0][j+1]=j
         psnr[0][j+1]=j
         maxpwerr[0][j+1]=j

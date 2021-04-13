@@ -10,7 +10,7 @@ psnr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 for i,eb in enumerate(ebs):
     cr[i+1][0]=eb
     psnr[i+1][0]=eb
-    for j,field in enumerate(fileds):
+    for j,field in enumerate(fields):
         
         
         filename="%s.dat" % str(field)
