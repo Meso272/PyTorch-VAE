@@ -15,6 +15,7 @@ class WAE_MMD(BaseVAE):
                  reg_weight: int = 100,
                  kernel_type: str = 'imq',
                  latent_var: float = 2.,
+                 quant_mode=0,
                  **kwargs) -> None:
         super(WAE_MMD, self).__init__()
         self.in_channels=in_channels
@@ -110,7 +111,10 @@ class WAE_MMD(BaseVAE):
 
         # Split the result into mu and var components
         # of the latent Gaussian distribution
+
         z = self.fc_z(result)
+        if self.quant_mode==1:
+          z=self.rounder.apply(z)
         return z
 
     def decode(self, z: Tensor) -> Tensor:
