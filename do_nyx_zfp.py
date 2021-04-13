@@ -23,16 +23,13 @@ for i,eb in enumerate(ebs):
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
-        comm="zfp -s -i %s -z out.dat -f -3 512 512 512 -a %f &>temp.txt" % (filepath,eb)
-        print(eb)
-        print(j)
-        print(field)
-
-        
-        print(os.system(comm))
+        comm="zfp -s -i %s -z out.dat -f -3 512 512 512 -a %f &>tempzfp.txt" % (filepath,eb)
         
         
-        with open("temp.txt","r") as f:
+        os.system(comm)
+        
+        
+        with open("tempzfp.txt","r") as f:
             line=f.read()
             
             #print(line[0])
@@ -49,7 +46,7 @@ for i,eb in enumerate(ebs):
             maxpwerr[i+1][j+1]=e
 
         os.system("rm -f out.dat")
-        os.system("rm -f temp.txt")
+        os.system("rm -f tempzfp.txt")
 
 
 np.savetxt("zfp_nyx_cr.txt" , cr ,delimiter='\t')
