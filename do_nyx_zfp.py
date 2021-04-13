@@ -47,6 +47,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f temp.txt")
 
 
-np.savetxt("zfp_nyx_cr.txt" % fieldname, cr ,delimiter='\t')
-np.savetxt("zfp_nyx_psnr.txt" % fieldname, psnr ,delimiter='\t')
-np.savetxt("zfp_nyx_maxpwerr.txt" % fieldname, maxpwerr ,delimiter='\t')
+np.savetxt("zfp_nyx_cr.txt" , cr ,delimiter='\t')
+np.savetxt("zfp_nyx_psnr.txt" , psnr ,delimiter='\t')
+np.savetxt("zfp_nyx_maxpwerr.txt" , maxpwerr ,delimiter='\t')

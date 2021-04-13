@@ -22,6 +22,7 @@ for i,eb in enumerate(ebs):
         os.system(comm)
         with open("temp.txt","r") as f:
             lines=f.read().splitlines()
+            print(lines)
             p=eval(lines[4].split(',')[0].split('=')[1])
             
             r=eval(lines[7].split('=')[1])
