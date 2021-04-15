@@ -4,7 +4,7 @@ import sys
 #fieldname=sys.argv[1]
 datafolder="/home/jliu447/lossycompression/NYX/512x512x512/"
 fields=["baryon_density","temperature","dark_matter_density","velocity_x","velocity_y","velocity_z"]
-ebs=[-x for x in range(-20,11)]
+ebs=[-x for x in range(11,16)]
 datafolder="/home/jliu447/lossycompression/NYX/512x512x512/"
 cr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)

@@ -3,7 +3,7 @@ import numpy as np
 
 datafolder="/home/jliu447/lossycompression/aramco"
 
-ebs=[-x for x in range(5,18)]
+ebs=[-x for x in range(5,20)]
 
 cr=np.zeros((len(ebs)+1,11),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,11),dtype=np.float32)
