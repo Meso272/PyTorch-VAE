@@ -20,7 +20,7 @@ for field in fields:
         filepath=os.path.join(datafolder,filename)
         a=np.fromfile(filepath,dtype=np.float32)
 
-        if i==0:
+        if i==1:
             mi=np.min(a)
             mx=np.max(a)
         else:
