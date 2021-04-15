@@ -61,7 +61,12 @@ if __name__=='__main__':
         prefix='',
         period=20
     )
-
+    tt_logger = TestTubeLogger(
+        save_dir=config['logging_params']['save_dir'],
+        name=config['logging_params']['name'],
+        debug=False,
+        create_git_tag=False,
+    )
     runner = Trainer(resume_from_checkpoint=args.checkpoint,min_epochs=1,
                  logger=tt_logger,
                  log_save_interval=100,
