@@ -107,6 +107,8 @@ zsize=args.zsize
 size=args.size
 
 array=np.fromfile(args.input,dtype=np.float32).reshape((xsize,ysize,zsize))
+print(np.max(array))
+print(np.min(array))
 picts=[]
 for x in range(0,xsize,size):
     for y in range(0,ysize,size):
@@ -129,6 +131,7 @@ for x in range(0,xsize,size):
             pict=np.expand_dims(pict,0)
             picts.append(pict)
 picts=np.array(picts)
+
 minimum=np.min(picts)
 maximum=np.max(picts)
 rng=maximum-minimum
@@ -158,7 +161,10 @@ qs=[]
 us=[]
 recon=np.zeros((xsize,ysize,zsize),dtype=np.float32)
 eb=args.error*rng
-
+picts=(picts+1)/2
+picts=picts*(global_max-global_min)+global_min
+print(np.max(picts))
+print(np.min(picts))
 if args.bits==32:
     
    
@@ -171,7 +177,8 @@ if args.bits==32:
         latents.append(eval(r'0b'+ bs))
     '''
     latents=zs
-
+    predict=(predict+1)/2
+    predict=predict*(global_max-global_min)+global_min
 
     idx=0
     for x in range(0,xsize,size):
@@ -185,11 +192,9 @@ if args.bits==32:
                     for b in range(y,endy):
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
-                            orig=(orig+1)/2
-                            orig=orig*(global_max-global_min)+global_min
+                            
                             pred=predict[idx][0][a-x][b-y][c-z]
-                            pred=(pred+1)/2
-                            pred=pred*(global_max-global_min)+global_min
+                            
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                            
@@ -213,6 +218,8 @@ else:
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
         predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+    predict=(predict+1)/2
+    predict=predict*(global_max-global_min)+global_min
     idx=0
     for x in range(0,xsize,size):
         for y in range(0,ysize,size):
@@ -225,11 +232,9 @@ else:
                     for b in range(y,endy):
                         for c in range(z,endz):
                             orig=picts[idx][0][a-x][b-y][c-z]
-                            orig=(orig+1)/2
-                            orig=orig*(global_max-global_min)+global_min
+                            
                             pred=predict[idx][0][a-x][b-y][c-z]
-                            pred=(pred+1)/2
-                            pred=pred*(global_max-global_min)+global_min
+                            
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                             qs.append(quant)
