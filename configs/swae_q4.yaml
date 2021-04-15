@@ -1,0 +1,35 @@
+model_params:
+  name: 'SWAE'
+  in_channels: 1
+  input_size: 16
+  latent_dim: 16
+  reg_weight: 100
+  hidden_dims: [16,32,64,128]
+  wasserstein_deg: 2.0
+  num_projections: 200
+  projection_dist: "normal" #"cauchy"
+  quant_mode: 1
+
+exp_params:
+  dataset: cesm
+  data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
+  img_size: 16
+  batch_size: 64 # Better to have a square number
+  LR: 0.005
+  weight_decay: 0.0
+  scheduler_gamma: 0.95
+
+trainer_params:
+  gpus: [0]
+  #max_nb_epochs: 50
+  max_epochs: 101
+
+logging_params:
+  ckpt_save_dir: "ckpts_new/SWAE_1616_16q_doublelayer_bs64"
+  save_dir: "logs/"
+  name: "SWAE_1616_16q_doublelayer_bs64"
+  manual_seed: 1265
+
+
+
+
