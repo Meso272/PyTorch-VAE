@@ -142,8 +142,11 @@ picts=np.array(picts)
 
 
 with torch.no_grad():
-    outputs=test(torch.from_numpy(picts).to(device))
+    length=picts.shape[0]
 
+    outputs1=test(torch.from_numpy(picts[:length//2]).to(device))
+    outputs2=test(torch.from_numpy(picts[length//2:]).to(device))
+    outputs=torch.cat((outputs1,outputs2))
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
 
