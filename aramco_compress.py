@@ -192,6 +192,8 @@ if args.bits==32:
                             pred=pred*(global_max-global_min)+global_min
                             recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
+                           
+                            print(orig-decomp)
                             qs.append(quant)
                             if quant==0:
                                 us.append(decomp)
