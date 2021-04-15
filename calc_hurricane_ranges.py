@@ -25,7 +25,7 @@ for field in fields:
             mx=np.max(a)
         else:
             mi=min(mi,np.min(a))
-            mx=max(np.max(a))
+            mx=max(mx,np.max(a))
     maxs.append(mx)
     mins.append(mi)
 
