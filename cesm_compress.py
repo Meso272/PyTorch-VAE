@@ -138,14 +138,22 @@ for x in range(0,height,size):
 picts=np.array(picts)
 
 with torch.no_grad():
-    
-    #outputs=test(torch.from_numpy(picts).to(device))
-
+    try:
+        outputs=test(torch.from_numpy(picts).to(device))
+    except RuntimeError as exception:
+        if "out of memory" in str(exception):
+            print("WARNING: out of memory")
+            if hasattr(torch.cuda, 'empty_cache'):
+                torch.cuda.empty_cache()
+        else:
+            raise exception
+    '''
     length=picts.shape[0]
 
     outputs1=test(torch.from_numpy(picts[:length//2]).to(device))
     outputs2=test(torch.from_numpy(picts[length//2:]).to(device))
     outputs=torch.cat((outputs1,outputs2))
+    ''' 
 
 
 if args.mode=="c":
