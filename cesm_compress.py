@@ -111,6 +111,9 @@ width=args.width
 size=args.size
 
 array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
+minimum=np.min(array)
+maximum=np.max(array)
+rng=maximum-minimum
 picts=[]
 for x in range(0,height,size):
     for y in range(0,width,size):
@@ -126,9 +129,7 @@ for x in range(0,height,size):
                     #print(array[x:x+size,y:y+size])
         picts.append(pict)
 picts=np.array(picts)
-minimum=np.min(picts)
-maximum=np.max(picts)
-rng=maximum-minimum
+
 with torch.no_grad():
     outputs=test(torch.from_numpy(picts).to('cuda'))
 

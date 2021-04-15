@@ -82,7 +82,7 @@ parser.add_argument('--zsize',  '-z',type=int,
 parser.add_argument('--size','-s',type=int,
                    default=16)
 parser.add_argument('--transpose','-t',type=int,
-                   default=0)
+                   default=1)
 args = parser.parse_args()
 
 global_max=0.0386
@@ -107,8 +107,10 @@ zsize=args.zsize
 size=args.size
 
 array=np.fromfile(args.input,dtype=np.float32).reshape((xsize,ysize,zsize))
-print(np.max(array))
-print(np.min(array))
+minimum=np.min(array)
+maximum=np.max(array)
+rng=maximum-minimum
+
 picts=[]
 for x in range(0,xsize,size):
     for y in range(0,ysize,size):
@@ -132,9 +134,8 @@ for x in range(0,xsize,size):
             picts.append(pict)
 picts=np.array(picts)
 
-minimum=np.min(picts)
-maximum=np.max(picts)
-rng=maximum-minimum
+
+
 with torch.no_grad():
     outputs=test(torch.from_numpy(picts).to('cuda'))
 
@@ -163,8 +164,7 @@ recon=np.zeros((xsize,ysize,zsize),dtype=np.float32)
 eb=args.error*rng
 picts=(picts+1)/2
 picts=picts*(global_max-global_min)+global_min
-print(np.max(picts))
-print(np.min(picts))
+
 if args.bits==32:
     
    
