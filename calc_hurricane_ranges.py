@@ -8,7 +8,7 @@ fields=["CLOUD","PRECIP","QGRAUP","QRAIN","QVAPOR","U","W","P","QCLOUD","QICE","
 
 maxs=[]
 mins=[]
-for field in enumerate(fields):
+for field in fields:
     
     for i in range(1,49):
         s=str(i)
