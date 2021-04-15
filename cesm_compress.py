@@ -87,9 +87,14 @@ parser.add_argument('--eval','-v',type=int,
                    default=0)
 parser.add_argument('--qlatent','-ql',type=int,
                    default=0)
+parser.add_argument('--gpu','-gpu',type=int,
+                   default=1)
 args = parser.parse_args()
 
-
+if args.gpu:
+    device='gpu'
+else:
+    device='cpu'
 with open(args.filename, 'r') as file:
     try:
         config = yaml.safe_load(file)
@@ -103,7 +108,8 @@ with torch.no_grad():
     checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
     test.load_state_dict(checkpoint['state_dict'])
     test=test.model
-    test=test.cuda()
+    if args.gpu:
+        test=test.cuda()
     if args.eval:
         test.eval()
 
@@ -132,7 +138,9 @@ for x in range(0,height,size):
 picts=np.array(picts)
 
 with torch.no_grad():
-    outputs=test(torch.from_numpy(picts).to('cuda'))
+    
+    outputs=test(torch.from_numpy(picts).to(device))
+
 
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
@@ -146,8 +154,10 @@ else:
     else:
         zs=zs.reshape((-1,args.lsize))
     with torch.no_grad():
-    
-        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        if args.gpu:
+            predict=test.decode(torch.from_numpy(zs).to(device)).cpu().detach().numpy()
+        else:
+            predict=test.decode(torch.from_numpy(zs)).detach().numpy()
     
 #predict=outputs[0].numpy()
 print(zs.shape)
@@ -206,7 +216,10 @@ else:
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
-        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        if args.gpu:
+            predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        else:
+            predict=test.decode(torch.from_numpy(zs)).detach().numpy()
     idx=0
     for x in range(0,height,size):
         for y in range(0,width,size):

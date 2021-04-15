@@ -83,6 +83,8 @@ parser.add_argument('--size','-s',type=int,
                    default=16)
 parser.add_argument('--transpose','-t',type=int,
                    default=1)
+parser.add_argument('--gpu','-gpu',type=int,
+                   default=1)
 args = parser.parse_args()
 
 global_max=0.0386
@@ -93,7 +95,10 @@ with open(args.filename, 'r') as file:
         config = yaml.safe_load(file)
     except yaml.YAMLError as exc:
         print(exc)
-
+if args.gpu:
+    device='gpu'
+else:
+    device='cpu'
 model = vae_models[config['model_params']['name']](**config['model_params'])
 test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
@@ -137,7 +142,7 @@ picts=np.array(picts)
 
 
 with torch.no_grad():
-    outputs=test(torch.from_numpy(picts).to('cuda'))
+    outputs=test(torch.from_numpy(picts).to(device))
 
 if args.mode=="c":
     zs=outputs[2].cpu().detach().numpy()
@@ -153,7 +158,10 @@ else:
         zs=zs.reshape((-1,args.lsize))
     with torch.no_grad():
     
-        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        if args.gpu:
+            predict=test.decode(torch.from_numpy(zs).to(device)).cpu().detach().numpy()
+        else:
+            predict=test.decode(torch.from_numpy(zs)).detach().numpy()
     
 #predict=outputs[0].numpy()
 print(zs.shape)
@@ -217,7 +225,10 @@ else:
             latents.append(tmp)
             zs[i][j]=(tmp/radius)*(zmax-zmin)+zmin
     with torch.no_grad():
-        predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        if args.gpu:
+            predict=test.decode(torch.from_numpy(zs).to('cuda')).cpu().detach().numpy()
+        else:
+            predict=test.decode(torch.from_numpy(zs)).detach().numpy()
     predict=(predict+1)/2
     predict=predict*(global_max-global_min)+global_min
     idx=0
