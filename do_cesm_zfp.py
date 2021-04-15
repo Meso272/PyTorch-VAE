@@ -4,7 +4,7 @@ import sys
 fieldname=sys.argv[1]
 datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % fieldname
 
-ebs=[-x for x in range(0,16)]
+ebs=[-x for x in range(-4,16)]
 
 cr=np.zeros((len(ebs)+1,12),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,12),dtype=np.float32)
