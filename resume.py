@@ -52,9 +52,26 @@ if __name__=='__main__':
                               config['exp_params'])
 
 # DEFAULTS used by the Trainer
-    
+    checkpoint_callback = ModelCheckpoint(
+        filepath=config['logging_params']['ckpt_save_dir'],
+        save_top_k=-1,
+        verbose=True,
+        #monitor='val_loss',
+        mode='min',
+        prefix='',
+        period=20
+    )
 
-    runner = Trainer(resume_from_checkpoint=args.checkpoint)
+    runner = Trainer(resume_from_checkpoint=args.checkpoint,min_epochs=1,
+                 logger=tt_logger,
+                 log_save_interval=100,
+                 #train_percent_check=1.,
+                 #val_percent_check=1.,
+                 num_sanity_val_steps=5,
+                 early_stop_callback = False,
+                 checkpoint_callback=checkpoint_callback,
+                 distributed_backend='ddp',
+                 **config['trainer_params'])
 
     print(f"======= Training {config['model_params']['name']} =======")
     runner.fit(experiment)

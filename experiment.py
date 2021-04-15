@@ -40,9 +40,10 @@ class VAEXperiment(pl.LightningModule):
                                               M_N = self.params['batch_size']/ self.num_train_imgs,
                                               optimizer_idx=optimizer_idx,
                                               batch_idx = batch_idx)
-
-        self.logger.experiment.log({key: val.item() for key, val in train_loss.items()})
-
+        try:
+            self.logger.experiment.log({key: val.item() for key, val in train_loss.items()})
+        except:
+            pass
         return train_loss
 
     def validation_step(self, batch, batch_idx, optimizer_idx = 0):
