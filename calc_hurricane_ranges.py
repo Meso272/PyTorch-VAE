@@ -16,7 +16,7 @@ for field in enumerate(fields):
             s='0'+s
         
         
-        filename="%sf%s.bin" % str(field,s)
+        filename="%sf%s.bin" % (field,s)
         filepath=os.path.join(datafolder,filename)
         a=np.fromfile(filepath,dtype=np.float32)
 
