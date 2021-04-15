@@ -92,7 +92,7 @@ parser.add_argument('--gpu','-gpu',type=int,
 args = parser.parse_args()
 
 if args.gpu:
-    device='gpu'
+    device='cuda'
 else:
     device='cpu'
 with open(args.filename, 'r') as file:
