@@ -19,6 +19,6 @@ for i,name in enumerate(namelist):
             lines=f.read().splitlines()
             p=eval(lines[6].split(',')[0].split('=')[1])
             print(p)
-            psnrs[i][j]=p
+            psnrs[i][j-52]=p
         os.system("rm -f recon.dat;rm -f temp.txt")
 np.savetxt("vaetypes.txt",psnrs,delimiter="\t")
