@@ -96,15 +96,16 @@ with open(args.filename, 'r') as file:
     except yaml.YAMLError as exc:
         print(exc)
 
-model = vae_models[config['model_params']['name']](**config['model_params'])
 
-test = VAEXperiment(model,config['exp_params'])
-checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
-test.load_state_dict(checkpoint['state_dict'])
-test=test.model
-test=test.cuda()
-if args.eval:
-    test.eval()
+with torch.no_grad():
+    model = vae_models[config['model_params']['name']](**config['model_params'])
+    test = VAEXperiment(model,config['exp_params'])
+    checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
+    test.load_state_dict(checkpoint['state_dict'])
+    test=test.model
+    test=test.cuda()
+    if args.eval:
+        test.eval()
 
 height=args.height
 width=args.width
