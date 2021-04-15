@@ -10,6 +10,7 @@ for i,name in enumerate(namelist):
     for j in range(52,63):
         datafile="CLDHGH_%d.dat" % j
         datapath=os.path.join(datafolder,datafile)
+        os.system("pwd")
         comm="python cesm_comress.py -c configs/%s.yaml -k ckpts/%s/last.ckpt -i %s -r recon.dat" % (config,name,datapath)
         os.system(comm)
         comm="compareData -f %s recon.dat&>temp.txt" % datapath
