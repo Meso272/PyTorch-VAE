@@ -175,7 +175,7 @@ def lorenzo(array,x_start,y_start,error_bound,block_size,cross_block=True):
             c=array[x-1][y-1] if x>0 and y>0 else 0
             orig=array[x][y]
             pred=a+b-c
-            loss+=abs(array[x][y]-pred)
+            loss+=abs(orig-pred)
             q,decomp=quantize(orig,pred,error_bound)
             qs.append(q)
             if q==0:
