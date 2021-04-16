@@ -3,7 +3,7 @@ import sys
 from math import ceil
 a=np.fromfile(sys.argv[1],dtype=np.float32)
 blocksize=int(sys.argv[2])
-eb=float(sys,argv[3])
+eb=float(sys.argv[3])
 size=a.shape[0]
 abseb=eb*(np.max(a)-np.min(a))
 e=ceil(0.5/abseb)
