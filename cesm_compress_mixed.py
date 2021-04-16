@@ -87,10 +87,6 @@ parser.add_argument('--eval','-v',type=int,
                    default=0)
 parser.add_argument('--qlatent','-ql',type=int,
                    default=0)
-parser.add_argument('--max','-mx',type=float,
-                   default=1.0)
-parser.add_argument('--min','-mi',type=float,
-                   default=0.0)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
 parser.add_argument('--multigpu','-mg',type=int,
@@ -137,9 +133,6 @@ for x in range(0,height,size):
         pict=array[x:endx,y:endy]
         padx=size-pict.shape[0]
         pady=size-pict.shape[1]
-        
-        if args.normalize:
-            pict=(pict-args.min)/(args.max-args.min)
         pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
@@ -166,6 +159,37 @@ with torch.no_grad():
     outputs2=test(torch.from_numpy(picts[length//2:]).to(device))
     outputs=torch.cat((outputs1,outputs2))
     ''' 
+def lorenzo(array,x_start,y_start,error_bound,block_size,cross_block=True):
+    x_end=min(height,x+block_size)
+    y_end=min(width,y+block_size)
+    #backup=np.array(array[x_start:x_end,y:start:y_end])
+    #preds=np.zeros((block_size,block_size),dtype=np.float32)
+    qs=[]
+    us=[]
+    loss=0
+    decomps=np.zeros((block_size,block_size),dtype=np.float32)
+    for x in range(x_start,x_end):
+        for y in range(y_start,y_end):
+            a=array[x-1][y] if x>0 else 0
+            b=array[x][y-1] if y>0 else 0
+            c=array[x-1][y-1] if x>0 and y>0 else 0
+            orig=array[x][y]
+            pred=a+b-c
+            loss+=abs(array[x][y]-pred)
+            q,decomp=quantize(orig,pred,error_bound)
+            qs.append(q)
+            if q==0:
+                us.append(decomp)
+            decomps[x-x_start][y-y_start]=decomp
+            array[x][y]=decomp
+    #array[x_start:x_end,y:start:y_end]=backup
+
+    return loss,decomps,qs,us
+           
+
+
+
+
 
 
 if args.mode=="c":
@@ -192,11 +216,12 @@ qs=[]
 us=[]
 recon=np.zeros((height,width),dtype=np.float32)
 eb=args.error*rng
+
+nn_count=0
+lorenzo_count=0
 if args.normalize:
     picts=(picts+1)/2
-    picts=picts*(args.max-args.min)+args.min
     predict=(predict+1)/2
-    predict=predict*(args.max-args.min)+args.min
 if args.bits==32:
     
     #temp_latents=zs.flatten()
@@ -216,20 +241,29 @@ if args.bits==32:
         for y in range(0,width,size):
             endx=min(x+size,height)
             endy=min(y+size,width)
+            orig=picts[idx][0][:endx-x,:endy-y]
+            pred=predict[idx][0][:endx-x,:endy-y]
+            recon[x:endx,y:endy]=predict[idx][0][:endx-x,:endy-y]
+            loss_1=np.sum(np.abs(orig-pred))
+            loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,eb,size)
+            if loss_2<=loss_1:
+                lorenzo_count+=1
+                qs=qs+q_block
+                us=us+u_block
+            else:
+                nn_count+=1
 
-            for a in range(x,endx):
-                for b in range(y,endy):
-                    orig=picts[idx][0][a-x][b-y]
-                    pred=predict[idx][0][a-x][b-y]
-                   
-                    
-                    
-                    recon[a][b]=pred
-                    quant,decomp=quantize(orig,pred,eb)
-                    qs.append(quant)
-                    if quant==0:
-                        us.append(decomp)
-                    array[a][b]=decomp
+                for a in range(x,endx):
+                    for b in range(y,endy):
+
+                        orig=picts[idx][0][a-x][b-y]
+                        pred=predict[idx][0][a-x][b-y]
+                        #recon[a][b]=pred
+                        quant,decomp=quantize(orig,pred,eb)
+                        qs.append(quant)
+                        if quant==0:
+                            us.append(decomp)
+                        array[a][b]=decomp
             idx=idx+1
 
 else:
@@ -275,6 +309,9 @@ else:
    latents=np.array(latents,dtype=np.float32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
+
+print("%d blocks used NN." % nn_count)
+print("%d blocks used Lorenzo." % lorenzo_count)
 if args.latents!=None and args.mode=="c":
     if args.transpose:
         latents=latents.transpose()
