@@ -89,6 +89,9 @@ parser.add_argument('--qlatent','-ql',type=int,
                    default=0)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
+parser.add_argument('--multigpu','-mg',type=int,
+                   default=0)
+parser.add_argument('--gpus', '-gs',nargs='*', type=int,default=0)
 args = parser.parse_args()
 
 if args.gpu:

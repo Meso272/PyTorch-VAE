@@ -271,8 +271,10 @@ class SWAE(BaseVAE):
         # of the latent Gaussian distribution
         if self.encoder_final_layer=='fc' and (self.struct!='resnet' or not self.resnet_fc):
             z = self.fc_z(result)
+            #del result
         else:
             z= result
+
         if self.quant_mode==1:
           z=self.rounder.apply(z)
         return z

@@ -14,12 +14,12 @@ class BasicBlock(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1,norm=nn.BatchNorm2d,actv=nn.ReLU):
         super().__init__()
         self.norm=norm
-        self.actv=actv()
+        self.actv=actv(inplace=True)
         #residual function
         self.residual_function = nn.Sequential(
             nn.Conv2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, bias=False),
             norm(out_channels),
-            actv(),
+            actv(inplace=True),
             nn.Conv2d(out_channels, out_channels * BasicBlock.expansion, kernel_size=3, padding=1, bias=False),
             norm(out_channels * BasicBlock.expansion)
         )
@@ -53,13 +53,13 @@ class BasicBlock_Decode(nn.Module):
     def __init__(self, in_channels, out_channels, stride=1,norm=nn.BatchNorm2d,actv=nn.ReLU):
         super().__init__()
         self.norm=norm
-        self.actv=actv()
+        self.actv=actv(inplace=True)
         #residual function
         self.residual_function = nn.Sequential(
             nn.ConvTranspose2d(in_channels*BasicBlock_Decode.expansion, in_channels , kernel_size=3, padding=1, output_padding=0,bias=False),
 
             norm(in_channels),
-            actv(),
+            actv(inplace=True),
             
             nn.ConvTranspose2d(in_channels, out_channels, kernel_size=3, stride=stride, padding=1, output_padding=stride-1, bias=False),
             norm(out_channels)
@@ -163,6 +163,7 @@ class ResNet_Encoder(nn.Module):
 
     def forward(self, x):
         output=x
+        #del x
         #print("i")
         #print(output.shape)
         if self.conv1!=None:
@@ -267,6 +268,7 @@ class ResNet_Decoder(nn.Module):
 
     def forward(self, x):
         output=x
+        #del x
         #print("decoder")
 
         #print(output.shape)
