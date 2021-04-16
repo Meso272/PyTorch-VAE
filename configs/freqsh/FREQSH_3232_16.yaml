@@ -14,13 +14,14 @@ exp_params:
   dataset: cesm_new
   data_path: "/home/jliu447/lossycompression/cesm-multisnapshot-5fields"
   field : "FREQSH"
+  max: 1.0
+  min: 0.0
   img_size: 32
   batch_size: 64 # Better to have a square number
   LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
-  global_max: 1.0
-  global_min: 0.0
+  
 
 trainer_params:
   gpus: [0,1,2,3]
