@@ -124,9 +124,9 @@ class SWAE_3D(BaseVAE):
 
         self.decoder = nn.Sequential(*modules)
         if strides==[]:
-                stride=2
-            else:
-                stride=strides[-1]
+            stride=2
+        else:
+            stride=strides[-1]
         modules=[]
         
         modules.append ( nn.Sequential(
