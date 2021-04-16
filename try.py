@@ -12,7 +12,7 @@ d=np.zeros(size,dtype=np.float32)
 for i in range(0,size,blocksize):
     end=min(i+blocksize,size)
     b=a[i:end]
-    m=mean(b)
+    m=np.mean(b)
     for j in range(i,end):
         diff=a[j]-m
         c[j]=round(diff*e)
