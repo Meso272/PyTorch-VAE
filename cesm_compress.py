@@ -115,6 +115,7 @@ with torch.no_grad():
         test=test.cuda()
     if args.eval:
         test.eval()
+    if
 
 height=args.height
 width=args.width
@@ -141,8 +142,9 @@ for x in range(0,height,size):
 picts=np.array(picts)
 
 with torch.no_grad():
-    try:
-        outputs=test(torch.from_numpy(picts).to(device))
+    #try:
+    outputs=test(torch.from_numpy(picts).to(device))
+    '''
     except RuntimeError as exception:
         if "out of memory" in str(exception):
             print("WARNING: out of memory")
@@ -150,7 +152,7 @@ with torch.no_grad():
                 torch.cuda.empty_cache()
         else:
             raise exception
-    '''
+
     length=picts.shape[0]
 
     outputs1=test(torch.from_numpy(picts[:length//2]).to(device))
