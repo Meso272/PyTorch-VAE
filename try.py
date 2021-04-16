@@ -1,6 +1,6 @@
 import numpy as np 
 import sys
-from math import ceil,round
+from math import ceil
 a=np.fromfile(sys.argv[1],dtype=np.float32)
 blocksize=int(sys.argv[2])
 eb=float(sys,argv[3])
