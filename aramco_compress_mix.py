@@ -211,7 +211,8 @@ recon=np.zeros((xsize,ysize,zsize),dtype=np.float32)
 eb=args.error*rng
 picts=(picts+1)/2
 picts=picts*(global_max-global_min)+global_min
-
+nn_count=0
+lorenzo_count=0
 if args.bits==32:
     
    
@@ -240,9 +241,9 @@ if args.bits==32:
                 loss_1=np.sum(np.abs(orig-pred))
                 loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,z,eb,size)
                 if loss_2<=loss_1:
-                lorenzo_count+=1
-                qs=qs+q_block
-                us=us+u_block
+                    lorenzo_count+=1
+                    qs=qs+q_block
+                    us=us+u_block
                 else:
                    nn_count+=1
                     for a in range(x,endx):
@@ -307,6 +308,8 @@ else:
 latents=np.array(latents,dtype=np.float32)
 quants=np.array(qs,dtype=np.int32)
 unpreds=np.array(us,dtype=np.float32)
+print("%d blocks used NN." % nn_count)
+print("%d blocks used Lorenzo." % lorenzo_count)
 if args.latents!=None and args.mode=="c":
     if args.transpose:
         latents=latents.transpose()
