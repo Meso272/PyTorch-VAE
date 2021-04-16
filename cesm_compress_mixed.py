@@ -160,8 +160,8 @@ with torch.no_grad():
     outputs=torch.cat((outputs1,outputs2))
     ''' 
 def lorenzo(array,x_start,y_start,error_bound,block_size,cross_block=True):
-    x_end=min(height,x+block_size)
-    y_end=min(width,y+block_size)
+    x_end=min(height,x_start+block_size)
+    y_end=min(width,y_start+block_size)
     #backup=np.array(array[x_start:x_end,y:start:y_end])
     #preds=np.zeros((block_size,block_size),dtype=np.float32)
     qs=[]
