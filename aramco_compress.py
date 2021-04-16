@@ -85,10 +85,14 @@ parser.add_argument('--transpose','-t',type=int,
                    default=1)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
+parser.add_argument('--max','-mx',type=float,
+                   default=0.0386)
+parser.add_argument('--min','-mi',type=float,
+                   default=-0.0512)
 args = parser.parse_args()
 
-global_max=0.0386
-global_min=-0.0512
+global_max=args.max
+global_min=args.min
 
 with open(args.filename, 'r') as file:
     try:
@@ -151,7 +155,7 @@ with torch.no_grad():
 
     outputs=torch.cat((outputs1,outputs2))
     '''
-if args.mode=="c":
+if args.mode!="d":
     zs=outputs[2].cpu().detach().numpy()
 
     predict=outputs[0].cpu().detach().numpy()
@@ -202,7 +206,10 @@ if args.bits==32:
                 endx=min(x+size,xsize)
                 endy=min(y+size,ysize)
                 endz=min(z+size,zsize)
-
+                recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
+                if args.mode=="e":
+                    idx=idx+1
+                    continue
                 for a in range(x,endx):
                     for b in range(y,endy):
                         for c in range(z,endz):
@@ -210,7 +217,7 @@ if args.bits==32:
                             
                             pred=predict[idx][0][a-x][b-y][c-z]
                             
-                            recon[a][b][c]=pred
+                            #recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                            
                             #print(orig-decomp)
@@ -245,7 +252,7 @@ else:
                 endx=min(x+size,xsize)
                 endy=min(y+size,ysize)
                 endz=min(z+size,zsize)
-
+                recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
                 for a in range(x,endx):
                     for b in range(y,endy):
                         for c in range(z,endz):
@@ -253,7 +260,7 @@ else:
                             
                             pred=predict[idx][0][a-x][b-y][c-z]
                             
-                            recon[a][b][c]=pred
+                            #recon[a][b][c]=pred
                             quant,decomp=quantize(orig,pred,eb)
                             qs.append(quant)
                             if quant==0:

@@ -168,7 +168,7 @@ with torch.no_grad():
     ''' 
 
 
-if args.mode=="c":
+if args.mode!="d":
     zs=outputs[2].cpu().detach().numpy()
     predict=outputs[0].cpu().detach().numpy()
     
@@ -216,7 +216,10 @@ if args.bits==32:
         for y in range(0,width,size):
             endx=min(x+size,height)
             endy=min(y+size,width)
-
+            recon[x:endx,y:endy]=predict[idx][0][:endx-x][:endy-y]
+            if args.mode=="e":
+                idx=idx+1
+                continue
             for a in range(x,endx):
                 for b in range(y,endy):
                     orig=picts[idx][0][a-x][b-y]
@@ -224,7 +227,7 @@ if args.bits==32:
                    
                     
                     
-                    recon[a][b]=pred
+                    #recon[a][b]=pred
                     quant,decomp=quantize(orig,pred,eb)
                     qs.append(quant)
                     if quant==0:
