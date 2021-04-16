@@ -85,6 +85,8 @@ parser.add_argument('--transpose','-t',type=int,
                    default=1)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
+parser.add_argument('--eval','-v',type=int,
+                   default=0)
 parser.add_argument('--max','-mx',type=float,
                    default=0.0386)
 parser.add_argument('--min','-mi',type=float,
@@ -109,6 +111,8 @@ checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 test=test.model
 test=test.cuda()
+if args.eval:
+    test.eval()
 #test.eval()
 xsize=args.xsize
 ysize=args.ysize

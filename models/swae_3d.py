@@ -22,6 +22,7 @@ class SWAE_3D(BaseVAE):
                  actv='leakyrelu',
                  norm='bn',
                  quant_mode=0,
+                 strides=[],
                     **kwargs) -> None:
         super(SWAE_3D, self).__init__()
         self.encoder_final_layer=encoder_final_layer
@@ -38,13 +39,17 @@ class SWAE_3D(BaseVAE):
         self.last_fm_nums=hidden_dims[-1]
         self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
         # Build Encoder
-        for h_dim in hidden_dims:
+        for i,h_dim in enumerate(hidden_dims):
+            if strides==[]:
+                stride=2
+            else:
+                stride=strides[i]
             modules.append(
                 nn.Sequential(
                     nn.Conv3d(in_channels, out_channels=in_channels,
                               kernel_size= 3, stride= 1, padding  = 1),###added layer
                     nn.Conv3d(in_channels, out_channels=h_dim,
-                              kernel_size= 3, stride= 2, padding  = 1),
+                              kernel_size= 3, stride= stride, padding  = 1),
                    )
             )
             if norm=='bn':
@@ -79,8 +84,12 @@ class SWAE_3D(BaseVAE):
         
 
         hidden_dims.reverse()
-
+        strides.reverse()
         for i in range(len(hidden_dims) - 1):
+            if strides==[]:
+                stride=2
+            else:
+                stride=strides[i]
             modules.append(
                 nn.Sequential(
                     nn.ConvTranspose3d(hidden_dims[i],
@@ -92,7 +101,7 @@ class SWAE_3D(BaseVAE):
                     nn.ConvTranspose3d(hidden_dims[i],
                                        hidden_dims[i + 1],
                                        kernel_size=3,
-                                       stride = 2,
+                                       stride = stride,
                                        padding=1,
                                        output_padding=1),
                     )
@@ -114,9 +123,12 @@ class SWAE_3D(BaseVAE):
 
 
         self.decoder = nn.Sequential(*modules)
-
+        if strides==[]:
+                stride=2
+            else:
+                stride=strides[-1]
         modules=[]
-
+        
         modules.append ( nn.Sequential(
                             nn.ConvTranspose3d(hidden_dims[-1],
                                        hidden_dims[-1],
@@ -127,7 +139,7 @@ class SWAE_3D(BaseVAE):
                             nn.ConvTranspose3d(hidden_dims[-1],
                                                hidden_dims[-1],
                                                kernel_size=3,
-                                               stride=2,
+                                               stride=stride,
                                                padding=1,
                                                output_padding=1),
                             
