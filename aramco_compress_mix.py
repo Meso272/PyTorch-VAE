@@ -245,7 +245,7 @@ if args.bits==32:
                     qs=qs+q_block
                     us=us+u_block
                 else:
-                   nn_count+=1
+                    nn_count+=1
                     for a in range(x,endx):
                         for b in range(y,endy):
                             for c in range(z,endz):
