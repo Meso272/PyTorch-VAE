@@ -287,16 +287,16 @@ class ResNet_Decoder(nn.Module):
         output = self.deconv1_x(output)
         #print("deconv1")
 
-        print(output.shape)
+        #print(output.shape)
         output = self.deconv2_x(output)
         #print("deconv2")
-        print(output.shape)
+        #print(output.shape)
         output = self.deconv3_x(output)
         #print("deconv3")
-        print(output.shape)
+        #print(output.shape)
         output = self.deconv4_x(output)
         #print("deconv4")
-        print(output.shape)
+        #print(output.shape)
         
         if self.convout!=None:
             output=self.convout(output)
