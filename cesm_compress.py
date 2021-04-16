@@ -115,7 +115,7 @@ with torch.no_grad():
         test=test.cuda()
     if args.eval:
         test.eval()
-    if
+    #if
 
 height=args.height
 width=args.width
