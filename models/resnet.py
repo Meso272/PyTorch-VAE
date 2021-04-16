@@ -163,7 +163,7 @@ class ResNet_Encoder(nn.Module):
 
     def forward(self, x):
         output=x
-        del x
+        #del x
         #print("i")
         #print(output.shape)
         if self.conv1!=None:
@@ -268,7 +268,7 @@ class ResNet_Decoder(nn.Module):
 
     def forward(self, x):
         output=x
-        del x
+        #del x
         #print("decoder")
 
         #print(output.shape)
@@ -287,16 +287,16 @@ class ResNet_Decoder(nn.Module):
         output = self.deconv1_x(output)
         #print("deconv1")
 
-        #print(output.shape)
+        print(output.shape)
         output = self.deconv2_x(output)
         #print("deconv2")
-        #print(output.shape)
+        print(output.shape)
         output = self.deconv3_x(output)
         #print("deconv3")
-        #print(output.shape)
+        print(output.shape)
         output = self.deconv4_x(output)
         #print("deconv4")
-        #print(output.shape)
+        print(output.shape)
         
         if self.convout!=None:
             output=self.convout(output)
