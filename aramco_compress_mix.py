@@ -44,39 +44,7 @@ def quantize(data,pred,error_bound):
         #print("a")
         return 0,data
     
-def lorenzo(array,x_start,y_start,z_start,error_bound,block_size,cross_block=True):
-    x_end=min(height,x_start+block_size)
-    y_end=min(width,y_start+block_size)
-    z_end=min(width,z_start+block_size)
-    #backup=np.array(array[x_start:x_end,y:start:y_end])
-    #preds=np.zeros((block_size,block_size),dtype=np.float32)
-    qs=[]
-    us=[]
-    loss=0
-    decomps=np.zeros((block_size,block_size,block_size),dtype=np.float32)
-    for x in range(x_start,x_end):
-        for y in range(y_start,y_end):
-            for z in range(z_start,z_end):
-                f_011=array[x-1][y][z] if x else 0
-                f_101=array[x][y-1][z] if y else 0
-                f_110=array[x][y][z-1] if z else 0
-                f_001=array[x-1][y-1][z] if x and y else 0
-                f_100=array[x][y-1][z-1] if y and z else 0
-                f_010=array[x][y-1][z] if x and z else 0
-                f_000=array[x-1][y-1][z-1] if x and y and z else 0
 
-                orig=array[x][y][z]
-                pred=f_000+f_011+f_101+f_110-f_001-f_010-f_100
-                loss+=abs(orig-pred)
-                q,decomp=quantize(orig,pred,error_bound)
-                qs.append(q)
-                if q==0:
-                    us.append(decomp)
-                decomps[x-x_start][y-y_start][z-z_start]=decomp
-                array[x][y][z]=decomp
-    #array[x_start:x_end,y:start:y_end]=backup
-
-    return loss,decomps,qs,us
 
 parser = argparse.ArgumentParser(description='Generic runner for VAE models')
 parser.add_argument('--config',  '-c',
@@ -131,6 +99,40 @@ if args.gpu:
     device='cuda'
 else:
     device='cpu'
+
+def lorenzo(array,x_start,y_start,z_start,error_bound,block_size,cross_block=True):
+    x_end=min(xsize,x_start+block_size)
+    y_end=min(ysize,y_start+block_size)
+    z_end=min(zsize,z_start+block_size)
+    #backup=np.array(array[x_start:x_end,y:start:y_end])
+    #preds=np.zeros((block_size,block_size),dtype=np.float32)
+    qs=[]
+    us=[]
+    loss=0
+    decomps=np.zeros((block_size,block_size,block_size),dtype=np.float32)
+    for x in range(x_start,x_end):
+        for y in range(y_start,y_end):
+            for z in range(z_start,z_end):
+                f_011=array[x-1][y][z] if x else 0
+                f_101=array[x][y-1][z] if y else 0
+                f_110=array[x][y][z-1] if z else 0
+                f_001=array[x-1][y-1][z] if x and y else 0
+                f_100=array[x][y-1][z-1] if y and z else 0
+                f_010=array[x][y-1][z] if x and z else 0
+                f_000=array[x-1][y-1][z-1] if x and y and z else 0
+
+                orig=array[x][y][z]
+                pred=f_000+f_011+f_101+f_110-f_001-f_010-f_100
+                loss+=abs(orig-pred)
+                q,decomp=quantize(orig,pred,error_bound)
+                qs.append(q)
+                if q==0:
+                    us.append(decomp)
+                decomps[x-x_start][y-y_start][z-z_start]=decomp
+                array[x][y][z]=decomp
+    #array[x_start:x_end,y:start:y_end]=backup
+
+    return loss,decomps,qs,us
 model = vae_models[config['model_params']['name']](**config['model_params'])
 test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
