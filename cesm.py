@@ -6,7 +6,7 @@ class CLDHGH(Dataset):
         height=1800
         width=3600
         picts=[]
-        count=[0,0,0,0]
+        #count=[0,0,0,0]
         for i in range(start,end):
             s=str(i)
             if i<10:
@@ -26,7 +26,9 @@ class CLDHGH(Dataset):
                     if normalize:
                         pict=pict*2-1
                     pict=np.expand_dims(pict,0)
+                    '''
                     var=np.var(pict)
+
                     if var<1e-5:
                         count[0]+=1
                     if var<1e-4:
@@ -34,12 +36,14 @@ class CLDHGH(Dataset):
                     if var<1e-3:
                         count[2]+=1
                     if var<1e-2:
-                        count[3]+=1    
+                        count[3]+=1   
+                    ''' 
                     #print(array[x:x+size,y:y+size])
                     picts.append(pict)
-        print(count)
-        print(self.picts.shape[0])
+        #print(count)
+
         self.picts=np.array(picts)
+        #print(self.picts.shape[0])
 
     def __len__(self):
         return self.picts.shape[0]
