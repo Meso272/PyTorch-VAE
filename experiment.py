@@ -24,7 +24,7 @@ class VAEXperiment(pl.LightningModule):
         self.params = params
         self.curr_device = None
         self.hold_graph = False
-        if 'epsilon' not in self.params:
+        if 'epsilon' not in self.params.keys():
             self.params['epsilon']=-1
         try:
             self.hold_graph = self.params['retain_first_backpass']
