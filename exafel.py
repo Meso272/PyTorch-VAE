@@ -10,7 +10,7 @@ class EXAFEL(Dataset):
             
             filename="group_renamed_%d.dat" % i
             filepath=os.path.join(path,filename)
-            array=np.fromfile(filepath,dtype=np.float32).reshape((32,height,width))
+            array=np.fromfile(filepath,dtype=np.float32).reshape((height,width))
 
         #print(array)
             
