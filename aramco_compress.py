@@ -2,7 +2,7 @@ import yaml
 import argparse
 import numpy as np
 import torch
-from bitstring import BitArray
+#from bitstring import BitArray
 from torch.autograd import Variable
 from models import *
 from experiment import VAEXperiment
