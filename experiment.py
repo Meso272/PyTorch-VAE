@@ -26,6 +26,8 @@ class VAEXperiment(pl.LightningModule):
         self.hold_graph = False
         if 'epsilon' not in self.params.keys():
             self.params['epsilon']=-1
+
+
         try:
             self.hold_graph = self.params['retain_first_backpass']
         except:
@@ -142,7 +144,7 @@ class VAEXperiment(pl.LightningModule):
     @data_loader
     def train_dataloader(self):
         transform = self.data_transforms()
-
+        print(self.params['epsilon'])
         if self.params['dataset'] == 'celeba':
             dataset = CelebA(root = self.params['data_path'],
                              split = "train",
