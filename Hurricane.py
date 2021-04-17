@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import os
 class Hurricane(Dataset):
-    def __init__(self,path,start,end,size,field='U',global_max=None,global_min=None,norm_min=-1,cache_size=None):
+    def __init__(self,path,start,end,size,field='U',global_max=None,global_min=None,norm_min=-1,cache_size=None,epsilon=-1):
         size_x=100
         size_y=500
         size_z=500
