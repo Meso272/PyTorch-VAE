@@ -139,15 +139,15 @@ for x in range(0,height,size):
         pict=array[x:endx,y:endy]
         padx=size-pict.shape[0]
         pady=size-pict.shape[1]
-        pict=np.pad(pict,((0,padx),(0,pady)))
-        pict=(pict-args.min)/(args.max-args.min)
-        pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
+        
                     #print(array[x:x+size,y:y+size])
         if args.normalize:
             pict=(pict-args.min)/(args.max-args.min)
         pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
+        pict=np.expand_dims(pict,0)
+        picts.append(pict)
 picts=np.array(picts)
 
 with torch.no_grad():
