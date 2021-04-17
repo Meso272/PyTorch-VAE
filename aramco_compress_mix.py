@@ -89,10 +89,14 @@ parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
 parser.add_argument('--lossmode','-lm',type=int,
                    default=1)
+parser.add_argument('--max','-mx',type=float,
+                   default=0.0386)
+parser.add_argument('--min','-mi',type=float,
+                   default=-0.0512)
 args = parser.parse_args()
 
-global_max=0.0386
-global_min=-0.0512
+global_max=args.max
+global_min=args.min
 
 with open(args.filename, 'r') as file:
     try:

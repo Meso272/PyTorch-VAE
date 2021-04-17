@@ -87,6 +87,10 @@ parser.add_argument('--eval','-v',type=int,
                    default=0)
 parser.add_argument('--qlatent','-ql',type=int,
                    default=0)
+parser.add_argument('--max','-mx',type=float,
+                   default=1.0)
+parser.add_argument('--min','-mi',type=float,
+                   default=0.0)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
 parser.add_argument('--multigpu','-mg',type=int,
@@ -136,11 +140,14 @@ for x in range(0,height,size):
         padx=size-pict.shape[0]
         pady=size-pict.shape[1]
         pict=np.pad(pict,((0,padx),(0,pady)))
+        pict=(pict-global_min)/(global_max-global_min)
+        pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
+                    #print(array[x:x+size,y:y+size])
+        if args.normalize:
+            pict=(pict-args.min)/(args.max-args.min)
+        pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
-        pict=np.expand_dims(pict,0)
-                    #print(array[x:x+size,y:y+size])
-        picts.append(pict)
 picts=np.array(picts)
 
 with torch.no_grad():
@@ -226,7 +233,9 @@ nn_count=0
 lorenzo_count=0
 if args.normalize:
     picts=(picts+1)/2
+    picts=picts*(args.max-args.min)+args.min
     predict=(predict+1)/2
+    predict=predict*(args.max-args.min)+args.min
 if args.bits==32:
     
     #temp_latents=zs.flatten()
