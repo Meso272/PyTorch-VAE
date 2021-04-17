@@ -221,7 +221,7 @@ if args.bits==32:
             print(endx)
             print(endy)
             print(predict[idx][0].shape)
-            print(predict[idx][0][:endx-x][:endy-y].shape)
+            print(predict[idx][0][:(endx-x)][:(endy-y)].shape)
             recon[x:endx,y:endy]=predict[idx][0][:endx-x][:endy-y]
             if args.mode=="e":
                 idx=idx+1
