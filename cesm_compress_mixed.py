@@ -140,7 +140,7 @@ for x in range(0,height,size):
         padx=size-pict.shape[0]
         pady=size-pict.shape[1]
         pict=np.pad(pict,((0,padx),(0,pady)))
-        pict=(pict-global_min)/(global_max-global_min)
+        pict=(pict-args.min)/(args.max-args.min)
         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
                     #print(array[x:x+size,y:y+size])
         if args.normalize:
