@@ -254,10 +254,10 @@ if args.bits==32:
                 else:
                     loss_1=np.sum(np.abs(origs-preds)//eb)
                 loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,z,eb,size)
-                print(idx)
-                print(loss_1)
-                print(loss_2)
-                print("--")
+                #print(idx)
+                #print(loss_1)
+                #print(loss_2)
+                #print("--")
                 if loss_2<=loss_1:
                     lorenzo_count+=1
                     qs=qs+q_block
