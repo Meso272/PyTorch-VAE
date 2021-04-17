@@ -246,6 +246,10 @@ if args.bits==32:
                 recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
                 loss_1=np.sum(np.abs(orig-pred))
                 loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,z,eb,size)
+                print(idx)
+                print(loss_1)
+                print(loss_2)
+                print("--")
                 if loss_2<=loss_1:
                     lorenzo_count+=1
                     qs=qs+q_block
