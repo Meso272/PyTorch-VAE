@@ -144,7 +144,7 @@ class VAEXperiment(pl.LightningModule):
     @data_loader
     def train_dataloader(self):
         transform = self.data_transforms()
-        print(self.params['epsilon'])
+        self.params['epsilon']=float(self.params['epsilon'])
         if self.params['dataset'] == 'celeba':
             dataset = CelebA(root = self.params['data_path'],
                              split = "train",
