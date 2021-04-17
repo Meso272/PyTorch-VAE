@@ -149,7 +149,8 @@ test = VAEXperiment(model,config['exp_params'])
 checkpoint = torch.load(args.ckpt, map_location=lambda storage, loc: storage)
 test.load_state_dict(checkpoint['state_dict'])
 test=test.model
-test=test.cuda()
+if args.gpu:
+    test=test.cuda()
 if args.eval:
     test.eval()
 #test.eval()
