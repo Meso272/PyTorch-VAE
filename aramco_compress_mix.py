@@ -126,7 +126,7 @@ def lorenzo(array,x_start,y_start,z_start,error_bound,block_size,cross_block=Tru
                 f_110=array[x][y][z-1] if z else 0
                 f_001=array[x-1][y-1][z] if x and y else 0
                 f_100=array[x][y-1][z-1] if y and z else 0
-                f_010=array[x][y-1][z] if x and z else 0
+                f_010=array[x-1][y][z-1] if x and z else 0
                 f_000=array[x-1][y-1][z-1] if x and y and z else 0
 
                 orig=array[x][y][z]
