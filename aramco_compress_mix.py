@@ -246,13 +246,13 @@ if args.bits==32:
                 endx=min(x+size,xsize)
                 endy=min(y+size,ysize)
                 endz=min(z+size,zsize)
-                orig=picts[idx][0][:endx-x,:endy-y,:endz-z]
-                pred=predict[idx][0][:endx-x,:endy-y,:endz-z]
-                recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
+                origs=picts[idx][0][:endx-x,:endy-y,:endz-z]
+                preds=predict[idx][0][:endx-x,:endy-y,:endz-z]
+                recon[x:endx,y:endy,z:endz]=preds
                 if args.lossmode==1:
-                    loss_1=np.sum(np.abs(orig-pred))
+                    loss_1=np.sum(np.abs(origs-preds))
                 else:
-                    loss_1=np.sum(np.abs(orig-pred)//eb)
+                    loss_1=np.sum(np.abs(origs-preds)//eb)
                 loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,z,eb,size)
                 print(idx)
                 print(loss_1)
@@ -267,9 +267,9 @@ if args.bits==32:
                     for a in range(x,endx):
                         for b in range(y,endy):
                             for c in range(z,endz):
-                                orig=picts[idx][0][a-x][b-y][c-z]
+                                orig=origs[a-x][b-y][c-z]
                             
-                                pred=predict[idx][0][a-x][b-y][c-z]
+                                pred=preds[a-x][b-y][c-z]
                             
                             #recon[a][b][c]=pred
                                 quant,decomp=quantize(orig,pred,eb)

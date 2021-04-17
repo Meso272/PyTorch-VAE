@@ -246,13 +246,13 @@ if args.bits==32:
         for y in range(0,width,size):
             endx=min(x+size,height)
             endy=min(y+size,width)
-            orig=picts[idx][0][:endx-x,:endy-y]
-            pred=predict[idx][0][:endx-x,:endy-y]
-            recon[x:endx,y:endy]=predict[idx][0][:endx-x,:endy-y]
+            origs=picts[idx][0][:endx-x,:endy-y]
+            preds=predict[idx][0][:endx-x,:endy-y]
+            recon[x:endx,y:endy]=preds
             if args.lossmode==1:
-                loss_1=np.sum(np.abs(orig-pred))
+                loss_1=np.sum(np.abs(origs-preds))
             else:
-                loss_1=np.sum(np.abs(orig-pred)//eb)
+                loss_1=np.sum(np.abs(origs-preds)//eb)
             loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,eb,size)
             if loss_2<=loss_1:
                 lorenzo_count+=1
@@ -264,8 +264,8 @@ if args.bits==32:
                 for a in range(x,endx):
                     for b in range(y,endy):
 
-                        orig=picts[idx][0][a-x][b-y]
-                        pred=predict[idx][0][a-x][b-y]
+                        orig=origs[a-x][b-y]
+                        pred=preds[a-x][b-y]
                         #recon[a][b]=pred
                         quant,decomp=quantize(orig,pred,eb)
                         qs.append(quant)
