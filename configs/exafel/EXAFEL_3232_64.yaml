@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE'
   in_channels: 1
   input_size: 32
-  latent_dim: 16
+  latent_dim: 64
   reg_weight: 100
   hidden_dims: [32,64,128,256]
   wasserstein_deg: 2.0
@@ -11,14 +11,17 @@ model_params:
   
 
 exp_params:
-  dataset: cesm
-  data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
+  dataset: exafel
+  data_path: "/home/jliu447/lossycompression/EXAFEL/extracted"
+ 
+  max: 14766.948
+  min: -16019.074
   img_size: 32
   batch_size: 64 # Better to have a square number
-  epsilon: 0.005
   LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
+  
 
 trainer_params:
   gpus: [0]
@@ -26,9 +29,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_new/SWAE_3232_16_filter"
+  ckpt_save_dir: "ckpts_new/SWAE_3232_64_EXAFEL_bs64"
   save_dir: "logs/"
-  name: "SWAE_3232_16_filter"
+  name: "SWAE_3232_64_EXAFEL_bs64"
   manual_seed: 1265
 
 
