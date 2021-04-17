@@ -20,7 +20,7 @@ exp_params:
   img_size: 8
   cache_size: 131072
   batch_size: 64 # Better to have a square number
-  LR: 0.05
+  LR: 0.005
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
