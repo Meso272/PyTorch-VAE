@@ -154,15 +154,15 @@ class VAEXperiment(pl.LightningModule):
             dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],normalize=True,epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='cesm_new':
 
-            dataset=CESM(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'])
+            dataset=CESM(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='exafel':
-            dataset=EXAFEL(path=self.params['data_path'],start=0,end=300,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'])
+            dataset=EXAFEL(path=self.params['data_path'],start=0,end=300,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='hurricane':
-            dataset=Hurricane(path=self.params['data_path'],start=1,end=41,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'])
+            dataset=Hurricane(path=self.params['data_path'],start=1,end=41,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
         elif self.params['dataset'] == 'exaalt':
             dataset=EXAALT(path=self.params['data_path'],start=0,end=4000)
         elif self.params['dataset'] == 'aramco':
-            dataset=ARAMCO(path=self.params['data_path'],start=self.params['start'],end=self.params['end'],size=self.params['img_size'],global_max=0.0386,global_min=-0.0512,cache_size=self.params['cache_size'])
+            dataset=ARAMCO(path=self.params['data_path'],start=self.params['start'],end=self.params['end'],size=self.params['img_size'],global_max=0.0386,global_min=-0.0512,cache_size=self.params['cache_size'],epsilon=self.params['epsilon'])
         else:
             raise ValueError('Undefined dataset type')
 

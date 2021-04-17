@@ -32,6 +32,10 @@ class Hurricane(Dataset):
                             else:
                                 pict=(pict-global_min)*2/(global_max-global_min)-1
                         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)),constant_values=norm_min)
+                        if epsilon>0:
+                            v=np.var(pict)
+                            if v<=epsilon:
+                                continue
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)

@@ -27,6 +27,10 @@ class EXAFEL(Dataset):
 
                         pict=np.pad(pict,((0,padx),(0,pady)))
                         pict=pict*2-1
+                        if epsilon>0:
+                            v=np.var(pict)
+                            if v<=epsilon:
+                                continue
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)

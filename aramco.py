@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import os
 class ARAMCO(Dataset):
-    def __init__(self,path,start,end,size,global_max=None,global_min=None,norm_min=-1,cache_size=None):
+    def __init__(self,path,start,end,size,global_max=None,global_min=None,norm_min=-1,cache_size=None,epsilon=-1):
         size_x=449
         size_y=449
         size_z=235
@@ -32,6 +32,10 @@ class ARAMCO(Dataset):
                             else:
                                 pict=(pict-global_min)*2/(global_max-global_min)-1
                         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)),constant_values=norm_min)
+                        if epsilon>0:
+                            v=np.var(pict)
+                            if v<=epsilon:
+                                continue
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)
