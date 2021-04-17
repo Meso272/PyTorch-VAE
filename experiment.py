@@ -13,6 +13,7 @@ from cesm import *
 from Hurricane import *
 from exaalt import EXAALT
 from aramco import ARAMCO
+from exafel import *
 class VAEXperiment(pl.LightningModule):
 
     def __init__(self,
