@@ -31,7 +31,7 @@ class ARAMCO(Dataset):
                                 pict=(pict-global_min)/(global_max-global_min)
                             else:
                                 pict=(pict-global_min)*2/(global_max-global_min)-1
-                        pict=np.pad(pict,((0,padx),(0,pady),(0,padz)))
+                        pict=np.pad(pict,((0,padx),(0,pady),(0,padz)),constant_values=norm_min)
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)

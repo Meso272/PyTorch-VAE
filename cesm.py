@@ -6,6 +6,7 @@ class CLDHGH(Dataset):
         height=1800
         width=3600
         picts=[]
+        count=[0,0,0,0]
         for i in range(start,end):
             s=str(i)
             if i<10:
@@ -25,9 +26,21 @@ class CLDHGH(Dataset):
                     if normalize:
                         pict=pict*2-1
                     pict=np.expand_dims(pict,0)
+                    var=np.var(pict)
+                    if var<1e-5:
+                        count[0]+=1
+                    if var<1e-4:
+                        count[1]+=1
+                    if var<1e-3:
+                        count[2]+=1
+                    if var<1e-2:
+                        count[3]+=1    
                     #print(array[x:x+size,y:y+size])
                     picts.append(pict)
+        print(count)
+        print(self.picts.shape[0])
         self.picts=np.array(picts)
+
     def __len__(self):
         return self.picts.shape[0]
     def __getitem__(self,idx):
@@ -54,9 +67,11 @@ class CESM(Dataset):
                     pict=array[x:endx,y:endy]
                     padx=size-pict.shape[0]
                     pady=size-pict.shape[1]
-                    pict=np.pad(pict,((0,padx),(0,pady)))
+                    
                     if global_max!=None:
                         pict=(pict-global_min)/(global_max-global_min)
+                    pict=np.pad(pict,((0,padx),(0,pady)))
+                    if global_max!=None:
                         pict=pict*2-1
                     pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])

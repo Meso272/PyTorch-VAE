@@ -14,10 +14,10 @@ for i in range(986):
     os.system("rm -f *sz*")
     os.system("rm -f temp.txt;rm -f f.txt")
 
-with open("crs.txt",'r') as f:
+with open("crs.txt",'w') as f:
     for i in range(986):
-        f.write(str(i)+"\t"+str(cr[i])+"\n")
+        f.write(str(i)+"\t"+str(crs[i])+"\n")
 
-    
+
         
        
