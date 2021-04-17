@@ -15,7 +15,7 @@ exp_params:
   dataset: hurricane
   data_path: "/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang"
   field: 'QVAPOR'
-  epsilon: 1e-5
+  epsilon: 1e-6
   max: 0.02368359
   min: 0
   start: 1
