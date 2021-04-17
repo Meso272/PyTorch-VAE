@@ -216,13 +216,8 @@ if args.bits==32:
         for y in range(0,width,size):
             endx=min(x+size,height)
             endy=min(y+size,width)
-            print(x)
-            print(y)
-            print(endx)
-            print(endy)
-            print(predict[idx][0].shape)
-            print(predict[idx][0][:(endx-x)][:(endy-y)].shape)
-            recon[x:endx,y:endy]=predict[idx][0][:endx-x][:endy-y]
+
+            recon[x:endx,y:endy]=predict[idx][0][:endx-x,:endy-y]
             if args.mode=="e":
                 idx=idx+1
                 continue
