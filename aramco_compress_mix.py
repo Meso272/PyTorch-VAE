@@ -87,6 +87,8 @@ parser.add_argument('--transpose','-t',type=int,
                    default=1)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
+parser.add_argument('--lossmode','-lm',type=int,
+                   default=1)
 args = parser.parse_args()
 
 global_max=0.0386
@@ -125,7 +127,10 @@ def lorenzo(array,x_start,y_start,z_start,error_bound,block_size,cross_block=Tru
 
                 orig=array[x][y][z]
                 pred=f_000+f_011+f_101+f_110-f_001-f_010-f_100
-                loss+=abs(orig-pred)
+                if args.lossmode==1:
+                    loss+=abs(orig-pred)
+                else:
+                    loss+=abs(orig-pred)//error_bound
                 q,decomp=quantize(orig,pred,error_bound)
                 qs.append(q)
                 if q==0:
@@ -244,7 +249,10 @@ if args.bits==32:
                 orig=picts[idx][0][:endx-x,:endy-y,:endz-z]
                 pred=predict[idx][0][:endx-x,:endy-y,:endz-z]
                 recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
-                loss_1=np.sum(np.abs(orig-pred))
+                if args.lossmode==1:
+                    loss_1=np.sum(np.abs(orig-pred))
+                else:
+                    loss_1=np.sum(np.abs(orig-pred)//eb)
                 loss_2,decomp_block,q_block,u_block=lorenzo(array,x,y,z,eb,size)
                 print(idx)
                 print(loss_1)
