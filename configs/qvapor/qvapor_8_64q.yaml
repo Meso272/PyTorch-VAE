@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE_3D'
   in_channels: 1
   input_size: 8
-  latent_dim: 8
+  latent_dim: 64
   reg_weight: 100
   hidden_dims: [32,64,128]
   wasserstein_deg: 2.0
@@ -13,6 +13,7 @@ exp_params:
   dataset: hurricane
   data_path: "/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang"
   field: 'QVAPOR'
+  epsilon: 1e-4
   max: 0.02368359
   min: 0
   start: 1
@@ -29,9 +30,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts/SWAE_U_8cubeto8_bs64_3264128"
+  ckpt_save_dir: "ckpts/SWAE_QVAPOR_8cubeto64q_bs64_3264128"
   save_dir: "logs/"
-  name: "SWAE_QVAPOR_8cubeto8_bs64_3264128"
+  name: "SWAE_QVAPOR_8cubeto64q_bs64_3264128"
   manual_seed: 1265
 
 
