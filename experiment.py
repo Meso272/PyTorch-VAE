@@ -24,6 +24,8 @@ class VAEXperiment(pl.LightningModule):
         self.params = params
         self.curr_device = None
         self.hold_graph = False
+        if 'epsilon' not in self.params:
+            self.params['epsilon']=-1
         try:
             self.hold_graph = self.params['retain_first_backpass']
         except:
@@ -147,11 +149,12 @@ class VAEXperiment(pl.LightningModule):
                              transform=transform,
                              download=True)
         elif self.params['dataset'] == 'cesm':
-            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],normalize=True)
+            dataset=CLDHGH(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],normalize=True,epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='cesm_new':
+
             dataset=CESM(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'])
         elif self.params['dataset'] =='exafel':
-            dataset=CESM(path=self.params['data_path'],start=0,end=300,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'])
+            dataset=EXAFEL(path=self.params['data_path'],start=0,end=300,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'])
         elif self.params['dataset'] =='hurricane':
             dataset=Hurricane(path=self.params['data_path'],start=1,end=41,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'])
         elif self.params['dataset'] == 'exaalt':
@@ -194,7 +197,7 @@ class VAEXperiment(pl.LightningModule):
 
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] =='exafel':
-            dataset=CESM(path=self.params['data_path'],start=300,end=310,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'])
+            dataset=EXAFEL(path=self.params['data_path'],start=300,end=310,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'])
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,

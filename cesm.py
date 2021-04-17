@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import os
 class CLDHGH(Dataset):
-    def __init__(self,path,start,end,size,normalize=True):
+    def __init__(self,path,start,end,size,normalize=True,epsilon=-1):
         height=1800
         width=3600
         picts=[]
@@ -25,7 +25,11 @@ class CLDHGH(Dataset):
                     pict=np.pad(pict,((0,padx),(0,pady)))
                     if normalize:
                         pict=pict*2-1
-                    pict=np.expand_dims(pict,0)
+                    if epsilon>0:
+                        v=np.var(pict)
+                        if v<=epsilon:
+                            continue
+                    
                     '''
                     var=np.var(pict)
 
@@ -39,6 +43,7 @@ class CLDHGH(Dataset):
                         count[3]+=1   
                     ''' 
                     #print(array[x:x+size,y:y+size])
+                    pict=np.expand_dims(pict,0)
                     picts.append(pict)
         #print(count)
 
