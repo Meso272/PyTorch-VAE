@@ -2,7 +2,7 @@ from torch.utils.data import Dataset
 import numpy as np
 import os
 class EXAFEL(Dataset):
-    def __init__(self,path,start,end,size,global_max,global_min):
+    def __init__(self,path,start,end,size,global_max,global_min,epsilon=-1):
         height=185
         width=388
         picts=[]

@@ -56,7 +56,7 @@ class CLDHGH(Dataset):
         return self.picts[idx],0
 
 class CESM(Dataset):
-    def __init__(self,path,start,end,size,field='FREQSH',global_max=None,global_min=None):
+    def __init__(self,path,start,end,size,field='FREQSH',global_max=None,global_min=None,epsilon=-1):
         height=1800
         width=3600
         picts=[]
