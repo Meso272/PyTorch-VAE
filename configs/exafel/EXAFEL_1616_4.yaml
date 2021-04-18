@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE'
   in_channels: 1
   input_size: 16
-  latent_dim: 8
+  latent_dim: 4
   reg_weight: 100
   hidden_dims: [16,32,64,128]
   wasserstein_deg: 2.0
@@ -24,14 +24,14 @@ exp_params:
   
 
 trainer_params:
-  gpus: [2]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_new/SWAE_1616_8_EXAFEL_bs64"
+  ckpt_save_dir: "ckpts_new/SWAE_1616_4_EXAFEL_bs64"
   save_dir: "logs/"
-  name: "SWAE_1616_8_EXAFEL_bs64"
+  name: "SWAE_1616_4_EXAFEL_bs64"
   manual_seed: 1265
 
 
