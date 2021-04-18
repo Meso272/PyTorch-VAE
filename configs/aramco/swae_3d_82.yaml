@@ -4,7 +4,7 @@ model_params:
   input_size: 8
   latent_dim: 8
   reg_weight: 100
-  hidden_dims: [64,256,512]
+  hidden_dims: [64,128,256]
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
@@ -27,9 +27,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_new/SWAE_aramco_8cubeto8_bs256_64256512"
+  ckpt_save_dir: "ckpts_new/SWAE_aramco_8cubeto8_bs256_64128256"
   save_dir: "logs/"
-  name: "SWAE_aramco_8cubeto8_bs256_64256512"
+  name: "SWAE_aramco_8cubeto8_bs256_64128256"
   manual_seed: 1265
 
 
