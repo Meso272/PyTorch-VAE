@@ -214,14 +214,7 @@ picts=np.array(picts)
 
 
 
-    '''
-    length=picts.shape[0]
-
-    outputs1=test(torch.from_numpy(picts[:length//2]).to(device))
-    outputs2=test(torch.from_numpy(picts[length//2:]).to(device))
-
-    outputs=torch.cat((outputs1,outputs2))
-    '''
+   
 if args.mode!="d":
     with torch.no_grad():
         if eps<=0:
