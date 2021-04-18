@@ -190,7 +190,7 @@ if args.mode!="d":
     zs=outputs[2].cpu().detach().numpy()
     predict=outputs[0].cpu().detach().numpy()
     if eps>0:
-        predict_temp=np.zeros((predict.shape[0]+len(meanlist),0,size,size),dtype=np.float32)
+        predict_temp=np.zeros((predict.shape[0]+len(meanlist),1,size,size),dtype=np.float32)
         for i in range(predict.shape[0]):
             predict_temp[idxlist[i]][0]=predict[i][0]
         for idx,mean in meanlist:
