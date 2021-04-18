@@ -7,6 +7,7 @@ class ARAMCO(Dataset):
         size_y=449
         size_z=235
         picts=[]
+        #count=[0,0,0,0]
         for i in range(start,end):
             s=str(i)
             if i<10:
@@ -34,13 +35,23 @@ class ARAMCO(Dataset):
                         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)),constant_values=norm_min)
                         if epsilon>0:
                             v=np.var(pict)
+                            if var<1e-5:
+                                count[0]+=1
+                            if var<1e-4:
+                                count[1]+=1
+                            if var<1e-3:
+                                count[2]+=1
+                            if var<1e-2:
+                                 count[3]+=1   
                             if v<=epsilon:
                                 continue
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                         picts.append(pict)
-            
+        print(count)
         self.picts=np.array(picts)
+        print(self.picts.shape[0])
+
         
     def __len__(self):
         return self.picts.shape[0]
