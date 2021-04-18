@@ -7,7 +7,7 @@ class ARAMCO(Dataset):
         size_y=449
         size_z=235
         picts=[]
-        #count=[0,0,0,0]
+        count=[0,0,0,0]
         for i in range(start,end):
             s=str(i)
             if i<10:
