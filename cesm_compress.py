@@ -125,7 +125,7 @@ with torch.no_grad():
 height=args.height
 width=args.width
 size=args.size
-eps=args.eps
+eps=args.epsilon
 array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
 minimum=np.min(array)
 maximum=np.max(array)
