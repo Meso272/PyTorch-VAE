@@ -26,13 +26,12 @@ class CLDHGH(Dataset):
                     if normalize:
                         pict=pict*2-1
                     if epsilon>0:
-                        v=np.var(pict)
+                        v=np.max(pict)-np.min(pict)
                         if v<=epsilon:
                             continue
                     
                     '''
-                    var=np.var(pict)
-
+                  =
                     if var<1e-5:
                         count[0]+=1
                     if var<1e-4:
@@ -78,14 +77,17 @@ class CESM(Dataset):
                     pady=size-pict.shape[1]
                     
                     if global_max!=None:
+                        rng=global_max-global_min
+                        if epsilon>0:
+                            v=np.max(pict)-np.min(pict)
+                            if v<=epsilon*rng:
+                                continue
                         pict=(pict-global_min)/(global_max-global_min)
+
                     pict=np.pad(pict,((0,padx),(0,pady)))
                     if global_max!=None:
                         pict=pict*2-1
-                    if epsilon>0:
-                        v=np.var(pict)
-                        if v<=epsilon:
-                            continue
+                    
                     pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
                     picts.append(pict)

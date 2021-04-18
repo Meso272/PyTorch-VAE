@@ -150,9 +150,7 @@ for x in range(0,height,size):
         picts.append(pict)
 picts=np.array(picts)
 
-with torch.no_grad():
-    #try:
-    outputs=test(torch.from_numpy(picts).to(device))
+
     '''
     except RuntimeError as exception:
         if "out of memory" in str(exception):
@@ -202,12 +200,14 @@ def lorenzo(array,x_start,y_start,error_bound,block_size,cross_block=True):
 
 
 
-
-
-if args.mode=="c":
+if args.mode!="d":
+    with torch.no_grad():
+    #try:
+        outputs=test(torch.from_numpy(picts).to(device) )
     zs=outputs[2].cpu().detach().numpy()
     predict=outputs[0].cpu().detach().numpy()
-    
+
+
 
 else:
     zs=np.fromfile(args.latents,dtype=np.float32)
@@ -258,6 +258,15 @@ if args.bits==32:
             origs=picts[idx][0][:endx-x,:endy-y]
             preds=predict[idx][0][:endx-x,:endy-y]
             recon[x:endx,y:endy]=preds
+
+            orng=np.max(origs)-np.min(origs)
+            if orng<=eb:
+                lorenzo_count+=1
+                qs=qs+[32768]*(size*size)
+                m=np.mean(origs)
+                array[x:endx,y:endy]=np.full((endx-x,endy-y),fill_value=m,dtype=np.float32)
+                idx=idx+1
+                continue
             if args.lossmode==1:
                 loss_1=np.sum(np.abs(origs-preds))
             else:

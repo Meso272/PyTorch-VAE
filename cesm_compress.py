@@ -149,26 +149,24 @@ for x in range(0,height,size):
         pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
-        if eps>0:
+        if eps>0:# to change move to before normalization
             v=np.var(pict)
             if v>eps:
-                pict=np.expand_dims(pict,0)
+                #pict=np.expand_dims(pict,0)
                     
-                picts.append(pict)
+                #picts.append(pict)
                 idxlist.append(idx)
             else:
 
                 meanlist.append( (idx,np.mean(pict) ) )
-        else:
-            pict=np.expand_dims(pict,0)
+        
+        pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
-            picts.append(pict)
+        picts.append(pict)
         idx+=1
 picts=np.array(picts)
 
-with torch.no_grad():
-    #try:
-    outputs=test(torch.from_numpy(picts).to(device))
+
     '''
     except RuntimeError as exception:
         if "out of memory" in str(exception):
@@ -187,15 +185,12 @@ with torch.no_grad():
 
 
 if args.mode!="d":
+    with torch.no_grad():
+    #try:
+        outputs=test(torch.from_numpy(picts).to(device) )
     zs=outputs[2].cpu().detach().numpy()
     predict=outputs[0].cpu().detach().numpy()
-    if eps>0:
-        predict_temp=np.zeros((predict.shape[0]+len(meanlist),1,size,size),dtype=np.float32)
-        for i in range(predict.shape[0]):
-            predict_temp[idxlist[i]][0]=predict[i][0]
-        for idx,mean in meanlist:
-            predict_temp[idx][0]=np.full((size,size),fill_value=mean,dtype=np.float32)
-        predict=predict_temp
+    
 
 
     
@@ -224,6 +219,13 @@ if args.normalize:
     picts=picts*(args.max-args.min)+args.min
     predict=(predict+1)/2
     predict=predict*(args.max-args.min)+args.min
+if eps>0:
+    predict_temp=np.zeros((predict.shape[0]+len(meanlist),1,size,size),dtype=np.float32)
+    for i in range(predict.shape[0]):
+        predict_temp[idxlist[i]][0]=predict[i][0]
+    for idx,mean in meanlist:
+        predict_temp[idx][0]=np.full((size,size),fill_value=mean,dtype=np.float32)
+    predict=predict_temp
 if args.bits==32:
     
     #temp_latents=zs.flatten()

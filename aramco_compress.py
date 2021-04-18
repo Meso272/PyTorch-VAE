@@ -91,11 +91,12 @@ parser.add_argument('--max','-mx',type=float,
                    default=0.0386)
 parser.add_argument('--min','-mi',type=float,
                    default=-0.0512)
+parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
 args = parser.parse_args()
 
 global_max=args.max
 global_min=args.min
-
+eps=args.epsilon
 with open(args.filename, 'r') as file:
     try:
         config = yaml.safe_load(file)
@@ -126,6 +127,11 @@ maximum=np.max(array)
 rng=maximum-minimum
 
 picts=[]
+if eps>0:
+    idxlist=[]
+    meanlist=[]
+   
+idx=0
 for x in range(0,xsize,size):
     for y in range(0,ysize,size):
         for z in range(0,zsize,size):
@@ -137,7 +143,18 @@ for x in range(0,xsize,size):
             pady=size-pict.shape[1]
             padz=size-pict.shape[2]
 
-            
+            if eps>0:
+                r=np.max(pict)-np.min(pict)
+                if r>eps*(global_max-global_min):
+                    
+                    
+                    #picts.append(pict)
+                    idxlist.append(idx)
+
+                else:
+
+                    meanlist.append( (idx,np.mean(pict) ) )
+           
             
 
             pict=(pict-global_min)/(global_max-global_min)
@@ -146,12 +163,13 @@ for x in range(0,xsize,size):
             pict=pict*2-1
             pict=np.expand_dims(pict,0)
             picts.append(pict)
+
+            idx+=1
 picts=np.array(picts)
 
 
 
-with torch.no_grad():
-    outputs=test(torch.from_numpy(picts).to(device))
+
     '''
     length=picts.shape[0]
 
@@ -161,9 +179,15 @@ with torch.no_grad():
     outputs=torch.cat((outputs1,outputs2))
     '''
 if args.mode!="d":
+    with torch.no_grad():
+        if eps<=0:
+            outputs=test(torch.from_numpy(picts).to(device))
+        else:
+            outputs=test(torch.from_numpy(picts[idxlist]).to(device))
     zs=outputs[2].cpu().detach().numpy()
 
     predict=outputs[0].cpu().detach().numpy()
+    
     
 
 else:
@@ -203,6 +227,13 @@ if args.bits==32:
     latents=zs
     predict=(predict+1)/2
     predict=predict*(global_max-global_min)+global_min
+    if eps>0:
+        predict_temp=np.zeros((predict.shape[0]+len(meanlist),1,size,size,size),dtype=np.float32)
+        for i in range(predict.shape[0]):
+            predict_temp[idxlist[i]][0]=predict[i][0]
+        for idx,mean in meanlist:
+            predict_temp[idx][0]=np.full((size,size,size),fill_value=mean,dtype=np.float32)
+        predict=predict_temp
 
     idx=0
     for x in range(0,xsize,size):
