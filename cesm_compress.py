@@ -96,6 +96,7 @@ parser.add_argument('--gpu','-gpu',type=int,
 parser.add_argument('--multigpu','-mg',type=int,
                    default=0)
 parser.add_argument('--gpus', '-gs',nargs='*', type=int,default=0)
+parser.add_argument('--epsilon', '-eps', type=float,default=-1)
 args = parser.parse_args()
 
 if args.gpu:
@@ -124,12 +125,17 @@ with torch.no_grad():
 height=args.height
 width=args.width
 size=args.size
-
+eps=args.eps
 array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
 minimum=np.min(array)
 maximum=np.max(array)
 rng=maximum-minimum
 picts=[]
+if eps>0:
+    idxlist=[]
+    meanlist=[]
+   
+idx=0
 for x in range(0,height,size):
     for y in range(0,width,size):
         endx=min(x+size,height)
@@ -143,9 +149,21 @@ for x in range(0,height,size):
         pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
-        pict=np.expand_dims(pict,0)
+        if eps>0:
+            v=np.var(pict)
+            if v>eps:
+                pict=np.expand_dims(pict,0)
+                    
+                picts.append(pict)
+                idxlist.append(idx)
+            else:
+
+                meanlist.append( (idx,np.mean(pict) ) )
+        else:
+            pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
-        picts.append(pict)
+            picts.append(pict)
+        idx+=1
 picts=np.array(picts)
 
 with torch.no_grad():
@@ -171,6 +189,15 @@ with torch.no_grad():
 if args.mode!="d":
     zs=outputs[2].cpu().detach().numpy()
     predict=outputs[0].cpu().detach().numpy()
+    if eps>0:
+        predict_temp=np.zeros((predict.shape[0]+len(meanlist),size,size),dtype=np.float32)
+        for i in range(predict.shape[0]):
+            predict_temp[idxlist[i]]=predict[i]
+        for idx,mean in meanlist:
+            predict_temp[idx]=np.full((size,size),fill_value=mean,dtype=np.float32)
+        predict=predict_temp
+
+
     
 
 else:
