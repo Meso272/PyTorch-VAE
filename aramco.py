@@ -34,7 +34,7 @@ class ARAMCO(Dataset):
                                 pict=(pict-global_min)*2/(global_max-global_min)-1
                         pict=np.pad(pict,((0,padx),(0,pady),(0,padz)),constant_values=norm_min)
                         if epsilon>0:
-                            v=np.var(pict)
+                            var=np.var(pict)
                             if var<1e-5:
                                 count[0]+=1
                             if var<1e-4:
@@ -43,7 +43,7 @@ class ARAMCO(Dataset):
                                 count[2]+=1
                             if var<1e-2:
                                  count[3]+=1   
-                            if v<=epsilon:
+                            if var<=epsilon:
                                 continue
                         pict=np.expand_dims(pict,0)
                     #print(array[x:x+size,y:y+size])
