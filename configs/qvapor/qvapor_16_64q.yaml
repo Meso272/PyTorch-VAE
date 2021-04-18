@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE_3D'
   in_channels: 1
   input_size: 16
-  latent_dim: 32
+  latent_dim: 64
   reg_weight: 100
   hidden_dims: [32,64,128,256]
   #strides: [1,2,2,2]
@@ -20,7 +20,7 @@ exp_params:
   min: 0
   start: 1
   end: 41 
-  img_size: 8
+  img_size: 16
   cache_size: 131072
   batch_size: 64 # Better to have a square number
   LR: 0.005
