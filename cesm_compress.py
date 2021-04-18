@@ -96,7 +96,7 @@ parser.add_argument('--gpu','-gpu',type=int,
 parser.add_argument('--multigpu','-mg',type=int,
                    default=0)
 parser.add_argument('--gpus', '-gs',nargs='*', type=int,default=0)
-parser.add_argument('--epsilon',  type=float,default=-1)
+parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
 args = parser.parse_args()
 
 if args.gpu:
