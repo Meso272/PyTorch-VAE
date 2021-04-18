@@ -97,6 +97,7 @@ parser.add_argument('--multigpu','-mg',type=int,
                    default=0)
 parser.add_argument('--gpus', '-gs',nargs='*', type=int,default=0)
 parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
+parser.add_argument('--singlerange','-sr',type=int,default=0)
 args = parser.parse_args()
 
 if args.gpu:
@@ -130,6 +131,8 @@ array=np.fromfile(args.input,dtype=np.float32).reshape((height,width))
 minimum=np.min(array)
 maximum=np.max(array)
 rng=maximum-minimum
+global_max=maximum if args.singlerange else args.max
+global_min=minimum if args.singlerange else args.min
 picts=[]
 if eps>0:
     idxlist=[]
@@ -145,7 +148,7 @@ for x in range(0,height,size):
         pady=size-pict.shape[1]
         
         if args.normalize:
-            pict=(pict-args.min)/(args.max-args.min)
+            pict=(pict-global_min)/(global_max-global_min)
         pict=np.pad(pict,((0,padx),(0,pady)))
         if args.normalize:
             pict=pict*2-1
@@ -201,9 +204,9 @@ recon=np.zeros((height,width),dtype=np.float32)
 eb=args.error*rng
 if args.normalize:
     picts=(picts+1)/2
-    picts=picts*(args.max-args.min)+args.min
+    picts=picts*(global_max-global_min)+global_min
     predict=(predict+1)/2
-    predict=predict*(args.max-args.min)+args.min
+    predict=predict*(global_max-global_min)+global_min
 if eps>0:
     predict_temp=np.zeros((predict.shape[0]+len(meanlist),1,size,size),dtype=np.float32)
     for i in range(predict.shape[0]):

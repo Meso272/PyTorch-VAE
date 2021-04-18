@@ -92,10 +92,9 @@ parser.add_argument('--max','-mx',type=float,
 parser.add_argument('--min','-mi',type=float,
                    default=-0.0512)
 parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
+parser.add_argument('--singlerange','-sr',type=int,default=0)
 args = parser.parse_args()
 
-global_max=args.max
-global_min=args.min
 eps=args.epsilon
 with open(args.filename, 'r') as file:
     try:
@@ -126,6 +125,8 @@ minimum=np.min(array)
 maximum=np.max(array)
 rng=maximum-minimum
 
+global_max=maximum if args.singlerange else args.max
+global_min=minimum if args.singlerange else args.min
 picts=[]
 if eps>0:
     idxlist=[]
