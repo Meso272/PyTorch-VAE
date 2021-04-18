@@ -151,21 +151,7 @@ for x in range(0,height,size):
 picts=np.array(picts)
 
 
-    '''
-    except RuntimeError as exception:
-        if "out of memory" in str(exception):
-            print("WARNING: out of memory")
-            if hasattr(torch.cuda, 'empty_cache'):
-                torch.cuda.empty_cache()
-        else:
-            raise exception
-
-    length=picts.shape[0]
-
-    outputs1=test(torch.from_numpy(picts[:length//2]).to(device))
-    outputs2=test(torch.from_numpy(picts[length//2:]).to(device))
-    outputs=torch.cat((outputs1,outputs2))
-    ''' 
+   
 def lorenzo(array,x_start,y_start,error_bound,block_size,cross_block=True):
     x_end=min(height,x_start+block_size)
     y_end=min(width,y_start+block_size)
