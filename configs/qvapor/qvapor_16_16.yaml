@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE_3D'
   in_channels: 1
   input_size: 8
-  latent_dim: 8
+  latent_dim: 32
   reg_weight: 100
   hidden_dims: [32,64,128]
   #strides: [1,2,2,2]
