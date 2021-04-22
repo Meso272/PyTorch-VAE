@@ -18,6 +18,7 @@ def compress(array,error_bound):#error_bound is relative
     for i in range(size):
         ele=array[i]
         q=abs(ele)//abseb
+        #q=round(abs(ele)//2*abseb)
         if ele<0:
             q=-q
         qs[i]=q
@@ -49,7 +50,8 @@ parser.add_argument('--error',  '-e',type=float,default=0
                    )
 parser.add_argument('--latents',  '-l',type=str,default=None
                    )
-#parser.add_argument('--quant',  '-q',type=str,default=None)
+
+parser.add_argument('--quant',  '-q',type=str,default=None)
 #parser.add_argument('--unpred',  '-u',type=str,default=None)
 parser.add_argument('-recon',  '-r',type=str,default=None
                    )
@@ -272,8 +274,10 @@ recon.tofile(args.recon)
 if args.latents!=None:
     zs.tofile(args.latents)
 if error_bound>0:
-    recon2.tofile(args.recon+".compress")
-    dl.tofile(args.latents+".compress")
+    recon2.tofile(args.recon+".decompress")
+    dl.tofile(args.latents+".decompress")
+    
+    ql.tofile(args.latents+".q")
 if args.padding:
     padded_array=np.pad(array,((1,0),))
     padded_array.tofile(args.input+".padded")
