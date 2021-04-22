@@ -169,7 +169,7 @@ if dim==3:
                 idx+=1
 else:
     for x in range(0,xsize,blocksize):
-        for y in range(0,ysize,size):
+        for y in range(0,ysize,blocksize):
             endx=min(x+blocksize,xsize)
             endy=min(y+blocksize,ysize)
             pict=array[x:endx,y:endy]
@@ -244,21 +244,21 @@ if error_bound>0:
 
 idx=0
 if dim==3:
-    for x in range(0,xsize,size):
-        for y in range(0,ysize,size):
-            for z in range(0,zsize,size):
-                endx=min(x+size,xsize)
-                endy=min(y+size,ysize)
-                endz=min(z+size,zsize)
+    for x in range(0,xsize,blocksize):
+        for y in range(0,ysize,blocksize):
+            for z in range(0,zsize,blocksize):
+                endx=min(x+blocksize,xsize)
+                endy=min(y+blocksize,ysize)
+                endz=min(z+blocksize,zsize)
                 recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
                 if error_bound>0:
                     recon2[x:endx,y:endy,z:endz]=predict2[idx][0][:endx-x,:endy-y,:endz-z]
                 idx+=1
 else:
-    for x in range(0,height,size):
-        for y in range(0,width,size):
-            endx=min(x+size,height)
-            endy=min(y+size,width)
+    for x in range(0,xsize,blocksize):
+        for y in range(0,ysize,blocksize):
+            endx=min(x+blocksize,xsize)
+            endy=min(y+blocksize,ysize)
 
             recon[x:endx,y:endy]=predict[idx][0][:endx-x,:endy-y]
             if error_bound>0:
