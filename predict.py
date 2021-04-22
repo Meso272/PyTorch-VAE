@@ -269,7 +269,8 @@ else:
 
 
 recon.tofile(args.recon)
-zs.tofile(args.latents)
+if args.latents!=None:
+    zs.tofile(args.latents)
 if error_bound>0:
     recon2.tofile(args.recon+".compress")
     dl.tofile(args.latents+".compress")
