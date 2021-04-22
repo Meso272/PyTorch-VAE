@@ -110,7 +110,7 @@ ysize=args.ysize
 zsize=args.zsize
 blocksize=args.blocksize
 dim=args.dimension
-error_bound=args.error_bound
+error_bound=args.error
 eps=args.eps
 if dim==3:
     array_size=(xsize,ysize,zsize)
