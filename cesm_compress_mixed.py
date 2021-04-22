@@ -251,7 +251,7 @@ if args.bits==32:
             orng=np.max(origs)-np.min(origs)
             if orng<=eb:
                 lorenzo_count+=1
-                qs=qs+[32768]*(size*size)
+                qs=qs+[32768]*((endx-x)*(endy-y))
                 m=np.mean(origs)
                 array[x:endx,y:endy]=np.full((endx-x,endy-y),fill_value=m,dtype=np.float32)
                 idx=idx+1
