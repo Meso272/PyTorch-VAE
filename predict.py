@@ -209,7 +209,7 @@ zs=zs.flatten()
 
 
 
-recon=np.zeros(arraysize,dtype=np.float32)
+recon=np.zeros(array_size,dtype=np.float32)
 predict=(predict+1)/2
 predict=predict*(global_max-global_min)+global_min
 
