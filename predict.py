@@ -169,7 +169,7 @@ if dim==3:
                 idx+=1
 else:
     for x in range(0,xsize,blocksize):
-        for y in range(0,yszie,size):
+        for y in range(0,ysize,size):
             endx=min(x+blocksize,xsize)
             endy=min(y+blocksize,ysize)
             pict=array[x:endx,y:endy]
