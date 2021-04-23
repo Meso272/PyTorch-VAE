@@ -22,7 +22,8 @@ def compress(array,error_bound):#error_bound is relative
         if ele<0:
             q=-q
         qs[i]=q
-        ds[i]=q*abseb
+        #ds[i]=q*abseb
+        ds[i]=q*2*abseb
     qs=qs-np.min(qs)
     return qs,ds
 
