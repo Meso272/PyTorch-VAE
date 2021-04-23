@@ -204,7 +204,10 @@ picts=np.array(picts)
 
 with torch.no_grad():
     #try:
-    outputs=test(torch.from_numpy(picts).to(device) )
+    if eps<=0:
+        outputs=test(torch.from_numpy(picts).to(device) )
+    else:
+        outputs=test(torch.from_numpy(picts[idxlist]).to(device) )
 zs=outputs[2].cpu().detach().numpy()
 predict=outputs[0].cpu().detach().numpy()
 latent_size=zs.shape[1]
