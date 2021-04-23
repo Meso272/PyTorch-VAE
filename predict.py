@@ -17,8 +17,8 @@ def compress(array,error_bound):#error_bound is relative
     ds=np.zeros((size,),dtype=np.float32)
     for i in range(size):
         ele=array[i]
-        q=abs(ele)//abseb
-        #q=round(abs(ele)//2*abseb)
+        #q=abs(ele)//abseb
+        q=round(abs(ele)//2*abseb)
         if ele<0:
             q=-q
         qs[i]=q
@@ -276,7 +276,6 @@ if args.latents!=None:
 if error_bound>0:
     recon2.tofile(args.recon+".decompress")
     dl.tofile(args.latents+".decompress")
-    
     ql.tofile(args.latents+".q")
 if args.padding:
     padded_array=np.pad(array,((1,0),))
