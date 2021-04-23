@@ -18,7 +18,7 @@ def compress(array,error_bound):#error_bound is relative
     for i in range(size):
         ele=array[i]
         #q=abs(ele)//abseb
-        q=round(abs(ele)//2*abseb)
+        q=round(abs(ele)//(2*abseb))
         if ele<0:
             q=-q
         qs[i]=q
