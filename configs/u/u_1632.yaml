@@ -15,6 +15,7 @@ exp_params:
   field: 'U'
   max: 85.17703
   min: -79.47297
+  epsilon: 1e-4
   start: 1
   end: 41 
   img_size: 16

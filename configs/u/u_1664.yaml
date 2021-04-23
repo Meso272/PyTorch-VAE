@@ -13,6 +13,7 @@ exp_params:
   dataset: hurricane
   data_path: "/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang"
   field: 'U'
+  epsilon: 1e-4
   max: 85.17703
   min: -79.47297
   start: 1
