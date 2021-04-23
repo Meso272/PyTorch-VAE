@@ -14,6 +14,7 @@ from Hurricane import *
 from exaalt import EXAALT
 from aramco import ARAMCO
 from exafel import *
+from nyx import *
 class VAEXperiment(pl.LightningModule):
 
     def __init__(self,
@@ -156,6 +157,9 @@ class VAEXperiment(pl.LightningModule):
         elif self.params['dataset'] =='cesm_new':
 
             dataset=CESM(path=self.params['data_path'],start=0,end=50,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
+        elif self.params['dataset'] =='nyx':
+
+            dataset=NYX(path=self.params['data_path'],start=self.params['start'],end=self.params['end'],size=self.params['img_size'],field=self.params['field'],log=self.params['log'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='exafel':
             dataset=EXAFEL(path=self.params['data_path'],start=0,end=300,size=self.params['img_size'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
         elif self.params['dataset'] =='hurricane':
@@ -193,6 +197,15 @@ class VAEXperiment(pl.LightningModule):
             self.num_val_imgs = len(self.sample_dataloader)
         elif self.params['dataset'] =='cesm_new':
             dataset=CESM(path=self.params['data_path'],start=50,end=52,size=self.params['img_size'],field=self.params['field'],global_max=self.params['max'],global_min=self.params['min'])
+            self.sample_dataloader =  DataLoader(dataset,
+                                                 batch_size= 144,
+                                                 shuffle = True,
+                                                 drop_last=True)
+
+            self.num_val_imgs = len(self.sample_dataloader)
+        elif self.params['dataset'] =='nyx':
+
+            dataset=NYX(path=self.params['data_path'],start=3,end=4,size=self.params['img_size'],field=self.params['field'],log=self.params['log'],global_max=self.params['max'],global_min=self.params['min'],epsilon=self.params['epsilon'])
             self.sample_dataloader =  DataLoader(dataset,
                                                  batch_size= 144,
                                                  shuffle = True,
