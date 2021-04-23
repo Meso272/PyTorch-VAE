@@ -4,7 +4,7 @@ import numpy as np
 datafolder="/home/jliu447/lossycompression/NYX"
 
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-fields=["baryon_density","temperature","dark_matter_density","velocity_x","velocity_y","velocity_z"]
+fields=["velocity_x","velocity_y","velocity_z"]
 cr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 for i,eb in enumerate(ebs):

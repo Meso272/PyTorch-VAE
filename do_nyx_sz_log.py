@@ -1,7 +1,7 @@
 import os
 import numpy as np 
 
-datafolder="/home/jliu447/lossycompression/NYX/512x512x512/"
+datafolder="/home/jliu447/lossycompression/NYX/"
 
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 fields=["baryon_density","temperature","dark_matter_density"]
@@ -13,7 +13,7 @@ for i,eb in enumerate(ebs):
     for j,field in enumerate(fields):
         
         
-        filename="%s.dat.log10" % str(field)
+        filename="%s_3.dat.log10" % str(field)
         filepath=os.path.join(datafolder,filename)
         comm="sz -z -f -i %s -M REL -R %f -3 512 512 512" % (filepath,eb)
         os.system(comm)
@@ -40,5 +40,5 @@ for i,eb in enumerate(ebs):
         os.system("rm -f temp.txt")
 
 
-np.savetxt("sz_nyxlog10_cr.txt",cr,delimiter='\t')
-np.savetxt("sz_nyxlog10_psnr.txt",psnr,delimiter='\t')
+np.savetxt("sz_nyx3log10_cr.txt",cr,delimiter='\t')
+np.savetxt("sz_nyx3log10_psnr.txt",psnr,delimiter='\t')
