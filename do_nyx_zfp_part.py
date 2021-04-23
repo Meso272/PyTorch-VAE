@@ -2,10 +2,10 @@ import os
 import numpy as np 
 import sys
 #fieldname=sys.argv[1]
-datafolder="/home/jliu447/lossycompression/NYX"
+datafolder="/home/jliu447/lossycompression/NYX/512x512x512/"
 fields=["baryon_density","temperature","dark_matter_density","velocity_x","velocity_y","velocity_z"]
-ebs=[-x for x in range(-17,17)]
-
+ebs=[x for x in range(20,27)]
+datafolder="/home/jliu447/lossycompression/NYX/512x512x512/"
 cr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 maxpwerr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
@@ -19,7 +19,7 @@ for i,eb in enumerate(ebs):
         cr[0][j+1]=j
         psnr[0][j+1]=j
         maxpwerr[0][j+1]=j
-        filename="%s_3.dat" % field
+        filename="%s.dat" % field
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
@@ -49,6 +49,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f tempzfp.txt")
 
 
-np.savetxt("zfp_nyx3_cr.txt" , cr ,delimiter='\t')
-np.savetxt("zfp_nyx3_psnr.txt" , psnr ,delimiter='\t')
-np.savetxt("zfp_nyx3_maxpwerr.txt" , maxpwerr ,delimiter='\t')
+np.savetxt("zfp_nyx_cr_bige.txt" , cr ,delimiter='\t')
+np.savetxt("zfp_nyx_psnr_bige.txt" , psnr ,delimiter='\t')
+np.savetxt("zfp_nyx_maxpwerr_bige.txt" , maxpwerr ,delimiter='\t')
