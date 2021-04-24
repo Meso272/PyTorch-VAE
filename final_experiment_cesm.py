@@ -5,7 +5,8 @@ configpath=sys.argv[1]
 ckptpath=sys.argv[2]
 field=sys.argv[3]
 blocksize=int(sys.argv[4])
-output=sys.argv[5]
+coeff=float(sys.argv[5])
+output=sys.argv[6]
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 ebs=[1e-2,1e-3]
 idxrange=[x for x in range(52,63)]
@@ -32,7 +33,7 @@ for i,eb in enumerate(ebs):
         
         filename="%s_%d.dat" % (field,j)
         filepath=os.path.join(datafolder,filename)
-        latent_eb=eb/10
+        latent_eb=eb/coeff
 
         comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l cesml.dat -r cesmr.dat -x 1800 -y 3600 -s %d -p 1&>cesm_t1.txt" % (configpath,ckptpath,filepath,latent_eb,blocksize)
         os.system(comm)
