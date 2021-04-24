@@ -180,6 +180,7 @@ class VAEXperiment(pl.LightningModule):
     @data_loader
     def val_dataloader(self):
         transform = self.data_transforms()
+        self.params['epsilon']=float(self.params['epsilon'])
 
         if self.params['dataset'] == 'celeba':
             celeba=CelebA(root = self.params['data_path'],split = "test",transform=transform,download=True)
