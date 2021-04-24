@@ -13,8 +13,8 @@ exp_params:
   dataset: nyx
   data_path: "/home/jliu447/lossycompression/NYX"
   field: "baryon_density"
-  max: #?
-  min: #?
+  max: 5.06394195556640625
+  min: -1.306397557258605957
   log: 1
   start: 0
   end: 4 

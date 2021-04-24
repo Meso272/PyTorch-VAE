@@ -13,8 +13,8 @@ exp_params:
   dataset: nyx
   data_path: "/home/jliu447/lossycompression/NYX"
   field: "temperature"
-  max: #?
-  min: #?
+  max: 6.6796627044677734375
+  min: 2.7645518779754638672
   log: 1
   start: 0
   end: 4 
