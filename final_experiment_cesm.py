@@ -41,11 +41,11 @@ for i,eb in enumerate(ebs):
             latent_nbele=eval(f.read())
         os.system("rm -f %s_t1.txt" % pid)
 
-        comm="huffmanZstd %sl.dat.q %d 65536&>%s_t2.txt" % (pid,latent_nbele,pid)
+        comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
         os.system(comm)
         with open("%s_t2.txt" % pid,"r") as f:
             latent_cr=eval(f.read().splitlines()[-1])
-             if latent_cr==0:
+            if latent_cr==0:
                 latent_cr=1
             data[i+1][j-51][0]=latent_cr
         os.system("rm -f %s_t2.txt" % pid)
