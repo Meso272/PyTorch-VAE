@@ -4,7 +4,7 @@ import sys
 #fieldname=sys.argv[1]
 datafolder="/home/jliu447/lossycompression/NYX"
 fields=["velocity_x","velocity_y","velocity_z"]
-ebs=[-x for x in range(14,28)]
+ebs=[x for x in range(5,28)]
 
 cr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,len(fields)+1),dtype=np.float32)
