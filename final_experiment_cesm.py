@@ -48,7 +48,7 @@ for i,eb in enumerate(ebs):
         os.system("rm -f cesm_t2.txt")
 
 
-        comm="compress %s.padded r.dat %f %d 2 1800 3600&>cesm_t3.txt" % (filepath,eb,blocksize)
+        comm="compress %s.padded cesmr.dat %f %d 2 1800 3600&>cesm_t3.txt" % (filepath,eb,blocksize)
         os.system(comm)
         with open("cesm_t3.txt","r") as f:
             lines=f.read().splitlines()
@@ -75,7 +75,7 @@ for i,eb in enumerate(ebs):
         os.system("rm -f cesm_t5.txt")
 
 
-        comm="compress %s.padded r.dat.decompress %f %d 2 1800 3600&>cesm_t3.txt" % (filepath,eb,blocksize)
+        comm="compress %s.padded cesmr.dat.decompress %f %d 2 1800 3600&>cesm_t3.txt" % (filepath,eb,blocksize)
         os.system(comm)
         with open("cesm_t3.txt","r") as f:
             lines=f.read().splitlines()
@@ -100,6 +100,7 @@ for i,eb in enumerate(ebs):
             dl_d_psnr=eval(lines[6].split(',')[0].split('=')[1])
             data[i+1][j-51][6]=dl_d_psnr
         os.system("rm -f cesm_t5.txt")
+        os.system("rm -f cesml.* cesmr.* %s.padded*" % filepath)
 
 
 np.savetxt("%s_latentcr.txt" % output,data[:,:,0],delimiter='\t')
