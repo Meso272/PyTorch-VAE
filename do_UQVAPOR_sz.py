@@ -14,7 +14,7 @@ for i,eb in enumerate(ebs):
     cr[i+1][0]=eb
     psnr[i+1][0]=eb
     for j in range(41,49):
-        r[0][j-40]=j
+        cr[0][j-40]=j
         psnr[0][j-40]=j
         filename="%sf%d.bin" % (field,j)
         filepath=os.path.join(datafolder,filename)
