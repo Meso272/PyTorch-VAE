@@ -34,7 +34,7 @@ for i,eb in enumerate(ebs):
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/10
 
-        comm="python predict.py -c %s -k %s -i %s -d 2 -e %f -l cesml.dat -r cesmr.dat -x 1800 -r 3600 -s %d -p 1&>cesm_t1.txt" % (configpath,ckptpath,filepath,latent_eb,blocksize)
+        comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l cesml.dat -r cesmr.dat -x 1800 -r 3600 -s %d -p 1&>cesm_t1.txt" % (configpath,ckptpath,filepath,latent_eb,blocksize)
         os.system(comm)
         with open("cesm_t1.txt","r") as f:
             latent_nbele=eval(f.read())
