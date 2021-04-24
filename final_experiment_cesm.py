@@ -1,6 +1,6 @@
 import os
 import sys
-
+import numpy as np
 configpath=sys.argv[1]
 ckptpath=sys.argv[2]
 field=sys.argv[3]
