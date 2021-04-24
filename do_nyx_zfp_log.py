@@ -48,6 +48,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f tempzfp.txt")
 
 
-np.savetxt("zfp_nyxlog10_cr.txt" , cr ,delimiter='\t')
-np.savetxt("zfp_nyxlog10_psnr.txt" , psnr ,delimiter='\t')
-np.savetxt("zfp_nyxlog10_maxpwerr.txt" , maxpwerr ,delimiter='\t')
+np.savetxt("zfp_nyx3log10_cr.txt" , cr ,delimiter='\t')
+np.savetxt("zfp_nyx3log10_psnr.txt" , psnr ,delimiter='\t')
+np.savetxt("zfp_nyx3log10_maxpwerr.txt" , maxpwerr ,delimiter='\t')
