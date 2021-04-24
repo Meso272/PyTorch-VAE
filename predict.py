@@ -52,7 +52,7 @@ parser.add_argument('--error',  '-e',type=float,default=0
 parser.add_argument('--latents',  '-l',type=str,default=None
                    )
 
-parser.add_argument('--quant',  '-q',type=str,default=None)
+#parser.add_argument('--quant',  '-q',type=str,default=None)
 #parser.add_argument('--unpred',  '-u',type=str,default=None)
 parser.add_argument('-recon',  '-r',type=str,default=None
                    )
@@ -213,7 +213,7 @@ predict=outputs[0].cpu().detach().numpy()
 latent_size=zs.shape[1]
 zs=zs.flatten()
 
-
+print(zs.shape[0])
 
 recon=np.zeros(array_size,dtype=np.float32)
 predict=(predict+1)/2
