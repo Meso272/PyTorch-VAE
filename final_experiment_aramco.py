@@ -9,6 +9,7 @@ output=sys.argv[5]
 eps=1e-4
 if len(sys.argv)>=7:
     eps=float(sys.argv[6])
+print(eps)
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2,1e-3]
 idxrange=[x for x in range(1510,1600,10)]+[1599]
