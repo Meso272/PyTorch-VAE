@@ -19,7 +19,7 @@ for i,eb in enumerate(ebs):
         cr[0][j-300]=j
         psnr[0][j-300]=j
         maxpwerr[0][j-300]=j
-        ffilename="group_renamed_%d.dat" % j
+        filename="group_renamed_%d.dat" % j
         filepath=os.path.join(datafolder,filename)
         arr=np.fromfile(filepath,dtype=np.float32)
         rng=np.max(arr)-np.min(arr)
