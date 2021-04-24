@@ -1,8 +1,8 @@
 import os
 import numpy as np 
 import sys
-fieldname=sys.argv[1]
-datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % fieldname
+
+datafolder="/home/jliu447/lossycompression/EXAFEL/extracted"
 
 ebs=[-x for x in range(0,16)]
 
