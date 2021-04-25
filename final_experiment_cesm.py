@@ -37,7 +37,7 @@ for i,eb in enumerate(ebs):
         filename="%s_%d.dat" % (field,j)
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/coeff
-        if(compress_mode!=2 or i*j==0):
+        if(compress_mode!=2 or i+(j-52)==0):
             comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l %sl.dat -r %sr.dat -x 1800 -y 3600 -s %d -p 1&>%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
@@ -54,7 +54,7 @@ for i,eb in enumerate(ebs):
                         lines=f.read().splitlines()
                         latent_cr=eval(lines[7].split("=")[-1])
                     os.system("rm -f %s_t2.5.txt" % pid)
-                    os.system("rm -f *sz3*")
+                    os.system("rm -f %s*sz3*")
                     if latent_cr==0:
                         latent_cr=1
                 data[i+1][j-51][0]=latent_cr
@@ -92,10 +92,10 @@ for i,eb in enumerate(ebs):
             os.system(comm)
             with open("%s_t3.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
-                    dl_nn_block=eval(lines[3].split(" ")[0])
-                    dl_lorenzo_block=eval(lines[4].split(" ")[0])
-                    data[i+1][j-51][4]=dl_nn_block/(dl_nn_block+dl_lorenzo_block)
-                os.system("rm -f %s_t3.txt" % pid)
+                dl_nn_block=eval(lines[3].split(" ")[0])
+                dl_lorenzo_block=eval(lines[4].split(" ")[0])
+                data[i+1][j-51][4]=dl_nn_block/(dl_nn_block+dl_lorenzo_block)
+            os.system("rm -f %s_t3.txt" % pid)
 
 
             comm="../sz_refactory/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
