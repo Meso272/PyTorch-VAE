@@ -110,7 +110,7 @@ for i,eb in enumerate(ebs):
             with open("%s_t4.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
                 dl_qucr=eval(lines[4].split("=")[-1])
-                    data[i+1][j+1][5]=dl_qucr
+                data[i+1][j+1][5]=dl_qucr
             os.system("rm -f %s_t5.txt" % pid)
 
             comm="compareData -f %s %s.padded.q.u.d&>%s_t5.txt" % (filepath,filepath,pid)
