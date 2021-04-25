@@ -237,9 +237,15 @@ if error_bound>0:
     with torch.no_grad():
     
         if args.gpu:
-            predict2=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
+            if args.parallel:
+                predict2=test.module.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
+            else:
+                predict2=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
         else:
-            predict2=test.decode(torch.from_numpy(dl)).detach().numpy()
+            if args.parallel:
+                predict2=test.module.decode(torch.from_numpy(dl)).detach().numpy()
+            else:
+                predict2=test.decode(torch.from_numpy(dl)).detach().numpy()
     predict2=(predict2+1)/2
     predict2=predict2*(global_max-global_min)+global_min
     recon2=np.zeros(array_size,dtype=np.float32)    
