@@ -33,14 +33,13 @@ dl_nn_ratios=np.zeros((len(ebs)+1,12),dtype=np.float32)
 dl_qucrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 '''
-
-for i,eb in enumerate(ebs):
-    for j,idx in enumerate(idxrange):
+for j,idx in enumerate(idxrange):
+    for i,eb in enumerate(ebs):
         
         filename="Uf%d.bin" % idx
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/coeff
-        if(compress_mode!=2 or i+j==0):
+        if(compress_mode!=2 or i==0):
             comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 85.17703 -mi -79.47297 -eps %f &>%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
@@ -117,7 +116,11 @@ for i,eb in enumerate(ebs):
                 dl_d_psnr=eval(lines[6].split(',')[0].split('=')[1])
                 data[i+1][j+1][6]=dl_d_psnr
             os.system("rm -f %s_t5.txt" % pid)
+        if compress_mode!=2:
             os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
+    if compress_mode==2:
+        os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
+
 
 
 if compress_mode!=2:
