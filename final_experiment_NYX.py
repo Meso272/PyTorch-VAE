@@ -16,8 +16,8 @@ eps=1e-4
 if len(sys.argv)>=9:
     eps=float(sys.argv[8])
 print(eps)
-ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-#ebs=[1e-2,1e-3]
+#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+ebs=[1e-2,1e-3]
 idxrange=[0]
 datafolder="/home/jliu447/lossycompression/NYX/512x512x512" 
 pid=str(os.getpid()).strip()
