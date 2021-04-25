@@ -60,7 +60,7 @@ for j,idx in enumerate(idxrange):
             os.system(comm)
             with open("%s_t2.5.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
-                latent_cr=eval(lines[7].split("=")[-1])
+                latent_cr=eval(lines[9].split("=")[-1])
             os.system("rm -f %s_t2.5.txt" % pid)
             os.system("rm -f %s*sz3*")
             if latent_cr==0:
