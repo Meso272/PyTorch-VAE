@@ -79,6 +79,7 @@ parser.add_argument('--max','-mx',type=float,
 parser.add_argument('--min','-mi',type=float,
                    default=0)
 parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
+parser.add_argument('--parallel',  '-para',type=int,default=0)
 #parser.add_argument('--singlerange','-sr',type=int,default=0)
 args = parser.parse_args()
 
@@ -107,6 +108,8 @@ with torch.no_grad():
         test=test.cuda()
     if args.eval:
         test.eval()
+    if args.parallel:
+        test=torch.nn.DataParallel(test)
 
 xsize=args.xsize
 ysize=args.ysize
