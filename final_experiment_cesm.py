@@ -50,6 +50,7 @@ for i,eb in enumerate(ebs):
                 latent_cr=eval(f.read().splitlines()[-1])
                 if latent_cr==0:
                     comm="sz_demo %sl.dat -1 %d %f %d 0 1&>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
+                    os.system(comm)
                     with open("%s_t2.5.txt" % pid,"r") as f:
                         lines=f.read().splitlines()
                         latent_cr=eval(lines[7].split("=")[-1])
