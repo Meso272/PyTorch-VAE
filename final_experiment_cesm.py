@@ -102,7 +102,7 @@ for i,eb in enumerate(ebs):
             os.system(comm)
             with open("%s_t4.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
-                    dl_qucr=eval(lines[4].split("=")[-1])
+                dl_qucr=eval(lines[4].split("=")[-1])
                 data[i+1][j-51][5]=dl_qucr
             os.system("rm -f %s_t5.txt" % pid)
     
