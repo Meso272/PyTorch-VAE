@@ -39,7 +39,8 @@ dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 
 
 for j,idx in enumerate(idxrange):
-    for i,eb in enumerate(ebs):    
+    for i,eb in enumerate(ebs):
+        print("niewanlong")    
         filename="%s.dat.log10" % field
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/coeff
