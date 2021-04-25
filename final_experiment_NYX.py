@@ -79,7 +79,7 @@ for j,idx in enumerate(idxrange):
             os.system("rm -f %s_t3.txt" % pid)
 
 
-            comm="../sz_refactory/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
+            comm="../sz3_backend/build/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
             os.system(comm)
             with open("%s_t4.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
@@ -106,7 +106,7 @@ for j,idx in enumerate(idxrange):
             os.system("rm -f %s_t3.txt" % pid)
 
 
-            comm="../sz_refactory/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
+            comm="../sz3_backend/build/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
             os.system(comm)
             with open("%s_t4.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
