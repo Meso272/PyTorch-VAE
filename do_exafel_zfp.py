@@ -4,7 +4,7 @@ import sys
 
 datafolder="/home/jliu447/lossycompression/EXAFEL/extracted"
 
-ebs=[-x for x in range(0,16)]
+ebs=[x for x in range(0,16)]
 
 cr=np.zeros((len(ebs)+1,53),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,53),dtype=np.float32)
