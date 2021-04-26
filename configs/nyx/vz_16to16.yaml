@@ -31,9 +31,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_new/SWAE_nyxvz_16cubeto16_bs144_3264128"
+  ckpt_save_dir: "ckpts_new/SWAE_nyxvz_16cubeto16_bs144_3264128256"
   save_dir: "logs/"
-  name: "SWAE_nyxvz_16cubeto16_bs144_3264128"
+  name: "SWAE_nyxvz_16cubeto16_bs144_3264128256"
   manual_seed: 1265
 
 
