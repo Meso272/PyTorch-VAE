@@ -47,6 +47,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f zfptemp.txt")
 
 
-np.savetxt("zfp_exafel_cr.txt" , cr ,delimiter='\t')
-np.savetxt("zfp_exafel_psnr.txt" , psnr ,delimiter='\t')
-np.savetxt("zfp_exafel_maxpwerr.txt" , maxpwerr ,delimiter='\t')
+np.savetxt("zfp_exafel_crbige.txt" , cr ,delimiter='\t')
+np.savetxt("zfp_exafel_psnrbige.txt" , psnr ,delimiter='\t')
+np.savetxt("zfp_exafel_maxpwerrbige.txt" , maxpwerr ,delimiter='\t')
