@@ -7,6 +7,7 @@ from torch.autograd import Variable
 from models import *
 from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
+import time
 
 
 def compress(array,error_bound):#error_bound is relative 
@@ -139,6 +140,11 @@ if eps>0:
     meanlist=[]
 
 idx=0
+
+totaltime=0
+
+start=time.clock()
+
 if dim==3:
     for x in range(0,xsize,blocksize):
         for y in range(0,ysize,blocksize):
@@ -210,11 +216,13 @@ with torch.no_grad():
     if eps<=0:
         outputs=test(torch.from_numpy(picts).to(device) )
     else:
-        outputs=test(torch.from_numpy(picts[idxlist]).to(device) )
+        outputs=test( torch.from_numpy(picts[idxlist]).to(device) )
 zs=outputs[2].cpu().detach().numpy()
 predict=outputs[0].cpu().detach().numpy()
 latent_size=zs.shape[1]
 zs=zs.flatten()
+
+totaltime+=time.clock()-start
 
 print(zs.shape[0])
 
@@ -258,6 +266,7 @@ if error_bound>0:
         predict2=predict_temp
 
 idx=0
+start=time.clock()
 if dim==3:
     for x in range(0,xsize,blocksize):
         for y in range(0,ysize,blocksize):
@@ -280,7 +289,8 @@ else:
                 recon2[x:endx,y:endy]=predict2[idx][0][:endx-x,:endy-y]
             idx+=1
 
-
+totaltime+=time.clock()-start
+print(totaltime)
 
 
 recon.tofile(args.recon)
