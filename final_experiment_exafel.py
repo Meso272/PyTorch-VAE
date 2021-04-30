@@ -15,7 +15,7 @@ if len(sys.argv)>=8:
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2,1e-3]
 idxrange=[x for x in range(300,352)]
-datafolder="/home/jliu447/lossycompression/EXAFEL/extracted" %
+datafolder="/home/jliu447/lossycompression/EXAFEL/extracted" 
 pid=str(os.getpid()).strip()
 data=np.zeros((len(ebs)+1,12,7),dtype=np.float32)
 for i in range(7):
