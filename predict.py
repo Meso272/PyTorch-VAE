@@ -230,7 +230,9 @@ print(zs.shape[0])
 recon=np.zeros(array_size,dtype=np.float32)
 predict=(predict+1)/2
 predict=predict*(global_max-global_min)+global_min
-
+latents=np.array(zs)
+if args.transpose:
+    latents=latents.reshape((-1,latent_size)).transpose().flatten()
 
 if eps>0:
 
@@ -240,11 +242,10 @@ if eps>0:
     for idx,mean in meanlist:
         predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
     predict=predict_temp
+
 if error_bound>0:
     start=time.clock()
-    latents=np.array(zs)
-    if args.transpose:
-        latents=latents.reshape((-1,latent_size)).transpose().flatten()
+    
     ql,dl=compress(latents,error_bound)
     if args.transpose:
         dl=dl.reshape((latent_size,-1)).transpose()
