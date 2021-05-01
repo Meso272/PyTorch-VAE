@@ -12,6 +12,8 @@ if len(sys.argv)>=7:
 eps=1e-4
 if len(sys.argv)>=8:
     eps=float(sys.argv[7])
+if len(sys.argv)>=9:
+    sz3_bs=int(sys.argv[8])
 print(eps)
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2,1e-3]
@@ -41,7 +43,11 @@ for j,idx in enumerate(idxrange):
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/coeff
         if(compress_mode!=2 or i==0):
-            comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 0.02368359 -mi 0 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
+            if compress_mode!=5:
+                comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 0.02368359 -mi 0 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
+            else:
+                comm="python3 predict.py -c %s -k %s -i %s -d 3 -t 0 -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 0.02368359 -mi 0 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,eps,pid)
+
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
