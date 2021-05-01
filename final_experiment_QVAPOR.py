@@ -53,22 +53,41 @@ for j,idx in enumerate(idxrange):
                 latent_nbele=eval(f.read())
             os.system("rm -f %s_t1.txt" % pid)
     
-            comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
-            os.system(comm)
-            with open("%s_t2.txt" % pid,"r") as f:
-                latent_cr=eval(f.read().splitlines()[-1])
-                if latent_cr==0:
-                    comm="sz_demo %sl.dat -1 %d %f %d 0 1&>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
-                    os.system(comm)
-                    with open("%s_t2.5.txt" % pid,"r") as f:
+            if compress_mode!=5:
+                comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
+                os.system(comm)
+                with open("%s_t2.txt" % pid,"r") as f:
+                    latent_cr=eval(f.read().splitlines()[-1])
+                    if latent_cr==0:
+                        comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
+                        os.system(comm)
+                        with open("%s_t2.5.txt" % pid,"r") as f:
+                            try:
+                                lines=f.read().splitlines()
+                                latent_cr=eval(lines[7].split("=")[-1])
+                            except:
+                                latent_cr=0
+                        os.system("rm -f %s_t2.5.txt" % pid)
+                        os.system("rm -f %s*sz3*")
+                        if latent_cr==0:
+                            latent_cr=1
+                    data[i+1][j+1][0]=latent_cr
+                os.system("rm -f %s_t2.txt" % pid)
+            else:
+                comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
+                os.system(comm)
+                with open("%s_t2.txt" % pid,"r") as f:
+                    try:
                         lines=f.read().splitlines()
                         latent_cr=eval(lines[7].split("=")[-1])
-                    os.system("rm -f %s_t2.5.txt" % pid)
-                    os.system("rm -f %s*sz3*")
-                    if latent_cr==0:
-                        latent_cr=1
+                    except:
+                        latent_cr=0
+                        
+                os.system("rm -f %s*sz3*")
+                if latent_cr==0:
+                    latent_cr=1
                 data[i+1][j+1][0]=latent_cr
-            os.system("rm -f %s_t2.txt" % pid)
+                os.system("rm -f %s_t2.txt" % pid)
 
         if(compress_mode%2==0):
             comm="compress %s.padded %sr.dat %f %d 3 100 500 500 %d&>%s_t3.txt" % (filepath,pid,eb,blocksize,compress_mode,pid)

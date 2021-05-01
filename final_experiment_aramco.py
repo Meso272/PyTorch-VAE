@@ -76,6 +76,7 @@ for j,idx in enumerate(idxrange):
                 os.system("rm -f %s_t2.txt" % pid)
             else:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
+                os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
                     try:
                         lines=f.read().splitlines()
