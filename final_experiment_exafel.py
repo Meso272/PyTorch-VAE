@@ -41,7 +41,7 @@ for j,idx in enumerate(idxrange):
         latent_eb=eb/coeff
         if(compress_mode!=2 or i==0):
             print("niujie")
-            comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l %sl.dat -r %sr.dat -x 5920 -y 388 -s %d -p 1 -mx 14766.948 -mi -16019.074 -eps %f&>%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
+            comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l %sl.dat -r %sr.dat -x 5920 -y 388 -s %d -p 1 -mx 14766.948 -mi -16019.074 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())

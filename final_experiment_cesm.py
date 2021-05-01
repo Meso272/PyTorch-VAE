@@ -39,7 +39,7 @@ for j in range(52,63):
         latent_eb=eb/coeff
         if(compress_mode!=2 or i==0):
             print("niujie")
-            comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l %sl.dat -r %sr.dat -x 1800 -y 3600 -s %d -p 1&>%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,pid)
+            comm="python3 predict.py -c %s -k %s -i %s -d 2 -e %f -l %sl.dat -r %sr.dat -x 1800 -y 3600 -s %d -p 1 >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
