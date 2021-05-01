@@ -81,6 +81,7 @@ parser.add_argument('--min','-mi',type=float,
                    default=0)
 parser.add_argument('--epsilon',  '-eps',type=float,default=-1)
 parser.add_argument('--parallel',  '-para',type=int,default=0)
+parser.add_argument('--time',  '-tm',type=int,default=0)
 #parser.add_argument('--singlerange','-sr',type=int,default=0)
 args = parser.parse_args()
 
@@ -298,7 +299,8 @@ else:
             idx+=1
 
 totaltime+=time.clock()-start
-print(totaltime)
+if args.time:
+    print(totaltime)
 
 
 recon.tofile(args.recon)
