@@ -68,7 +68,7 @@ for j,idx in enumerate(idxrange):
             data[i+1][j+1][0]=latent_cr
             os.system("rm -f %s_t2.txt" % pid)
 
-        if(1):
+        if(compress_mode<=2):
             comm="compress %s.padded %sr.dat %f %d 3 512 512 512 %d&>%s_t3.txt" % (filepath,pid,eb,blocksize,compress_mode,pid)
             os.system(comm)
             with open("%s_t3.txt" % pid,"r") as f:
@@ -133,7 +133,7 @@ if compress_mode!=2:
 if compress_mode==0:
     np.savetxt("%s_nnratio.txt" % output,data[:,:,1],delimiter='\t')
     #np.savetxt("%s_dlnnratio.txt" % output,data[:,:,4],delimiter='\t')
-if 1:
+if compress_mode<=2:
     np.savetxt("%s_qucr.txt" % output,data[:,:,2],delimiter='\t')
     np.savetxt("%s_dpsnr.txt" % output,data[:,:,3],delimiter='\t')
 ''''

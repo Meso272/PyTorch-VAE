@@ -71,7 +71,7 @@ parser.add_argument('--eval','-v',type=int,
                    default=0)
 parser.add_argument('--padding','-p',type=int,
                    default=0)
-#parser.add_argument('--transpose','-t',type=int,default=1)
+parser.add_argument('--transpose','-t',type=int,default=1)
 parser.add_argument('--gpu','-gpu',type=int,
                    default=1)
 #parser.add_argument('--lossmode','-lm',type=int,default=1)
@@ -232,6 +232,7 @@ predict=predict*(global_max-global_min)+global_min
 
 
 if eps>0:
+
     predict_temp=np.zeros((predict.shape[0]+len(meanlist),1)+block_size,dtype=np.float32)
     for i in range(predict.shape[0]):
         predict_temp[idxlist[i]][0]=predict[i][0]
@@ -239,9 +240,16 @@ if eps>0:
         predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
     predict=predict_temp
 if error_bound>0:
+    start=time.clock()
     latents=np.array(zs)
+    if args.transpose:
+        latents=latents.reshape((-1,latent_size)).transpose().flatten()
     ql,dl=compress(latents,error_bound)
-    dl=dl.reshape((-1,latent_size))
+    if args.transpose:
+        dl=dl.reshape((latent_size,-1)).transpose()
+    else:
+        dl=dl.reshape((-1,latent_size))
+    totaltime+=time.clock()-start
     with torch.no_grad():
     
         if args.gpu:
