@@ -45,7 +45,7 @@ for j,idx in enumerate(idxrange):
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb/coeff
         if(compress_mode!=2 or i==0):
-            comm="python3 predict.py -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1>%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
+            comm="python3 predict.py -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 >%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
