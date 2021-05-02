@@ -32,7 +32,7 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts/SWAE_QVAPOR_8cubeto16_bs64_3264128"
+  ckpt_save_dir: "ckpts_test/SWAE_QVAPOR_8cubeto16_bs64_3264128"
   save_dir: "logs/"
   name: "SWAE_QVAPOR_8cubeto16_bs64_3264128"
   manual_seed: 1265
