@@ -144,7 +144,7 @@ idx=0
 
 totaltime=0
 
-start=time.clock()
+
 
 if dim==3:
     for x in range(0,xsize,blocksize):
@@ -211,7 +211,7 @@ else:
             idx+=1
 
 picts=np.array(picts)
-
+start=time.clock()
 with torch.no_grad():
     #try:
     if eps<=0:
