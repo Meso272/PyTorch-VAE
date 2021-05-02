@@ -218,12 +218,13 @@ with torch.no_grad():
         outputs=test(torch.from_numpy(picts).to(device) )
     else:
         outputs=test( torch.from_numpy(picts[idxlist]).to(device) )
+totaltime+=time.clock()-start
 zs=outputs[2].cpu().detach().numpy()
 predict=outputs[0].cpu().detach().numpy()
 latent_size=zs.shape[1]
 zs=zs.flatten()
 
-totaltime+=time.clock()-start
+
 
 print(zs.shape[0])
 
@@ -244,14 +245,14 @@ if eps>0:
     predict=predict_temp
 
 if error_bound>0:
-    start=time.clock()
+    #start=time.clock()
     
     ql,dl=compress(latents,error_bound)
     if args.transpose:
         dl=dl.reshape((latent_size,-1)).transpose()
     else:
         dl=dl.reshape((-1,latent_size))
-    totaltime+=time.clock()-start
+    #totaltime+=time.clock()-start
     with torch.no_grad():
     
         if args.gpu:
@@ -276,7 +277,7 @@ if error_bound>0:
         predict2=predict_temp
 
 idx=0
-start=time.clock()
+#start=time.clock()
 if dim==3:
     for x in range(0,xsize,blocksize):
         for y in range(0,ysize,blocksize):
@@ -299,7 +300,7 @@ else:
                 recon2[x:endx,y:endy]=predict2[idx][0][:endx-x,:endy-y]
             idx+=1
 
-totaltime+=time.clock()-start
+#totaltime+=time.clock()-start
 if args.time:
     print(totaltime)
 
