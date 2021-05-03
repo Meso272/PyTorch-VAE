@@ -3,7 +3,7 @@ import numpy as np
 
 datafolder="/home/jliu447/lossycompression/aramco"
 
-ebs=[-x for x in range(5,20)]
+ebs=[-x for x in range(0,5)]
 
 cr=np.zeros((len(ebs)+1,11),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,11),dtype=np.float32)
@@ -49,6 +49,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f temp.txt")
 
 
-np.savetxt("zfp_aramco_cr.txt",cr,delimiter='\t')
-np.savetxt("zfp_aramco_psnr.txt",psnr,delimiter='\t')
-np.savetxt("zfp_aramco_maxpwerr.txt",maxpwerr,delimiter='\t')
+np.savetxt("zfp_aramcobige_cr.txt",cr,delimiter='\t')
+np.savetxt("zfp_aramcobige_psnr.txt",psnr,delimiter='\t')
+np.savetxt("zfp_aramcobige_maxpwerr.txt",maxpwerr,delimiter='\t')
