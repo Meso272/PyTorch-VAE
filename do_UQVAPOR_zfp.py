@@ -4,7 +4,7 @@ import sys
 field=sys.argv[1]
 datafolder="/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang"
 #fields=["CLOUD","PRECIP","QGRAUP","QRAIN","QVAPOR","U","W","P","QCLOUD","QICE","QSNOW","TC","V"]
-ebs=[-x for x in range(-5,18)]
+ebs=[-x for x in range(-10,-5)]
 cr=np.zeros((len(ebs)+1,9),dtype=np.float32)
 psnr=np.zeros((len(ebs)+1,9),dtype=np.float32)
 maxpwerr=np.zeros((len(ebs)+1,9),dtype=np.float32)
@@ -48,6 +48,6 @@ for i,eb in enumerate(ebs):
         os.system("rm -f tempzfp.txt")
 
 
-np.savetxt("zfp_%s_cr.txt" % field, cr ,delimiter='\t')
-np.savetxt("zfp_%s_psnr.txt" % field, psnr ,delimiter='\t')
-np.savetxt("zfp_%s_maxpwerr.txt" % field, maxpwerr ,delimiter='\t')
+np.savetxt("zfp_%sbige_cr.txt" % field, cr ,delimiter='\t')
+np.savetxt("zfp_%sbige_psnr.txt" % field, psnr ,delimiter='\t')
+np.savetxt("zfp_%sbige_maxpwerr.txt" % field, maxpwerr ,delimiter='\t')
