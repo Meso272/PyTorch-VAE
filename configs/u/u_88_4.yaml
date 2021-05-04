@@ -32,7 +32,7 @@ trainer_params:
 logging_params: 
   ckpt_save_dir: "ckpts_new/SWAE_U_8cubeto8_bs64_64128256_lr0.01"
   save_dir: "logs/"
-  name: "SWAE_U_8cubeto8_bs64_3264128256_lr0.01"
+  name: "SWAE_U_8cubeto8_bs64_64128256_lr0.01"
   manual_seed: 1265
 
 
