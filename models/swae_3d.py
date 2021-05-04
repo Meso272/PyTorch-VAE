@@ -37,9 +37,8 @@ class SWAE_3D(BaseVAE):
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256]
         self.last_fm_nums=hidden_dims[-1]
-        strides=self.strides
         if strides==[]:
-            strides=[2]*[hidden_dims]
+            #strides=[2]*len(hidden_dims)
             self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
         else:
             self.last_fm_size=input_size
@@ -110,7 +109,7 @@ class SWAE_3D(BaseVAE):
                                        kernel_size=3,
                                        stride = stride,
                                        padding=1,
-                                       output_padding=1),
+                                       output_padding=stride//2),
                     )
             )
             if norm=='bn':
@@ -148,7 +147,7 @@ class SWAE_3D(BaseVAE):
                                                kernel_size=3,
                                                stride=stride,
                                                padding=1,
-                                               output_padding=1),
+                                               output_padding=stride//2),
                             
                             ) )
         if norm=='bn':
