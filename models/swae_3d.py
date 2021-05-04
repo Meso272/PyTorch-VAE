@@ -43,7 +43,7 @@ class SWAE_3D(BaseVAE):
         else:
             self.last_fm_size=input_size
             for stride in strides:
-                self.last_fm_size/=stride
+                self.last_fm_size=self.last_fm_size//stride
         # Build Encoder
         for i,h_dim in enumerate(hidden_dims):
             if strides==[]:
