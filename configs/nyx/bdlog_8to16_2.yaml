@@ -22,7 +22,7 @@ exp_params:
   img_size: 8
   cache_size: 131072
   batch_size: 144 # Better to have a square number
-  LR: 0.01
+  LR: 0.003
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
@@ -31,9 +31,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_new/SWAE_nyxbaryonlog_8cubeto16_bs144_3264128_lr0.01"
+  ckpt_save_dir: "ckpts_new/SWAE_nyxbaryonlog_8cubeto16_bs144_3264128_lr0.003"
   save_dir: "logs/"
-  name: "SWAE_nyxbaryonlog_8cubeto16_bs144_3264128_lr0.01"
+  name: "SWAE_nyxbaryonlog_8cubeto16_bs144_3264128_lr0.003"
   manual_seed: 1265
 
 
