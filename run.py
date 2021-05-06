@@ -61,7 +61,7 @@ if __name__=='__main__':
 
 # DEFAULTS used by the Trainer
     checkpoint_callback = ModelCheckpoint(
-        dirpath=config['logging_params']['ckpt_save_dir'],
+        filepath=config['logging_params']['ckpt_save_dir'],
         save_top_k=-1,
         verbose=True,
         #monitor='val_loss',
@@ -72,7 +72,7 @@ if __name__=='__main__':
 
     runner = Trainer(min_epochs=1,
                  logger=tt_logger,
-                 log_every_n_steps=100,
+                 log_save_interval=100,
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
