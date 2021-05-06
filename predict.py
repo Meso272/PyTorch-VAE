@@ -42,7 +42,7 @@ parser.add_argument('--config',  '-c',
                     default='configs/vae.yaml')
 parser.add_argument('--ckpt',  '-k',type=str
                    )
-#parser.add_argument('--mode',  '-m',type=str,default="c")
+parser.add_argument('--mode',  '-m',type=str,default="c")
 #parser.add_argument('--lsize','-ls',type=int,default=0)
 parser.add_argument('--input',  '-i',type=str
                    )
@@ -112,6 +112,7 @@ with torch.no_grad():
         test.eval()
     if args.parallel:
         test=torch.nn.DataParallel(test)
+        test=test.module
 
 xsize=args.xsize
 ysize=args.ysize
@@ -120,6 +121,8 @@ blocksize=args.blocksize
 dim=args.dimension
 error_bound=args.error
 eps=args.epsilon
+global_max=args.max
+global_min=args.min
 if dim==3:
     array_size=(xsize,ysize,zsize)
     block_size=(blocksize,blocksize,blocksize)
@@ -127,13 +130,13 @@ if dim==3:
 else:
     array_size=(xsize,ysize)
     block_size=(blocksize,blocksize)
+
 array=np.fromfile(args.input,dtype=np.float32).reshape(array_size)
 minimum=np.min(array)
 maximum=np.max(array)
 rng=maximum-minimum
 
-global_max=args.max
-global_min=args.min
+
 picts=[]
 
 if eps>0:
@@ -215,12 +218,21 @@ start=time.clock()
 with torch.no_grad():
     #try:
     if eps<=0:
-        outputs=test(torch.from_numpy(picts).to(device) )
+        input_data=picts
+        
     else:
-        outputs=test( torch.from_numpy(picts[idxlist]).to(device) )
-totaltime+=time.clock()-start
-zs=outputs[2].cpu().detach().numpy()
-predict=outputs[0].cpu().detach().numpy()
+        input_data=picts[idxlist]
+    if error_bound<=0:
+        outputs=test(torch.from_numpy(input_data).to(device) )
+        totaltime+=time.clock()-start
+        zs=outputs[2].cpu().detach().numpy()
+        predict=outputs[0].cpu().detach().numpy()
+    else:
+        outputs=test.encode(torch.from_numpy(input_data).to(device) )
+        totaltime+=time.clock()-start
+        zs=outputs.cpu().detach().numpy()
+
+
 latent_size=zs.shape[1]
 zs=zs.flatten()
 
@@ -229,20 +241,12 @@ zs=zs.flatten()
 print(zs.shape[0])
 
 recon=np.zeros(array_size,dtype=np.float32)
-predict=(predict+1)/2
-predict=predict*(global_max-global_min)+global_min
+
 latents=np.array(zs)
 if args.transpose:
     latents=latents.reshape((-1,latent_size)).transpose().flatten()
 
-if eps>0:
 
-    predict_temp=np.zeros((predict.shape[0]+len(meanlist),1)+block_size,dtype=np.float32)
-    for i in range(predict.shape[0]):
-        predict_temp[idxlist[i]][0]=predict[i][0]
-    for idx,mean in meanlist:
-        predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
-    predict=predict_temp
 
 if error_bound>0:
     #start=time.clock()
@@ -256,27 +260,27 @@ if error_bound>0:
     with torch.no_grad():
     
         if args.gpu:
-            if args.parallel:
-                predict2=test.module.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
-            else:
-                predict2=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
+            
+            predict=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
         else:
-            if args.parallel:
-                predict2=test.module.decode(torch.from_numpy(dl)).detach().numpy()
-            else:
-                predict2=test.decode(torch.from_numpy(dl)).detach().numpy()
-    predict2=(predict2+1)/2
-    predict2=predict2*(global_max-global_min)+global_min
-    recon2=np.zeros(array_size,dtype=np.float32)    
-    if eps>0:
-        predict_temp=np.zeros((predict2.shape[0]+len(meanlist),1)+block_size,dtype=np.float32)
-        for i in range(predict2.shape[0]):
-            predict_temp[idxlist[i]][0]=predict2[i][0]
-        for idx,mean in meanlist:
-            predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
-        predict2=predict_temp
+            
+            predict=test.decode(torch.from_numpy(dl)).detach().numpy()
 
 idx=0
+
+predict=(predict+1)/2
+predict=predict*(global_max-global_min)+global_min
+if eps>0:
+
+    predict_temp=np.zeros((predict.shape[0]+len(meanlist),1)+block_size,dtype=np.float32)
+    for i in range(predict.shape[0]):
+        predict_temp[idxlist[i]][0]=predict[i][0]
+    for idx,mean in meanlist:
+        predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
+    predict=predict_temp
+
+
+
 #start=time.clock()
 if dim==3:
     for x in range(0,xsize,blocksize):
@@ -286,8 +290,7 @@ if dim==3:
                 endy=min(y+blocksize,ysize)
                 endz=min(z+blocksize,zsize)
                 recon[x:endx,y:endy,z:endz]=predict[idx][0][:endx-x,:endy-y,:endz-z]
-                if error_bound>0:
-                    recon2[x:endx,y:endy,z:endz]=predict2[idx][0][:endx-x,:endy-y,:endz-z]
+                
                 idx+=1
 else:
     for x in range(0,xsize,blocksize):
@@ -296,8 +299,7 @@ else:
             endy=min(y+blocksize,ysize)
 
             recon[x:endx,y:endy]=predict[idx][0][:endx-x,:endy-y]
-            if error_bound>0:
-                recon2[x:endx,y:endy]=predict2[idx][0][:endx-x,:endy-y]
+            
             idx+=1
 
 #totaltime+=time.clock()-start
@@ -305,13 +307,15 @@ if args.time:
     print(totaltime)
 
 
-recon.tofile(args.recon)
+
 if args.latents!=None:
     zs.tofile(args.latents)
 if error_bound>0:
-    recon2.tofile(args.recon+".decompress")
+    recon.tofile(args.recon+".decompress")
     dl.tofile(args.latents+".decompress")
     ql.tofile(args.latents+".q")
+else:
+    recon.tofile(args.recon)
 if args.padding:
     padded_array=np.pad(array,((1,0),))
     padded_array.tofile(args.input+".padded")

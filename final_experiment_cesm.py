@@ -7,18 +7,24 @@ field=sys.argv[3]
 blocksize=int(sys.argv[4])
 coeff=float(sys.argv[5])
 output=sys.argv[6]
-compress_mode=0# 0 is all, 1 is NN, 2 is lorenzo,3 is only latent cr
+compress_mode=0# 0 is all, 1 is NN, 2 is lorenzo,3 is only latent cr, 4 is NN unbounded, 5 is sz3 latent
+latent_rate=-1
 if len(sys.argv)>=8:
     compress_mode=int(sys.argv[7])
+
 if len(sys.argv)>=9:
-    sz3_bs=int(sys.argv[8])
+    if compress_mode==5:
+        sz3_bs=int(sys.argv[8])
+    else:
+        latent_rate=int(sys.argv[8])
+
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2,1e-3]
 idxrange=[x for x in range(52,63)]
 datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % field
 pid=str(os.getpid()).strip()
-data=np.zeros((len(ebs)+1,12,7),dtype=np.float32)
-for i in range(7):
+data=np.zeros((len(ebs)+1,len(idxrange)+1,5),dtype=np.float32)
+for i in range(5):
     data[1:,0,i]=ebs
     data[0,1:,i]=idxrange
 
@@ -34,11 +40,11 @@ dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 '''
 
 
-for j in range(52,63):
+for j,idx in enumerate(idxrange):
     for i,eb in enumerate(ebs): 
-        filename="%s_%d.dat" % (field,j)
+        filename="%s_%d.dat" % (field,idx)
         filepath=os.path.join(datafolder,filename)
-        latent_eb=eb/coeff
+        latent_eb=eb*coeff
         if(compress_mode!=2 or i==0):
             print("niujie")
             if compress_mode!=5:
@@ -49,9 +55,11 @@ for j in range(52,63):
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
+                if latent_rate==-1:
+                    latent_rate=1800*3600/latent_nbele
             os.system("rm -f %s_t1.txt" % pid)
 
-            if compress_mode!=5:
+            if compress_mode!=5 and coeff>0:
                 comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
@@ -69,9 +77,9 @@ for j in range(52,63):
                         os.system("rm -f %s*sz3*")
                         if latent_cr==0:
                             latent_cr=1
-                    data[i+1][j-51][0]=latent_cr
+                    data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
-            else:
+            elif compress_mode==5:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
@@ -84,17 +92,18 @@ for j in range(52,63):
                 os.system("rm -f %s*sz3*")
                 if latent_cr==0:
                     latent_cr=1
-                data[i+1][j-51][0]=latent_cr
+                data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
 
-        if(compress_mode%2==0):
+        if(compress_mode<=2):
             comm="compress %s.padded %sr.dat %f %d 2 1800 3600 %d&>%s_t3.txt" % (filepath,pid,eb,blocksize,compress_mode,pid)
             os.system(comm)
             with open("%s_t3.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
                 nn_block=eval(lines[3].split(" ")[0])
                 lorenzo_block=eval(lines[4].split(" ")[0])
-                data[i+1][j-51][1]=nn_block/(nn_block+lorenzo_block)
+                nn_ratio=nn_block/(nn_block+lorenzo_block)
+                data[i+1][j+1][1]=nn_ratio
             os.system("rm -f %s_t3.txt" % pid)
 
 
@@ -103,42 +112,29 @@ for j in range(52,63):
             with open("%s_t4.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
                 qucr=eval(lines[4].split("=")[-1])
-                data[i+1][j-51][2]=qucr
+                data[i+1][j+1][2]=qucr
             os.system("rm -f %s_t4.txt" % pid)
 
             comm="compareData -f %s %s.padded.q.u.d&>%s_t5.txt" % (filepath,filepath,pid)
             os.system(comm)
             with open("%s_t5.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
-                d_psnr=eval(lines[6].split(',')[0].split('=')[1])
-                data[i+1][j-51][3]=d_psnr
+                psnr=eval(lines[6].split(',')[0].split('=')[1])
+                data[i+1][j+1][3]=psnr
             os.system("rm -f %s_t5.txt" % pid)
-    
-        if(compress_mode<=1):
-            comm="compress %s.padded %sr.dat.decompress %f %d 2 1800 3600 %d&>%s_t3.txt" % (filepath,pid,eb,blocksize,compress_mode,pid)
+            final_cr=1/(1/qucr+nn_ratio/(latent_rate*latent_cr))
+            data[i+1][j+1][4]=final_cr
+        if(compress_mode==4):
+            comm="compareData -f %s %sr.dat &>%s_t5.txt" % (filepath,filepath,pid)
             os.system(comm)
-            with open("%s_t3.txt" % pid,"r") as f:
-                lines=f.read().splitlines()
-                dl_nn_block=eval(lines[3].split(" ")[0])
-                dl_lorenzo_block=eval(lines[4].split(" ")[0])
-                data[i+1][j-51][4]=dl_nn_block/(dl_nn_block+dl_lorenzo_block)
-            os.system("rm -f %s_t3.txt" % pid)
-
-
-            comm="../sz_refactory/test/sz_backend %s.padded.q %s.padded.q.u&>%s_t4.txt" % (filepath,filepath,pid)
-            os.system(comm)
-            with open("%s_t4.txt" % pid,"r") as f:
-                lines=f.read().splitlines()
-                dl_qucr=eval(lines[4].split("=")[-1])
-                data[i+1][j-51][5]=dl_qucr
-            os.system("rm -f %s_t5.txt" % pid)
-    
-            comm="compareData -f %s %s.padded.q.u.d&>%s_t5.txt" % (filepath,filepath,pid)
-            os.system(comm)
+            data[i+1][j+1][1]=1
             with open("%s_t5.txt" % pid,"r") as f:
                 lines=f.read().splitlines()
-                dl_d_psnr=eval(lines[6].split(',')[0].split('=')[1])
-                data[i+1][j-51][6]=dl_d_psnr
+                psnr=eval(lines[6].split(',')[0].split('=')[1])
+                
+                data[i+1][j+1][3]=psnr
+            final_cr=latent_rate*latent_cr
+            data[i+1][j+1][4]=final_cr
             os.system("rm -f %s_t5.txt" % pid)
         if compress_mode!=2:
             os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
@@ -146,18 +142,17 @@ for j in range(52,63):
         os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
     print("niewanlong")
 
-
+np.savetxt("%s_psnr.txt" % output,data[:,:,3],delimiter='\t')
 if compress_mode!=2:
     np.savetxt("%s_latentcr.txt" % output,data[:,:,0],delimiter='\t')
 if compress_mode==0:
     np.savetxt("%s_nnratio.txt" % output,data[:,:,1],delimiter='\t')
-    np.savetxt("%s_dlnnratio.txt" % output,data[:,:,4],delimiter='\t')
-if compress_mode%2<=0:
+if compress_mode<=2:
     np.savetxt("%s_qucr.txt" % output,data[:,:,2],delimiter='\t')
-    np.savetxt("%s_dpsnr.txt" % output,data[:,:,3],delimiter='\t')
-if compress_mode<=1:
-    np.savetxt("%s_dlqucr.txt" % output,data[:,:,5],delimiter='\t')
-    np.savetxt("%s_dldpsnr.txt" % output,data[:,:,6],delimiter='\t')
+
+if compress_mode<=2 or compress_mode==4:
+    np.savetxt("%s_final_cr.txt" % output,data[:,:,4],delimiter='\t')
+
 
 
 
