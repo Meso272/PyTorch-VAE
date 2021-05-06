@@ -266,7 +266,7 @@ if error_bound>0:
             
             predict=test.decode(torch.from_numpy(dl)).detach().numpy()
 
-idx=0
+
 
 predict=(predict+1)/2
 predict=predict*(global_max-global_min)+global_min
@@ -279,7 +279,7 @@ if eps>0:
         predict_temp[idx][0]=np.full(block_size,fill_value=mean,dtype=np.float32)
     predict=predict_temp
 
-
+idx=0
 
 #start=time.clock()
 if dim==3:
