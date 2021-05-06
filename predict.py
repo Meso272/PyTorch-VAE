@@ -307,15 +307,13 @@ if args.time:
     print(totaltime)
 
 
-
+recon.tofile(args.recon)
 if args.latents!=None:
     zs.tofile(args.latents)
 if error_bound>0:
-    recon.tofile(args.recon+".decompress")
     dl.tofile(args.latents+".decompress")
     ql.tofile(args.latents+".q")
-else:
-    recon.tofile(args.recon)
+
 if args.padding:
     padded_array=np.pad(array,((1,0),))
     padded_array.tofile(args.input+".padded")
