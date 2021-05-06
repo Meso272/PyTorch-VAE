@@ -274,12 +274,12 @@ if error_bound>0:
                     end=min(len_dl,start+split)
                     dl_split=dl[start:end]
                     predict_s=test.decode(torch.from_numpy(dl_split).to(device)).cpu().detach().numpy()
-                    if predict==None:
+                    if start==0:
                         predict=predict_s
                     else:
                         predict=np.concatenate((predict,predict_s))
                     torch.cuda.empty_cache()
-                    start+=end
+                    start+=split
 
         else:
             
