@@ -54,7 +54,7 @@ for j,idx in enumerate(idxrange):
             if compress_mode!=5:
                 comm="python3 predict.py -sp 32768 -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
             else:
-                comm="python3 predict.py -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 -t 0 >%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
+                comm="python3 predict.py -sp 32768 -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 -t 0 >%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
