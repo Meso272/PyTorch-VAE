@@ -224,7 +224,7 @@ with torch.no_grad():
         
     else:
         input_data=picts[idxlist]
-    if error_bound<=0:
+    if error_bound<=0 and args.split==0:
         outputs=test(torch.from_numpy(input_data).to(device) )
         totaltime+=time.clock()-start
         zs=outputs[2].cpu().detach().numpy()
@@ -251,14 +251,21 @@ if args.transpose:
 if args.gpu:
     torch.cuda.empty_cache()
 
-if error_bound>0:
+if error_bound>0 or args.split>0:
     #start=time.clock()
-    
-    ql,dl=compress(latents,error_bound)
-    if args.transpose:
-        dl=dl.reshape((latent_size,-1)).transpose()
+    if error_bound>0:
+         ql,dl=compress(latents,error_bound)
+         if args.transpose:
+             dl=dl.reshape((latent_size,-1)).transpose()
+         else:
+             dl=dl.reshape((-1,latent_size))
     else:
-        dl=dl.reshape((-1,latent_size))
+        ql=latents
+        dl=latents
+        if args.transpose:
+             dl=dl.reshape((latent_size,-1)).transpose()
+         else:
+             dl=dl.reshape((-1,latent_size))
     #totaltime+=time.clock()-start
     with torch.no_grad():
     
