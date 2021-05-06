@@ -59,6 +59,8 @@ parser.add_argument('-recon',  '-r',type=str,default=None
                    )
 #parser.add_argument('--decomp',  '-d',type=str,default=None)
 #parser.add_argument('--bits',  '-b',type=int,default=32)
+parser.add_argument('--split',  '-sp',type=int,
+                   default=0)
 parser.add_argument('--xsize',  '-x',type=int,
                    default=449)
 parser.add_argument('--ysize',  '-y',type=int,
@@ -261,8 +263,24 @@ if error_bound>0:
     with torch.no_grad():
     
         if args.gpu:
-            
-            predict=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
+            if args.split==0:
+                predict=test.decode(torch.from_numpy(dl).to(device)).cpu().detach().numpy()
+            else:
+                split=args.split
+                len_dl=dl.shape[0]
+                start=0
+                predict=None
+                while(start<len_dl):
+                    end=min(len_dl,start+split)
+                    dl_split=dl[start:end]
+                    predict_s=test.decode(torch.from_numpy(dl_split).to(device)).cpu().detach().numpy()
+                    if predict==None:
+                        predict=predict_s
+                    else:
+                        predict=np.concatenate((predict,predict_s))
+                    torch.cuda.empty_cache()
+                    start+=end
+
         else:
             
             predict=test.decode(torch.from_numpy(dl)).detach().numpy()
