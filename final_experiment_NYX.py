@@ -59,7 +59,7 @@ for j,idx in enumerate(idxrange):
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
                 if latent_rate==-1:
-                    latent_rate=100*500*500/latent_nbele
+                    latent_rate=512*512*512/latent_nbele
             os.system("rm -f %s_t1.txt" % pid)
     
             #comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
