@@ -126,7 +126,7 @@ for j,idx in enumerate(idxrange):
             final_cr=1/(1/qucr+nn_ratio/(latent_rate*latent_cr))
             data[i+1][j+1][4]=final_cr
         if(compress_mode==4):
-            comm="compareData -f %s %sr.dat &>%s_t5.txt" % (filepath,filepath,pid)
+            comm="compareData -f %s %sr.dat &>%s_t5.txt" % (filepath,pid,pid)
             os.system(comm)
             data[i+1][j+1][1]=1
             with open("%s_t5.txt" % pid,"r") as f:
