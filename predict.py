@@ -309,7 +309,7 @@ if args.time:
 
 recon.tofile(args.recon)
 if args.latents!=None:
-    zs.tofile(args.latents)
+    latents.tofile(args.latents)
 if error_bound>0:
     dl.tofile(args.latents+".decompress")
     ql.tofile(args.latents+".q")
