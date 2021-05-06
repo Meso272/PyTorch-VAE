@@ -61,7 +61,7 @@ if __name__=='__main__':
 
 # DEFAULTS used by the Trainer
     checkpoint_callback = ModelCheckpoint(
-        dirpath=config['logging_params']['ckpt_save_dir'],
+        filepath=config['logging_params']['ckpt_save_dir'],
         save_top_k=-1,
         verbose=True,
         #monitor='val_loss',
