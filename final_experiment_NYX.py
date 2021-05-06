@@ -153,8 +153,6 @@ if compress_mode<=2 or compress_mode==4:
     np.savetxt("%s_final_cr.txt" % output,data[:,:,4],delimiter='\t')
 
 
-'''
-
 
 
 
