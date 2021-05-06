@@ -246,7 +246,8 @@ latents=np.array(zs)
 if args.transpose:
     latents=latents.reshape((-1,latent_size)).transpose().flatten()
 
-
+if args.gpu:
+    torch.cuda.empty_cache()
 
 if error_bound>0:
     #start=time.clock()
@@ -311,7 +312,7 @@ if args.latents!=None:
     latents.tofile(args.latents)
 if error_bound>0:
 
-   
+
     dl.tofile(args.latents+".decompress")
     ql.tofile(args.latents+".q")
 
