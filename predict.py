@@ -311,8 +311,7 @@ if args.latents!=None:
     latents.tofile(args.latents)
 if error_bound>0:
 
-    print(dl.shape)
-    print(ql.shape)
+   
     dl.tofile(args.latents+".decompress")
     ql.tofile(args.latents+".q")
 
