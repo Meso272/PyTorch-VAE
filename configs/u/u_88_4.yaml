@@ -21,7 +21,7 @@ exp_params:
   img_size: 8
   cache_size: 131072
   batch_size: 64 # Better to have a square number
-  LR: 0.01
+  LR: 0.003
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
@@ -30,9 +30,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_new/SWAE_U_8cubeto8_bs64_64128256_lr0.01"
+  ckpt_save_dir: "ckpts_new/SWAE_U_8cubeto8_bs64_64128256_lr0.003"
   save_dir: "logs/"
-  name: "SWAE_U_8cubeto8_bs64_64128256_lr0.01"
+  name: "SWAE_U_8cubeto8_bs64_64128256_lr0.003"
   manual_seed: 1265
 
 
