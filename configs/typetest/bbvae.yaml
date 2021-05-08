@@ -14,7 +14,7 @@ exp_params:
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 32
   batch_size: 64 # Better to have a square number
-  LR: 0.001 #orig 0.0005
+  LR: 0.0005 #orig 0.0005
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
