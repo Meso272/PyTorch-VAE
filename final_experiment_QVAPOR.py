@@ -10,14 +10,14 @@ compress_mode=0# 0 is all, 1 is NN, 2 is lorenzo,3 is only latent cr
 if len(sys.argv)>=7:
     compress_mode=int(sys.argv[6])
 eps=1e-4
-latent_rate=-1
+preset_latent_rate=-1
 if len(sys.argv)>=8:
     eps=float(sys.argv[7])
 if len(sys.argv)>=9:
     if compress_mode==5:
         sz3_bs=int(sys.argv[8])
     else:
-        latent_rate=int(sys.argv[8])
+        preset_latent_rate=int(sys.argv[8])
 print(eps)
 ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2]

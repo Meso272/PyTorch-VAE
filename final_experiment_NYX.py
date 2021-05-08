@@ -13,14 +13,14 @@ compress_mode=0# 0 is all, 1 is NN, 2 is lorenzo,3 is only latent cr, 5 is
 if len(sys.argv)>=8:
     compress_mode=int(sys.argv[7])
 eps=1e-4
-latent_rate=-1
+preset_latent_rate=-1
 if len(sys.argv)>=9:
     eps=float(sys.argv[8])
 if len(sys.argv)>=10:
     if compress_mode==5:
         sz3_bs=int(sys.argv[9])
     else:
-        latent_rate=int(sys.argv[9])
+        preset_latent_rate=int(sys.argv[9])
 print(eps)
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 ebs=[1e-2]
@@ -46,6 +46,7 @@ dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 
 split=((512/blocksize)**3)//8
 for j,idx in enumerate(idxrange):
+    latent_rate=preset_latent_rate
     for i,eb in enumerate(ebs):
         print("niewanlong")    
         filename="%s.dat.log10" % field
