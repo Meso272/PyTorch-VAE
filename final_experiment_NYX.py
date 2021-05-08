@@ -44,7 +44,7 @@ dl_qucrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 '''
 
-split=((512/blocksize)**3)//8
+split=((512/blocksize)**3)//16
 for j,idx in enumerate(idxrange):
     for i,eb in enumerate(ebs):
         print("niewanlong")    
