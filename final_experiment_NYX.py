@@ -44,7 +44,7 @@ dl_qucrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 '''
 
-
+split=((512/blocksize)**3)//8
 for j,idx in enumerate(idxrange):
     for i,eb in enumerate(ebs):
         print("niewanlong")    
@@ -53,9 +53,9 @@ for j,idx in enumerate(idxrange):
         latent_eb=eb*coeff
         if(compress_mode!=2 or i==0):
             if compress_mode!=5:
-                comm="python3 predict.py -sp 32768 -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
+                comm="python3 predict.py -sp %d -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 >%s_t1.txt" % (split,configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
             else:
-                comm="python3 predict.py -sp 32768 -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 -t 0 >%s_t1.txt" % (configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
+                comm="python3 predict.py -sp %d -c %s -k %s -i %s -d 3 -l %sl.dat -r %sr.dat -s %d -p 1 -x 512 -y 512 -z 512 -mx %f -mi %f -eps %f -para 1 -v 1 -t 0 >%s_t1.txt" % (split,configpath,ckptpath,filepath,pid,pid,blocksize,maximum[field],minimum[field],eps,pid)
             os.system(comm)
             with open("%s_t1.txt" % pid,"r") as f:
                 latent_nbele=eval(f.read())
@@ -133,6 +133,7 @@ for j,idx in enumerate(idxrange):
                 psnr=eval(lines[6].split(',')[0].split('=')[1])
                 
                 data[i+1][j+1][3]=psnr
+
             latent_cr=data[i+1][j+1][0]
             final_cr=latent_rate*latent_cr
 
