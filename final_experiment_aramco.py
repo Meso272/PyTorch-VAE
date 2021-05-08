@@ -27,6 +27,7 @@ idxrange=[x for x in range(1510,1600,10)]+[1599]
 datafolder="/home/jliu447/lossycompression/aramco" 
 pid=str(os.getpid()).strip()
 data=np.zeros((len(ebs)+1,len(idxrange)+1,5),dtype=np.float32)
+data[:,:,0]=np.ones((len(ebs)+1,len(idxrange)+1))
 for i in range(5):
     data[1:,0,i]=ebs
     data[0,1:,i]=idxrange
