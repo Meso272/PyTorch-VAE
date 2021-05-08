@@ -49,7 +49,11 @@ class SWAE(BaseVAE):
         if self.quant_mode==1:
             self.rounder=Round_1
         
-        self.last_resnet_size=int( input_size/(2**len(hidden_dims)) )
+        self.last_resnet_size=input_size
+        for i in range(len(hidden_dims)):
+          self.last_resnet_size=(self.last_resnet_size+1)//2
+        self.last_resnet_size=int(self.last_resnet_size)
+
         if struct=='resnet' and resnet_pooling:
             self.last_fm_size=1
         else:
