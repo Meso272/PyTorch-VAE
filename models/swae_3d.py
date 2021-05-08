@@ -40,10 +40,10 @@ class SWAE_3D(BaseVAE):
         #if strides==[]:
             #strides=[2]*len(hidden_dims)
             #self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
-        else:
-            self.last_fm_size=input_size
-            for stride in strides:
-                self.last_fm_size=(self.last_fm_size+1)//stride
+       
+        self.last_fm_size=input_size
+        for stride in strides:
+            self.last_fm_size=(self.last_fm_size+1)//stride
         # Build Encoder
         for i,h_dim in enumerate(hidden_dims):
             if strides==[]:
