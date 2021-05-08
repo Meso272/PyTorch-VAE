@@ -19,7 +19,8 @@ if len(sys.argv)>=9:
         latent_rate=int(sys.argv[8])
 
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[1e-2]
+ebs=[i*1e-3 for i in range(1,10)]
+#ebs=[1e-2]
 idxrange=[x for x in range(52,63)]
 #idxrange=[52,53]
 datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % field
@@ -49,6 +50,8 @@ for j,idx in enumerate(idxrange):
         filename="%s_%d.dat" % (field,idx)
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb*coeff
+        if latent_eb<1e-3:
+            latent_eb=1e-3
         if(compress_mode!=2 or i==0):
             print("niujie")
             if compress_mode!=5:
