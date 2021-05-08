@@ -133,7 +133,9 @@ for j,idx in enumerate(idxrange):
                 psnr=eval(lines[6].split(',')[0].split('=')[1])
                 
                 data[i+1][j+1][3]=psnr
+            latent_cr=data[i+1][j+1][0]
             final_cr=latent_rate*latent_cr
+
             data[i+1][j+1][4]=final_cr
             os.system("rm -f %s_t5.txt" % pid)
         if compress_mode!=2:
