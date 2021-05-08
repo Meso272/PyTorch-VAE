@@ -44,7 +44,7 @@ dl_qucrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 '''
 
-split=((512/blocksize)**3)//16
+split=((512/blocksize)**3)//8
 for j,idx in enumerate(idxrange):
     for i,eb in enumerate(ebs):
         print("niewanlong")    
@@ -68,17 +68,26 @@ for j,idx in enumerate(idxrange):
             #with open("%s_t2.txt" % pid,"r") as f:
                 #latent_cr=eval(f.read().splitlines()[-1])
                 #if latent_cr==0:
-            if compress_mode!=5:
-                comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
+            if compress_mode!=5 and coeff>0:
+                comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
                 os.system(comm)
-                with open("%s_t2.5.txt" % pid,"r") as f:
-                    lines=f.read().splitlines()
-                    latent_cr=eval(lines[7].split("=")[-1])
-                os.system("rm -f %s_t2.5.txt" % pid)
-                os.system("rm -f %s*sz3*")
-                if latent_cr==0:
-                    latent_cr=1
-                data[i+1][j+1][0]=latent_cr
+                with open("%s_t2.txt" % pid,"r") as f:
+                    latent_cr=eval(f.read().splitlines()[-1])
+                    if latent_cr==0:
+                        comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
+                        os.system(comm)
+                        with open("%s_t2.5.txt" % pid,"r") as f:
+                            try:
+                                lines=f.read().splitlines()
+                                latent_cr=eval(lines[8].split("=")[-1])
+                            except:
+                                latent_cr=0
+                        os.system("rm -f %s_t2.5.txt" % pid)
+                        os.system("rm -f %s*sz3*")
+                        if latent_cr==0:
+                            latent_cr=1
+                    data[i+1][j+1][0]=latent_cr
+                os.system("rm -f %s_t2.txt" % pid)
             else:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
                 os.system(comm)

@@ -61,7 +61,7 @@ for j,idx in enumerate(idxrange):
                     latent_rate=100*500*500/latent_nbele
             os.system("rm -f %s_t1.txt" % pid)
     
-            if compress_mode!=5:
+            if compress_mode!=5  and coeff>0:
                 comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
@@ -72,7 +72,7 @@ for j,idx in enumerate(idxrange):
                         with open("%s_t2.5.txt" % pid,"r") as f:
                             try:
                                 lines=f.read().splitlines()
-                                latent_cr=eval(lines[7].split("=")[-1])
+                                latent_cr=eval(lines[8].split("=")[-1])
                             except:
                                 latent_cr=0
                         os.system("rm -f %s_t2.5.txt" % pid)

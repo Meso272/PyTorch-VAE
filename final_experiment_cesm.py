@@ -77,7 +77,7 @@ for j,idx in enumerate(idxrange):
                         with open("%s_t2.5.txt" % pid,"r") as f:
                             try:
                                 lines=f.read().splitlines()
-                                latent_cr=eval(lines[7].split("=")[-1])
+                                latent_cr=eval(lines[8].split("=")[-1])
                             except:
                                 latent_cr=0
                         os.system("rm -f %s_t2.5.txt" % pid)
@@ -86,7 +86,7 @@ for j,idx in enumerate(idxrange):
                             latent_cr=1
                     data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
-            elif compress_mode==5:
+            else:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
