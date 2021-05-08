@@ -84,7 +84,7 @@ for j,idx in enumerate(idxrange):
                             latent_cr=1
                     data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
-            else:
+            elif compress_mode==5:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
