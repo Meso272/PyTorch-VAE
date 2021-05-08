@@ -20,7 +20,8 @@ if len(sys.argv)>=9:
         latent_rate=int(sys.argv[8])
 print(eps)
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[1e-2]
+#ebs=[1e-2]
+ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]
 idxrange=[x for x in range(41,49)]
 #idxrange=[41,42]
 datafolder="/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang" 
@@ -48,6 +49,8 @@ for j,idx in enumerate(idxrange):
         filename="QVAPORf%d.bin" % idx
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb*coeff
+        if latent_eb<1e-3:
+            latent_eb=1e-3
         if(compress_mode!=2 or i==0):
             if compress_mode!=5:
                 comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 0.02368359 -mi 0 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)

@@ -19,8 +19,8 @@ if len(sys.argv)>=9:
         latent_rate=int(sys.argv[8])
 
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[i*1e-3 for i in range(1,10)]
-#ebs=[1e-2]
+#ebs=[i*1e-3 for i in range(1,10)]
+ebs=[1e-2]
 idxrange=[x for x in range(52,63)]
 #idxrange=[52,53]
 datafolder="/home/jliu447/lossycompression/cesm-multisnapshot-5fields/%s" % field
@@ -86,7 +86,7 @@ for j,idx in enumerate(idxrange):
                             latent_cr=1
                     data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
-            else:
+            elif compress_mode==5:
                 comm="sz_demo %sl.dat -1 %d %f %d &>%s_t2.txt"% (pid,latent_nbele,latent_eb,sz3_bs,pid)
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
