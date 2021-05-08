@@ -50,7 +50,7 @@ for j,idx in enumerate(idxrange):
         filename="aramco-snapshot-%d.f32" % idx
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb*coeff
-        if latent_eb<1e-3:
+        if latent_eb<1e-3 and latent_eb>0:
             latent_eb=1e-3
         if(compress_mode!=2 or i==0):
             if compress_mode!=5:
