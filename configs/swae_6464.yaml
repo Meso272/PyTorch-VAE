@@ -4,7 +4,7 @@ model_params:
   input_size: 64
   latent_dim: 64
   reg_weight: 100
-  hidden_dims: [64,128,256,512]
+  hidden_dims: [32,64,128,256]
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
@@ -15,7 +15,7 @@ exp_params:
   data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 64
   batch_size: 64 # Better to have a square number
-  LR: 0.02
+  LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
