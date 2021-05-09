@@ -23,7 +23,7 @@ if len(sys.argv)>=10:
         preset_latent_rate=int(sys.argv[9])
 print(eps)
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[3e-2]
+ebs=[4e-2]
 idxrange=[0]
 datafolder="/home/jliu447/lossycompression/NYX/512x512x512" 
 pid=str(os.getpid()).strip()
