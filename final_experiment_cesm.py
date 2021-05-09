@@ -16,7 +16,7 @@ if len(sys.argv)>=9:
     if compress_mode==5:
         sz3_bs=int(sys.argv[8])
     else:
-       preset_latent_rate=int(sys.argv[8])
+       preset_latent_rate=float(sys.argv[8])
 
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]
