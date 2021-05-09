@@ -22,8 +22,8 @@ if len(sys.argv)>=10:
     else:
         preset_latent_rate=int(sys.argv[9])
 print(eps)
-#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[1e-2]
+ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[1e-2]
 idxrange=[0]
 datafolder="/home/jliu447/lossycompression/NYX/512x512x512" 
 pid=str(os.getpid()).strip()
@@ -62,6 +62,7 @@ for j,idx in enumerate(idxrange):
                 latent_nbele=eval(f.read())
                 if latent_rate==-1:
                     latent_rate=512*512*512/latent_nbele
+                    print(latent_rate)
             os.system("rm -f %s_t1.txt" % pid)
     
             #comm="huffmanZstd %sl.dat.q %d 1048576&>%s_t2.txt" % (pid,latent_nbele,pid)
