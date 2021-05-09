@@ -45,6 +45,7 @@ dl_d_psnrs=np.zeros((len(ebs)+1,12),dtype=np.float32)
 
 
 for j,idx in enumerate(idxrange):
+    latent_rate=preset_latent_rate
     for i,eb in enumerate(ebs):    
         filename="QVAPORf%d.bin" % idx
         filepath=os.path.join(datafolder,filename)
