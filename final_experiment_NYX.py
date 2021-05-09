@@ -78,7 +78,7 @@ for j,idx in enumerate(idxrange):
                         latent_cr=eval(f.read().splitlines()[-1])
                     except:
                         print("huffman failed")
-                        latent_cr==0
+                        latent_cr=0
                     if latent_cr==0:
                         comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
                         os.system(comm)
