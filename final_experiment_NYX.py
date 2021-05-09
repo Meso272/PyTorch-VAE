@@ -151,6 +151,7 @@ for j,idx in enumerate(idxrange):
             data[i+1][j+1][4]=final_cr
             os.system("rm -f %s_t5.txt" % pid)
         if compress_mode!=2:
+            pass
             #os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
     if compress_mode==2:
         os.system("rm -f %sl.* %sr.* %s.padded*" % (pid,pid,filepath))
