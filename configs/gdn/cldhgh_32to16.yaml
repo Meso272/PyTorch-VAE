@@ -9,6 +9,7 @@ model_params:
   num_projections: 200
   projection_dist: "normal" #"cauchy"
   actv: "gdn"
+  norm: "no"
   
 
 exp_params:
