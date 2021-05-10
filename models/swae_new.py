@@ -11,7 +11,7 @@ from .resnet import *
 from functools import partial
 norm_map={"bn":nn.BatchNorm2d,"gdn":GDN,"no":nn.Identity,"igdn":partial(GDN,inverse=True)}
 actv_map={"relu":nn.ReLU,"leakyrelu":nn.LeakyReLU,"prelu":nn.PReLU,"no":nn.Identity}
-class SWAE(BaseVAE):
+class SWAE_NEW(BaseVAE):
 
     def __init__(self,
                  in_channels: int,
@@ -25,14 +25,14 @@ class SWAE(BaseVAE):
                  encoder_final_layer='fc',
                  actv='leakyrelu',
                  norm='bn',
-                 struct='new',
+                 struct='new',#deprecated
                  quant_mode=0,
                  resblock_num=[2,2,2,2],
                  first_channel=16,
                  resnet_pooling=True,
                  resnet_fc=True,
                     **kwargs) -> None:
-        super(SWAE, self).__init__()
+        super(SWAE_NEW, self).__init__()
         self.struct=struct
         self.in_channels=in_channels
         self.encoder_final_layer=encoder_final_layer
@@ -86,42 +86,46 @@ class SWAE(BaseVAE):
 
       
         for h_dim in hidden_dims:
-            if struct=='old':
-                modules.append(
-                nn.Sequential(
-                        nn.Conv2d(in_channels, out_channels=in_channels,
-                                  kernel_size= 3, stride= 1, padding  = 1),###added layer
-                        nn.Conv2d(in_channels, out_channels=h_dim,
-                                  kernel_size= 3, stride= 2, padding  = 1),
-                        nn.BatchNorm2d(h_dim),
-                        nn.Sequential(nn.LeakyReLU())
-                    
-                        )
-                )
+            if norm=='bn':
+                norm1=nn.BatchNorm2d(in_channels)
+                norm2=nn.BatchNorm2d(h_dim)
+
+            elif norm=='gn':
+                norm1=nn.GroupNorm(16,in_channels)
+                norm2=nn.GroupNorm(16,h_dim)
             else:
-                modules.append(
-                        nn.Sequential(
-                            nn.Conv2d(in_channels, out_channels=in_channels,
-                                  kernel_size= 3, stride= 1, padding  = 1),###added layer
-                            nn.Conv2d(in_channels, out_channels=h_dim,
-                                  kernel_size= 3, stride= 2, padding  = 1),
+                norm1=nn.Identity()
+                norm2=nn.Identity()
+
+
+            if actv=='leakyrelu':
+                actv1=nn.LeakyReLU()
+                actv2=nn.LeakyReLU()
+            elif actv=='prelu':
+                actv1=nn.PReLU()
+                actv2=nn.LeakyReLU()
+            elif actv=='gdn':
+                actv1=GDN(in_channels)
+                actv2=GDN(h_dim)
+            else:
+                actv1=nn.Identity()
+                actv2=nn.Identity()
+           
+            modules.append(
+                nn.Sequential(
+                    nn.Conv2d(in_channels, out_channels=in_channels,
+                        kernel_size= 3, stride= 1, padding  = 1),###added layer
+                    norm1,
+                    actv1,
+                    nn.Conv2d(in_channels, out_channels=h_dim,
+                        kernel_size= 3, stride= 2, padding  = 1),
+                    norm2,
+                    actv2
                     
-                        )    
-                )
+                )    
+            )
 
-                if norm=='bn':
-                    modules.append(nn.Sequential(nn.BatchNorm2d(h_dim)))
-
-                elif norm=='gn':
-                    modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
-
-
-                if actv=='leakyrelu':
-                    modules.append(nn.Sequential(nn.LeakyReLU()))
-                elif actv=='prelu':
-                    modules.append(nn.Sequential(nn.PReLU()))
-                elif actv=='gdn':
-                    modules.append(nn.Sequential(GDN(h_dim)))
+              
         
             in_channels = h_dim
         if self.encoder_final_layer=='conv':
@@ -144,117 +148,112 @@ class SWAE(BaseVAE):
         hidden_dims.reverse()
    
         for i in range(len(hidden_dims) - 1):
-            if struct=='old':
-                modules.append(
-                    nn.Sequential(
-                        nn.ConvTranspose2d(hidden_dims[i],
-                                           hidden_dims[i],
-                                           kernel_size=3,
-                                           stride = 1,
-                                           padding=1,
-                                           output_padding=0),##added layer
-                        nn.ConvTranspose2d(hidden_dims[i],
-                                           hidden_dims[i + 1],
-                                           kernel_size=3,
-                                           stride = 2,
-                                           padding=1,
-                                           output_padding=1),
-                        nn.BatchNorm2d(hidden_dims[i + 1]),
-                        nn.LeakyReLU()
+            if norm=='bn':
+                norm1=nn.BatchNorm2d(hidden_dims[i])
+                norm2=nn.BatchNorm2d(hidden_dims[i+1])
 
-                    )
-            )
+            elif norm=='gn':
+                norm1=nn.GroupNorm(16,hidden_dims[i])
+                norm2=nn.GroupNorm(16,hidden_dims[i+1])
             else:
+                norm1=nn.Identity()
+                norm2=nn.Identity()
 
 
-                modules.append(
-                    nn.Sequential(
-                        nn.ConvTranspose2d(hidden_dims[i],
-                                           hidden_dims[i],
-                                           kernel_size=3,
-                                           stride = 1,
-                                           padding=1,
-                                           output_padding=0),##added layer
-                        nn.ConvTranspose2d(hidden_dims[i],
-                                           hidden_dims[i + 1],
-                                           kernel_size=3,
-                                           stride = 2,
-                                           padding=1,
-                                           output_padding=1),
-                        )
-                )
-
-                if norm=='bn':
-                    modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[i + 1])))
-
-                elif norm=='gn':
-                    modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
+            if actv=='leakyrelu':
+                actv1=nn.LeakyReLU()
+                actv2=nn.LeakyReLU()
+            elif actv=='prelu':
+                actv1=nn.PReLU()
+                actv2=nn.LeakyReLU()
+            elif actv=='gdn':
+                actv1=GDN(hidden_dims[i])
+                actv2=GDN(hidden_dims[i+1])
+            else:
+                actv1=nn.Identity()
+                actv2=nn.Identity()
+        
 
 
-                if actv=='leakyrelu':
-                    modules.append(nn.Sequential(nn.LeakyReLU()))
-                elif actv=='prelu':
-                    modules.append(nn.Sequential(nn.PReLU()))
-                elif actv=='gdn':
-                    modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
+            modules.append(
+                nn.Sequential(
+                    nn.ConvTranspose2d(hidden_dims[i],
+                                        hidden_dims[i],
+                                        kernel_size=3,
+                                        stride = 1,
+                                        padding=1,
+                                        output_padding=0),##added layer
+                    norm1,
+                    actv1,
+                    nn.ConvTranspose2d(hidden_dims[i],
+                                        hidden_dims[i + 1],
+                                        kernel_size=3,
+                                        stride = 2,
+                                        padding=1,
+                                        output_padding=1),
+                    norm2,
+                    actv2
+                  )
+            )
+
+            
 
      
 
         self.decoder = nn.Sequential(*modules)
         
-        if struct=='old':
-            self.final_layer_1= nn.Sequential(
-                            nn.ConvTranspose2d(hidden_dims[-1],
-                                       hidden_dims[-1],
-                                       kernel_size=3,
-                                       stride = 1,
-                                       padding=1,
-                                       output_padding=0),##added layer
-                            nn.ConvTranspose2d(hidden_dims[-1],
-                                               hidden_dims[-1],
-                                               kernel_size=3,
-                                               stride=2,
-                                               padding=1,
-                                               output_padding=1),
-                            nn.BatchNorm2d(hidden_dims[-1]),
-                            nn.LeakyReLU()
-                            
-                            ) 
+        
 
 
 
+        
+        modules=[]
+        if norm=='bn':
+            norm1=nn.BatchNorm2d(hidden_dims[-1])
+            norm2=nn.BatchNorm2d(hidden_dims[-1])
+
+        elif norm=='gn':
+            norm1=nn.GroupNorm(16,hidden_dims[-1])
+            norm2=nn.GroupNorm(16,hidden_dims[-1])
         else:
-            modules=[]
-            modules.append ( nn.Sequential(
-                                nn.ConvTranspose2d(hidden_dims[-1],
-                                           hidden_dims[-1],
-                                           kernel_size=3,
-                                           stride = 1,
-                                           padding=1,
-                                           output_padding=0),##added layer
-                                nn.ConvTranspose2d(hidden_dims[-1],
-                                                   hidden_dims[-1],
-                                                   kernel_size=3,
-                                                   stride=2,
-                                                   padding=1,
-                                                   output_padding=1),
+            norm1=nn.Identity()
+            norm2=nn.Identity()
+
+
+        if actv=='leakyrelu':
+            actv1=nn.LeakyReLU()
+            actv2=nn.LeakyReLU()
+        elif actv=='prelu':
+            actv1=nn.PReLU()
+            actv2=nn.LeakyReLU()
+        elif actv=='gdn':
+            actv1=GDN(hidden_dims[-1])
+            actv2=GDN(hidden_dims[-1])
+        else:
+            actv1=nn.Identity()
+            actv2=nn.Identity()
+        modules.append ( nn.Sequential(
+                            nn.ConvTranspose2d(hidden_dims[-1],
+                                        hidden_dims[-1],
+                                        kernel_size=3,
+                                        stride = 1,
+                                        padding=1,
+                                        output_padding=0),##added layer
+                            norm1,
+                            actv1,
+                            nn.ConvTranspose2d(hidden_dims[-1],
+                                                hidden_dims[-1],
+                                                kernel_size=3,
+                                                stride=2,
+                                                padding=1,
+                                                output_padding=1),
+                            norm2,
+                            actv2
                             
-                                ) )
-            if norm=='bn':
-                modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[-1])))
+                            ) )
+            
 
-            elif norm=='gn':
-                modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
-
-
-            if actv=='leakyrelu':
-                modules.append(nn.Sequential(nn.LeakyReLU()))
-            elif actv=='prelu':
-                modules.append(nn.Sequential(nn.PReLU()))
-            elif actv=='gdn':
-                modules.append(nn.Sequential(GDN(hidden_dims[-1],inverse=True)))
-
-            self.final_layer_1=nn.Sequential(*modules)
+        self.final_layer_1=nn.Sequential(*modules)
 
         self.final_layer_2=nn.Sequential(nn.Conv2d(hidden_dims[-1], out_channels= self.in_channels,
                                       kernel_size= 3, padding= 1),

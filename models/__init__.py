@@ -27,6 +27,7 @@ from .swae_1d import *
 from .swae_3d import *
 from .swae_expand import * 
 from .swae_plus import *
+from .swae_new import *
 # Aliases
 VAE = VanillaVAE
 GaussianVAE = VanillaVAE
@@ -37,6 +38,7 @@ vae_models = {'HVAE':HVAE,
               'LVAE':LVAE,
               'IWAE':IWAE,
               'SWAE':SWAE,
+              'SWAE_NEW':SWAE_NEW,
               'SWAE_PLUS':SWAE_PLUS,
               'SWAE_EXPAND':SWAE_EXPAND,
               'SWAE_1D':SWAE_1D,
