@@ -147,6 +147,7 @@ class SWAE_3D(BaseVAE):
         else:
             stride=strides[-1]
         op=o_padding[-1]
+        print(op)
         modules=[]
         
         modules.append ( nn.Sequential(
@@ -197,8 +198,9 @@ class SWAE_3D(BaseVAE):
         :return: (Tensor) List of latent codes
         """
         result = self.encoder(input)
-        result = torch.flatten(result, start_dim=1)
         print(result.size())
+        result = torch.flatten(result, start_dim=1)
+        
         # Split the result into mu and var components
         # of the latent Gaussian distribution
         if self.encoder_final_layer=='fc':
