@@ -68,6 +68,7 @@ class SWAE(BaseVAE):
             self.last_fm_size=1
         else:
             self.last_fm_size=self.last_resnet_size
+        print(self.last_fm_size)
         self.resnet_pooling=resnet_pooling
         self.resnet_fc=resnet_fc
         if strides==[]:
@@ -117,7 +118,7 @@ class SWAE(BaseVAE):
                             nn.Conv2d(in_channels, out_channels=in_channels,
                                   kernel_size= 3, stride= 1, padding  = 1),###added layer
                             nn.Conv2d(in_channels, out_channels=h_dim,
-                                  kernel_size= 3, stride= 2, padding  = 1),
+                                  kernel_size= 3, stride= stride, padding  = 1),
                     
                         )    
                 )
