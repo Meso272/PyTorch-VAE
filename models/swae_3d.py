@@ -51,7 +51,7 @@ class SWAE_3D(BaseVAE):
                 o_padding.append(1-self.last_fm_size%2)
                 self.last_fm_size=(self.last_fm_size+1)//2
             #print(self.last_fm_size)
-        print(o_padding)
+        
         # Build Encoder
         for i,h_dim in enumerate(hidden_dims):
             if strides==[]:
@@ -185,10 +185,7 @@ class SWAE_3D(BaseVAE):
                             nn.Tanh())
         if self.quant_mode==1:
           self.rounder=Round_1
-        for param in self.encoder.parameters():
-            print (param.size())
-        for param in self.decoder.parameters():
-            print (param.size())
+        
 
         
 
@@ -201,7 +198,7 @@ class SWAE_3D(BaseVAE):
         """
         result = self.encoder(input)
         result = torch.flatten(result, start_dim=1)
-
+        print(result.size())
         # Split the result into mu and var components
         # of the latent Gaussian distribution
         if self.encoder_final_layer=='fc':
@@ -222,6 +219,7 @@ class SWAE_3D(BaseVAE):
             if self.encoder_final_layer=='conv':
                 result = self.decoder_input(result)
         result = self.decoder(result)
+        print(result.size())
         result = self.final_layer_1(result)
         result= self.final_layer_2(result)
         
