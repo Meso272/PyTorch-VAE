@@ -25,6 +25,7 @@ from .dip_vae import *
 from .wae_mmd_1d import *
 from .swae_1d import *
 from .swae_3d import *
+from .swae_3d_new import *
 from .swae_expand import * 
 from .swae_plus import *
 from .swae_new import *
@@ -43,6 +44,7 @@ vae_models = {'HVAE':HVAE,
               'SWAE_EXPAND':SWAE_EXPAND,
               'SWAE_1D':SWAE_1D,
               'SWAE_3D':SWAE_3D,
+              'SWAE_3D_NEW':SWAE_3D_NEW,
               'MIWAE':MIWAE,
               'VQVAE':VQVAE,
               'DFCVAE':DFCVAE,

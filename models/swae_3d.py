@@ -64,8 +64,8 @@ class SWAE_3D(BaseVAE):
             if norm=='bn':
                 modules.append(nn.Sequential(nn.BatchNorm3d(h_dim)))
 
-            else:
-                pass
+            elif norm=='gn':
+                modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
 
 
             if actv=='leakyrelu':
@@ -73,7 +73,7 @@ class SWAE_3D(BaseVAE):
             elif actv=='prelu':
                 modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
-                modules.append(nn.Sequential(GDN3D(h_dim)))
+                modules.append(nn.Sequential(GDN(h_dim)))
             in_channels = h_dim
         if self.encoder_final_layer=='conv':
             modules.append(nn.Sequential( nn.Conv3d(hidden_dims[-1], out_channels=latent_dim//(self.last_fm_size**3),
@@ -118,8 +118,8 @@ class SWAE_3D(BaseVAE):
             if norm=='bn':
                 modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[i + 1])))
 
-            else:
-                pass
+            elif norm=='gn':
+                modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
 
 
             if actv=='leakyrelu':
@@ -127,7 +127,7 @@ class SWAE_3D(BaseVAE):
             elif actv=='prelu':
                 modules.append(nn.Sequential(nn.PReLU()))
             elif actv=='gdn':
-                modules.append(nn.Sequential(GDN3D(hidden_dims[i + 1],inverse=True)))
+                modules.append(nn.Sequential(GDN(hidden_dims[i + 1],inverse=True)))
 
 
 
@@ -156,8 +156,8 @@ class SWAE_3D(BaseVAE):
         if norm=='bn':
             modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[-1])))
 
-        else:
-            pass
+        elif norm=='gn':
+            modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
 
 
         if actv=='leakyrelu':
@@ -165,7 +165,7 @@ class SWAE_3D(BaseVAE):
         elif actv=='prelu':
             modules.append(nn.Sequential(nn.PReLU()))
         elif actv=='gdn':
-            modules.append(nn.Sequential(GDN3D(hidden_dims[-1],inverse=True)))
+            modules.append(nn.Sequential(GDN(hidden_dims[-1],inverse=True)))
 
         self.final_layer_1=nn.Sequential(*modules)
 
