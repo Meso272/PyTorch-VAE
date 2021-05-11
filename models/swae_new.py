@@ -228,8 +228,8 @@ class SWAE_NEW(BaseVAE):
 
             
 
-     
-        print(self.encoder.parameters())
+        for parameter in self.encoder.parameters():
+            print(parameter)
         self.decoder = nn.Sequential(*modules)
         
         
