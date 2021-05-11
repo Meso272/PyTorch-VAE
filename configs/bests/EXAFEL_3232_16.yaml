@@ -17,7 +17,7 @@ exp_params:
   max: 14766.948
   min: -16019.074
   img_size: 32
-  batch_size: 64 # Better to have a square number
+  batch_size: 256 # Better to have a square number
   LR: 0.01
   weight_decay: 0.0
   scheduler_gamma: 0.95
@@ -29,9 +29,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_test/SWAE_3232_16_EXAFEL_bs64"
+  ckpt_save_dir: "ckpts_new/SWAE_3232_16_EXAFEL_bs256"
   save_dir: "logs/"
-  name: "SWAE_3232_16_EXAFEL_bs64"
+  name: "SWAE_3232_16_EXAFEL_bs256"
   manual_seed: 1265
 
 
