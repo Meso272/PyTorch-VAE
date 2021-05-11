@@ -97,7 +97,10 @@ class SWAE_NEW(BaseVAE):
             self.decoder=ResNet_Decoder(BasicBlock_Decode,num_block=resblock_num,channel_list=hidden_dims,fc_in=fc_out,up_sampling=resnet_pooling,first_size=self.last_resnet_size,last_channel=first_channel,default_convout=True,norm=norm_map[norm],actv=actv_map[actv])
             return 
 
-      
+        print(norm1)
+        print(norm2)
+        print(actv1)
+        print(actv2)
         for h_dim in hidden_dims:
             if norm1=='bn':
                 norm1=nn.BatchNorm2d(in_channels)
