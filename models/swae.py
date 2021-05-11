@@ -25,6 +25,7 @@ class SWAE(BaseVAE):
                  encoder_final_layer='fc',
                  actv='leakyrelu',
                  norm='bn',
+                 bn_momentum="default",
                  group_num=32,
                  struct='new',
                  quant_mode=0,
@@ -124,7 +125,10 @@ class SWAE(BaseVAE):
                 )
 
                 if norm=='bn':
-                    modules.append(nn.Sequential(nn.BatchNorm2d(h_dim)))
+                    if bn_momentum=="default":
+                        modules.append(nn.Sequential(nn.BatchNorm2d(h_dim)))
+                    else:
+                        modules.append(nn.Sequential(nn.BatchNorm2d(h_dim,momentum=None)))
 
                 elif norm=='gn':
                     modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
@@ -201,7 +205,10 @@ class SWAE(BaseVAE):
                 )
 
                 if norm=='bn':
-                    modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[i + 1])))
+                    if bn_momentum=="default":
+                        modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[i + 1])))
+                    else:
+                        modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[i + 1],momentum=None)))
 
                 elif norm=='gn':
                     modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
@@ -258,7 +265,10 @@ class SWAE(BaseVAE):
                             
                                 ) )
             if norm=='bn':
-                modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[-1])))
+                if bn_momentum=="default":
+                    modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[-1])))
+                else:
+                    modules.append(nn.Sequential(nn.BatchNorm2d(hidden_dims[-1],momentum=None)))
 
             elif norm=='gn':
                 modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
