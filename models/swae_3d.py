@@ -147,8 +147,7 @@ class SWAE_3D(BaseVAE):
         else:
             stride=strides[-1]
         op=o_padding[-1]
-        print("ppppp")
-        print(op)
+
         modules=[]
         
         modules.append ( nn.Sequential(
@@ -199,8 +198,7 @@ class SWAE_3D(BaseVAE):
         :return: (Tensor) List of latent codes
         """
         result = self.encoder(input)
-        print("eee")
-        print(result.size())
+       
         result = torch.flatten(result, start_dim=1)
         
         # Split the result into mu and var components
@@ -223,14 +221,11 @@ class SWAE_3D(BaseVAE):
             if self.encoder_final_layer=='conv':
                 result = self.decoder_input(result)
         result = self.decoder(result)
-        print("aaa")
-        print(result.size())
+        
         result = self.final_layer_1(result)
-        print("bbb")
-        print(result.size())
+       
         result= self.final_layer_2(result)
-        print("ccc")
-        print(result.size())
+        
         
         return result
 
