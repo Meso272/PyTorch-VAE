@@ -21,12 +21,12 @@ exp_params:
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [0,1,2,3]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_test/SWAE_3232_16_doublelayer_bs256_0mbn"
+  ckpt_save_dir: "ckpts_new/SWAE_3232_16_doublelayer_bs256_0mbn"
   save_dir: "logs/"
   name: "SWAE_3232_16_doublelayer_bs256_0mbn"
   manual_seed: 1265
