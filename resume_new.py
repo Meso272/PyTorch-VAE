@@ -73,7 +73,7 @@ if __name__=='__main__':
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
-                 early_stop_callback = False,
+                 #early_stop_callback = False,
                  checkpoint_callback=checkpoint_callback,
                  accelerator='ddp',
                  **config['trainer_params'])
