@@ -21,10 +21,10 @@ class SWAE_3D_NEW(BaseVAE):
                  encoder_final_layer='fc',
                  actv=None,
                  norm=None,
-                 actv1='leakyrelu',
-                 norm1='bn',
-                 actv2='leakyrelu',
-                 norm2='bn',
+                 actv_1='leakyrelu',
+                 norm_1='bn',
+                 actv_2='leakyrelu',
+                 norm_2='bn',
                  group_num=32,
                  quant_mode=0,
                  strides=[],
@@ -39,11 +39,11 @@ class SWAE_3D_NEW(BaseVAE):
         self.proj_dist = projection_dist
         self.quant_mode=quant_mode
         if actv!=None:
-            actv1=actv
-            actv2=actv
+            actv_1=actv
+            actv_2=actv
         if norm!=None:
-            norm1=norm
-            norm2=norm
+            norm_1=norm
+            norm_2=norm
         modules = []
         if hidden_dims is None:
             hidden_dims = [32, 64, 128, 256]
@@ -64,34 +64,34 @@ class SWAE_3D_NEW(BaseVAE):
                 stride=2
             else:
                 stride=strides[i]
-            if norm1=='bn':
+            if norm_1=='bn':
                 norm1=nn.BatchNorm2d(in_channels)
-            elif norm1=='gn':
+            elif norm_1=='gn':
                 norm1=nn.GroupNorm(group_num,in_channels) 
             else:
                 norm1=nn.Identity()
 
-            if norm2=='bn':
+            if norm_2=='bn':
                 norm2=nn.BatchNorm2d(h_dim)
-            elif norm2=='gn':
+            elif norm_2=='gn':
                 norm2=nn.GroupNorm(group_num,h_dim) 
             else:
                 norm2=nn.Identity()
                
-            if actv1=='leakyrelu':
+            if actv_1=='leakyrelu':
                 actv1=nn.LeakyReLU()
-            elif actv1=='prelu':
+            elif actv_1=='prelu':
                 actv1=nn.PReLU()
-            elif actv1=='gdn':
+            elif actv_1=='gdn':
                 actv1=GDN(in_channels) 
             else:
                 actv1=nn.Identity()
             
-            if actv2=='leakyrelu':
+            if actv_2=='leakyrelu':
                 actv2=nn.LeakyReLU()
-            elif actv2=='prelu':
+            elif actv_2=='prelu':
                 actv2=nn.PReLU()
-            elif actv2=='gdn':
+            elif actv_2=='gdn':
                 actv2=GDN(h_dim) 
             else:
                 actv2=nn.Identity()
@@ -134,34 +134,34 @@ class SWAE_3D_NEW(BaseVAE):
                 stride=2
             else:
                 stride=strides[i]
-            if norm1=='bn':
+            if norm_1=='bn':
                 norm1=nn.BatchNorm2d(hidden_dims[i])
-            elif norm1=='gn':
+            elif norm_1=='gn':
                 norm1=nn.GroupNorm(group_num,hidden_dims[i]) 
             else:
                 norm1=nn.Identity()
 
-            if norm2=='bn':
+            if norm_2=='bn':
                 norm2=nn.BatchNorm2d(hidden_dims[i+1])
-            elif norm2=='gn':
+            elif norm_2=='gn':
                 norm2=nn.GroupNorm(group_num,hidden_dims[i+1]) 
             else:
                 norm2=nn.Identity()
                
-            if actv1=='leakyrelu':
+            if actv_1=='leakyrelu':
                 actv1=nn.LeakyReLU()
-            elif actv1=='prelu':
+            elif actv_1=='prelu':
                 actv1=nn.PReLU()
-            elif actv1=='gdn':
+            elif actv_1=='gdn':
                 actv1=GDN(hidden_dims[i]) 
             else:
                 actv1=nn.Identity()
             
-            if actv2=='leakyrelu':
+            if actv_2=='leakyrelu':
                 actv2=nn.LeakyReLU()
-            elif actv2=='prelu':
+            elif actv_2=='prelu':
                 actv2=nn.PReLU()
-            elif actv2=='gdn':
+            elif actv_2=='gdn':
                 actv2=GDN(hidden_dims[i+1]) 
             else:
                 actv2=nn.Identity()
@@ -198,34 +198,34 @@ class SWAE_3D_NEW(BaseVAE):
             stride=strides[-1]
         modules=[]
         
-        if norm1=='bn':
+        if norm_1=='bn':
             norm1=nn.BatchNorm2d(hidden_dims[-1])
-        elif norm1=='gn':
+        elif norm_1=='gn':
             norm1=nn.GroupNorm(group_num,hidden_dims[-1]) 
         else:
             norm1=nn.Identity()
 
-        if norm2=='bn':
+        if norm_2=='bn':
             norm2=nn.BatchNorm2d(hidden_dims[-1])
-        elif norm2=='gn':
+        elif norm_2=='gn':
             norm2=nn.GroupNorm(group_num,hidden_dims[-1]) 
         else:
             norm2=nn.Identity()
                
-        if actv1=='leakyrelu':
+        if actv_1=='leakyrelu':
             actv1=nn.LeakyReLU()
-        elif actv1=='prelu':
+        elif actv_1=='prelu':
             actv1=nn.PReLU()
-        elif actv1=='gdn':
+        elif actv_1=='gdn':
             actv1=GDN(hidden_dims[-1]) 
         else:
             actv1=nn.Identity()
             
-        if actv2=='leakyrelu':
+        if actv_2=='leakyrelu':
             actv2=nn.LeakyReLU()
-        elif actv2=='prelu':
+        elif actv_2=='prelu':
             actv2=nn.PReLU()
-        elif actv2=='gdn':
+        elif actv_2=='gdn':
             actv2=GDN(hidden_dims[-1]) 
         else:
             actv2=nn.Identity()
