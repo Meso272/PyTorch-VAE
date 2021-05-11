@@ -24,7 +24,7 @@ exp_params:
   
 
 trainer_params:
-  gpus: [0,1,2,3]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 
