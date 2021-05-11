@@ -29,6 +29,7 @@ class SWAE_NEW(BaseVAE):
                  norm1='bn',
                  actv2='leakyrelu',
                  norm2='bn',
+                 group_num=32,
                  struct='new',#deprecated
                  quant_mode=0,
                  resblock_num=[2,2,2,2],
@@ -101,14 +102,14 @@ class SWAE_NEW(BaseVAE):
             if norm1=='bn':
                 norm1=nn.BatchNorm2d(in_channels)
             elif norm1=='gn':
-                norm1=nn.GroupNorm(16,in_channels) 
+                norm1=nn.GroupNorm(group_num,in_channels) 
             else:
                 norm1=nn.Identity()
 
             if norm2=='bn':
                 norm2=nn.BatchNorm2d(h_dim)
             elif norm2=='gn':
-                norm2=nn.GroupNorm(16,h_dim) 
+                norm2=nn.GroupNorm(group_num,h_dim) 
             else:
                 norm2=nn.Identity()
                
@@ -170,14 +171,14 @@ class SWAE_NEW(BaseVAE):
             if norm1=='bn':
                 norm1=nn.BatchNorm2d(hidden_dims[i])
             elif norm1=='gn':
-                norm1=nn.GroupNorm(16,hidden_dims[i]) 
+                norm1=nn.GroupNorm(group_num,hidden_dims[i]) 
             else:
                 norm1=nn.Identity()
 
             if norm2=='bn':
                 norm2=nn.BatchNorm2d(hidden_dims[i+1])
             elif norm2=='gn':
-                norm2=nn.GroupNorm(16,hidden_dims[i+1]) 
+                norm2=nn.GroupNorm(group_num,hidden_dims[i+1]) 
             else:
                 norm2=nn.Identity()
                
@@ -237,14 +238,14 @@ class SWAE_NEW(BaseVAE):
         if norm1=='bn':
             norm1=nn.BatchNorm2d(hidden_dims[-1])
         elif norm1=='gn':
-            norm1=nn.GroupNorm(16,hidden_dims[-1]) 
+            norm1=nn.GroupNorm(group_num,hidden_dims[-1]) 
         else:
             norm1=nn.Identity()
 
         if norm2=='bn':
             norm2=nn.BatchNorm2d(hidden_dims[-1])
         elif norm2=='gn':
-            norm2=nn.GroupNorm(16,hidden_dims[-1]) 
+            norm2=nn.GroupNorm(group_num,hidden_dims[-1]) 
         else:
             norm2=nn.Identity()
                

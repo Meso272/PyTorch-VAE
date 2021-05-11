@@ -21,6 +21,7 @@ class SWAE_3D(BaseVAE):
                  encoder_final_layer='fc',
                  actv='leakyrelu',
                  norm='bn',
+                 group_num=32,
                  quant_mode=0,
                  strides=[],
                     **kwargs) -> None:
@@ -65,7 +66,7 @@ class SWAE_3D(BaseVAE):
                 modules.append(nn.Sequential(nn.BatchNorm3d(h_dim)))
 
             elif norm=='gn':
-                modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
+                modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
 
 
             if actv=='leakyrelu':
@@ -119,7 +120,7 @@ class SWAE_3D(BaseVAE):
                 modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[i + 1])))
 
             elif norm=='gn':
-                modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
+                modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
 
 
             if actv=='leakyrelu':
@@ -157,7 +158,7 @@ class SWAE_3D(BaseVAE):
             modules.append(nn.Sequential(nn.BatchNorm3d(hidden_dims[-1])))
 
         elif norm=='gn':
-            modules.append(nn.Sequential(nn.GroupNorm(16,h_dim)))
+            modules.append(nn.Sequential(nn.GroupNorm(group_num,h_dim)))
 
 
         if actv=='leakyrelu':
