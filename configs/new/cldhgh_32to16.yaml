@@ -8,6 +8,8 @@ model_params:
   wasserstein_deg: 2.0
   num_projections: 200
   projection_dist: "normal" #"cauchy"
+  norm: "bn"
+  actv: "leakyrelu"
   
 
 exp_params:
