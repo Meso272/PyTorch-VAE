@@ -100,12 +100,13 @@ class SWAE_3D(BaseVAE):
         hidden_dims.reverse()
         o_padding.reverse()
         strides.reverse()
-        print(strides)
+        #print(strides)
         for i in range(len(hidden_dims) - 1):
             if strides==[]:
                 stride=2
             else:
                 stride=strides[i]
+
 
             op=o_padding[i]
             modules.append(
@@ -184,6 +185,11 @@ class SWAE_3D(BaseVAE):
                             nn.Tanh())
         if self.quant_mode==1:
           self.rounder=Round_1
+        for param in self.encoder.parameters():
+            print (param.size())
+        for param in self.decoder.parameters():
+            print (param.size())
+
         
 
     def encode(self, input: Tensor) -> Tensor:
