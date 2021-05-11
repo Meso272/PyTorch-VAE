@@ -100,11 +100,13 @@ class SWAE_3D(BaseVAE):
         hidden_dims.reverse()
         o_padding.reverse()
         strides.reverse()
+        print(strides)
         for i in range(len(hidden_dims) - 1):
             if strides==[]:
                 stride=2
             else:
                 stride=strides[i]
+
             op=o_padding[i]
             modules.append(
                 nn.Sequential(
