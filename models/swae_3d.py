@@ -43,11 +43,13 @@ class SWAE_3D(BaseVAE):
             #self.last_fm_size=int( input_size/(2**len(hidden_dims)) )
        
         self.last_fm_size=input_size
+        o_padding=[]
         for stride in strides:
             if stride==1:
-                continue
+                o_padding.append(0)
             else:
-                self.last_fm_size=(self.last_fm_size+1)//stride
+                o_padding.append(1-self.last_fm_size%2)
+                self.last_fm_size=(self.last_fm_size+1)//2
         # Build Encoder
         for i,h_dim in enumerate(hidden_dims):
             if strides==[]:
@@ -94,12 +96,14 @@ class SWAE_3D(BaseVAE):
         
 
         hidden_dims.reverse()
+        o_padding.reverse()
         strides.reverse()
         for i in range(len(hidden_dims) - 1):
             if strides==[]:
                 stride=2
             else:
                 stride=strides[i]
+            op=o_padding[i]
             modules.append(
                 nn.Sequential(
                     nn.ConvTranspose3d(hidden_dims[i],
@@ -113,7 +117,7 @@ class SWAE_3D(BaseVAE):
                                        kernel_size=3,
                                        stride = stride,
                                        padding=1,
-                                       output_padding=stride//2),
+                                       output_padding=op),
                     )
             )
             if norm=='bn':
@@ -137,6 +141,7 @@ class SWAE_3D(BaseVAE):
             stride=2
         else:
             stride=strides[-1]
+        op=o_padding[-1]
         modules=[]
         
         modules.append ( nn.Sequential(
@@ -151,7 +156,7 @@ class SWAE_3D(BaseVAE):
                                                kernel_size=3,
                                                stride=stride,
                                                padding=1,
-                                               output_padding=stride//2),
+                                               output_padding=op),
                             
                             ) )
         if norm=='bn':

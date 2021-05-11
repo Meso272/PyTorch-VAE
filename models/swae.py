@@ -32,6 +32,7 @@ class SWAE(BaseVAE):
                  first_channel=16,
                  resnet_pooling=True,
                  resnet_fc=True,
+                 strides=[],
                     **kwargs) -> None:
         super(SWAE, self).__init__()
         self.struct=struct
@@ -51,8 +52,16 @@ class SWAE(BaseVAE):
             self.rounder=Round_1
         
         self.last_resnet_size=input_size
-        for i in range(len(hidden_dims)):
-          self.last_resnet_size=(self.last_resnet_size+1)//2
+        if strides==[]:
+            strides=[2]*len(hidden_dims)
+        o_padding=[]
+        for stride in strides:
+            if stride==1:
+                o_padding.append(0)
+            else:
+                o_padding.append(1-self.last_resnet_size%2)
+                self.last_resnet_size=(self.last_resnet_size+1)//2
+
         self.last_resnet_size=int(self.last_resnet_size)
 
         if struct=='resnet' and resnet_pooling:
@@ -61,6 +70,8 @@ class SWAE(BaseVAE):
             self.last_fm_size=self.last_resnet_size
         self.resnet_pooling=resnet_pooling
         self.resnet_fc=resnet_fc
+        if strides==[]:
+            strides=[2]*len(hidden_dims)
         
        # Build Encoder
         if struct=="resnet":
@@ -86,14 +97,15 @@ class SWAE(BaseVAE):
             return 
 
       
-        for h_dim in hidden_dims:
+        for i,h_dim in enumerate(hidden_dims):
+            stride=strides[i]
             if struct=='old':
                 modules.append(
                 nn.Sequential(
                         nn.Conv2d(in_channels, out_channels=in_channels,
                                   kernel_size= 3, stride= 1, padding  = 1),###added layer
                         nn.Conv2d(in_channels, out_channels=h_dim,
-                                  kernel_size= 3, stride= 2, padding  = 1),
+                                  kernel_size= 3, stride= stride, padding  = 1),
                         nn.BatchNorm2d(h_dim),
                         nn.Sequential(nn.LeakyReLU())
                     
@@ -143,8 +155,10 @@ class SWAE(BaseVAE):
         modules = []
         
         hidden_dims.reverse()
-   
+        o_padding.reverse()
         for i in range(len(hidden_dims) - 1):
+            stride=strides[i]
+            op=o_padding[i]
             if struct=='old':
                 modules.append(
                     nn.Sequential(
@@ -157,9 +171,9 @@ class SWAE(BaseVAE):
                         nn.ConvTranspose2d(hidden_dims[i],
                                            hidden_dims[i + 1],
                                            kernel_size=3,
-                                           stride = 2,
+                                           stride = stride,
                                            padding=1,
-                                           output_padding=1),
+                                           output_padding=op),
                         nn.BatchNorm2d(hidden_dims[i + 1]),
                         nn.LeakyReLU()
 
@@ -179,9 +193,9 @@ class SWAE(BaseVAE):
                         nn.ConvTranspose2d(hidden_dims[i],
                                            hidden_dims[i + 1],
                                            kernel_size=3,
-                                           stride = 2,
+                                           stride = stride,
                                            padding=1,
-                                           output_padding=1),
+                                           output_padding=op),
                         )
                 )
 
@@ -202,7 +216,8 @@ class SWAE(BaseVAE):
      
 
         self.decoder = nn.Sequential(*modules)
-        
+        stride=strides[-1]
+        op=o_padding[-1]
         if struct=='old':
             self.final_layer_1= nn.Sequential(
                             nn.ConvTranspose2d(hidden_dims[-1],
@@ -214,9 +229,9 @@ class SWAE(BaseVAE):
                             nn.ConvTranspose2d(hidden_dims[-1],
                                                hidden_dims[-1],
                                                kernel_size=3,
-                                               stride=2,
+                                               stride=stride,
                                                padding=1,
-                                               output_padding=1),
+                                               output_padding=op),
                             nn.BatchNorm2d(hidden_dims[-1]),
                             nn.LeakyReLU()
                             
@@ -236,9 +251,9 @@ class SWAE(BaseVAE):
                                 nn.ConvTranspose2d(hidden_dims[-1],
                                                    hidden_dims[-1],
                                                    kernel_size=3,
-                                                   stride=2,
+                                                   stride=stride,
                                                    padding=1,
-                                                   output_padding=1),
+                                                   output_padding=op),
                             
                                 ) )
             if norm=='bn':
