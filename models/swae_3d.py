@@ -50,6 +50,7 @@ class SWAE_3D(BaseVAE):
             else:
                 o_padding.append(1-self.last_fm_size%2)
                 self.last_fm_size=(self.last_fm_size+1)//2
+            print(self.last_fm_size)
         # Build Encoder
         for i,h_dim in enumerate(hidden_dims):
             if strides==[]:
