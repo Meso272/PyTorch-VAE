@@ -66,7 +66,7 @@ if __name__=='__main__':
         verbose=True,
         #monitor='val_loss',
         mode='min',
-        prefix='',
+        
         every_n_val_epochs=20
     )
 
