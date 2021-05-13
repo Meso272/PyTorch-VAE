@@ -67,7 +67,7 @@ if __name__=='__main__':
         #monitor='val_loss',
         mode='min',
         prefix='',
-        period=20
+        every_n_val_epochs=20
     )
 
     runner = Trainer(min_epochs=1,
