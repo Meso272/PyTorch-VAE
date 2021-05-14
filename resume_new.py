@@ -58,7 +58,7 @@ if __name__=='__main__':
         verbose=True,
         monitor='val_loss',
         mode='min',
-        save_last=True,
+        #save_last=True,
         period=20
     )
     tt_logger = TestTubeLogger(
