@@ -64,7 +64,7 @@ if __name__=='__main__':
         filepath=config['logging_params']['ckpt_save_dir'],
         save_top_k=-1,
         verbose=True,
-        monitor='val_loss',
+        monitor='loss',
         mode='min',
         prefix='',
         period=20
