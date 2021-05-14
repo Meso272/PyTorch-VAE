@@ -14,28 +14,28 @@ model_params:
 exp_params:
   dataset: nyx
   data_path: "/home/jliu447/lossycompression/NYX"
-  field: "temperature"
-  max: 6.6796627044677734375
-  min: 2.7645518779754638672
+  field: "baryon_density"
+  max: 5.06394195556640625
+  min: -1.306397557258605957
   log: 1
   start: 0
   end: 4 
   epsilon: 1e-4
   img_size: 8
   cache_size: 131072
-  batch_size: 32 # Better to have a square number
+  batch_size: 256 # Better to have a square number
   LR: 0.0001
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [0,1,2,3]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_gdn/tlog_8cubeto16_bs32x4_3264128_lr1e-4"
+  ckpt_save_dir: "ckpts_gdn/bdlog_8cubeto16_bs256_3264128_lr1e-4"
   save_dir: "logs/"
-  name: "tlog_8cubeto16_bs32x4_3264128_lr1e-4"
+  name: "bdlog_8cubeto16_bs256_3264128_lr1e-4"
   manual_seed: 1265
 
 
