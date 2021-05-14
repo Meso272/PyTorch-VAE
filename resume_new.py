@@ -56,7 +56,7 @@ if __name__=='__main__':
         dirpath=config['logging_params']['ckpt_save_dir'],
         save_top_k=-1,
         verbose=True,
-        #monitor='val_loss',
+        monitor='val_loss',
         mode='min',
         save_last=True,
         period=20
@@ -69,12 +69,13 @@ if __name__=='__main__':
     )
     runner = Trainer(resume_from_checkpoint=args.checkpoint,min_epochs=1,
                  logger=tt_logger,
-                 log_every_n_steps=100,
+                 log_every_n_steps=100000,
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
                  #early_stop_callback = False,
-                 checkpoint_callback=checkpoint_callback,
+                 checkpoint_callback=True,
+                 callbacks=checkpoint_callback,
                  accelerator='ddp',
                  **config['trainer_params'])
 
