@@ -7,7 +7,7 @@ from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TestTubeLogger
-
+import os
 from pytorch_lightning.callbacks import ModelCheckpoint
     
 if __name__=='__main__':

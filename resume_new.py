@@ -1,7 +1,7 @@
 import yaml
 import argparse
 import numpy as np
-
+import os
 from models import *
 from experiment import VAEXperiment
 import torch.backends.cudnn as cudnn
