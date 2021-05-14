@@ -73,7 +73,7 @@ if __name__=='__main__':
 
     runner = Trainer(min_epochs=1,
                  logger=tt_logger,
-                 log_every_n_steps=100,
+                 log_every_n_steps=100000,
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
