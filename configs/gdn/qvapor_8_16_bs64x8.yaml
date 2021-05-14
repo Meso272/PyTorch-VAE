@@ -25,7 +25,7 @@ exp_params:
   img_size: 8
   cache_size: 131072
   batch_size: 64 # Better to have a square number
-  LR: 0.0002
+  LR: 0.0004
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
@@ -34,9 +34,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_gdn/QVAPOR_8cubeto16_bs64x8_3264128_lr2e-4"
+  ckpt_save_dir: "ckpts_gdn/QVAPOR_8cubeto16_bs64x8_3264128_lr4e-4"
   save_dir: "logs/"
-  name: "QVAPOR_8cubeto16_bs64x8_3264128_lr2e-4"
+  name: "QVAPOR_8cubeto16_bs64x8_3264128_lr4e-4"
   manual_seed: 1265
 
 

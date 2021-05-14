@@ -23,19 +23,19 @@ exp_params:
   epsilon: 1e-4
   img_size: 8
   cache_size: 131072
-  batch_size: 256 # Better to have a square number
-  LR: 0.0005
+  batch_size: 1024 # Better to have a square number
+  LR: 0.002
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
 trainer_params:
-  gpus: [0,1,2,3]
+  gpus: [0]
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_gdn/tlog_8cubeto16_bs256x4_3264128_lr5e-4"
+  ckpt_save_dir: "ckpts_gdn/tlog_8cubeto16_bs1024_3264128_lr2e-4"
   save_dir: "logs/"
-  name: "tlog_8cubeto16_bs256x4_3264128_lr5e-4"
+  name: "tlog_8cubeto16_bs1024_3264128_lr2e-4"
   manual_seed: 1265
 
 
