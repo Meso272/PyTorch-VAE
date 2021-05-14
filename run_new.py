@@ -68,7 +68,7 @@ if __name__=='__main__':
         monitor='val_loss',
         mode='min',
         
-        period=20
+        period=10
     )
 
     runner = Trainer(min_epochs=1,
@@ -77,7 +77,8 @@ if __name__=='__main__':
                  #train_percent_check=1.,
                  #val_percent_check=1.,
                  num_sanity_val_steps=5,
-                 checkpoint_callback=checkpoint_callback,
+                 checkpoint_callback=True,
+                 callbacks=checkpoint_callback,
                  accelerator='ddp',
                  **config['trainer_params'])
 

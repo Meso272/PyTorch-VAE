@@ -24,7 +24,7 @@ exp_params:
   img_size: 8
   cache_size: 131072
   batch_size: 256 # Better to have a square number
-  LR: 0.0001
+  LR: 0.0005
   weight_decay: 0.0
   scheduler_gamma: 0.95
 
@@ -33,9 +33,9 @@ trainer_params:
   #max_nb_epochs: 50
   max_epochs: 101
 logging_params: 
-  ckpt_save_dir: "ckpts_gdn/bdlog_8cubeto16_bs256x4_3264128_lr1e-4"
+  ckpt_save_dir: "ckpts_gdn/bdlog_8cubeto16_bs256x4_3264128_lr5e-4"
   save_dir: "logs/"
-  name: "bdlog_8cubeto16_bs256x4_3264128_lr1e-4"
+  name: "bdlog_8cubeto16_bs256x4_3264128_lr5e-4"
   manual_seed: 1265
 
 
