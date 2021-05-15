@@ -65,8 +65,8 @@ if __name__=='__main__':
         save_top_k=-1,
         verbose=True,
         #save_last=True,
-        monitor='loss',
-        mode='min',
+        #monitor='loss',
+        #mode='min',
         
         period=10
     )
