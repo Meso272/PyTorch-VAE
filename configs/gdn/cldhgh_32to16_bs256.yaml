@@ -2,7 +2,7 @@ model_params:
   name: 'SWAE'
   in_channels: 1
   input_size: 32
-  latent_dim: 32
+  latent_dim: 16
   reg_weight: 100
   hidden_dims: [32,64,128,256]
   wasserstein_deg: 2.0
@@ -14,13 +14,10 @@ model_params:
   
 
 exp_params:
-  dataset: cesm_new
-  data_path: "/home/jliu447/lossycompression/cesm-multisnapshot-5fields"
-  field : "FREQSH"
-  max: 1.0
-  min: 0.0
+  dataset: cesm
+  data_path: "/home/jliu447/lossycompression/multisnapshot-data-cleaned/CLDHGH"
   img_size: 32
-  batch_size: 64 # Better to have a square number
+  batch_size: 256 # Better to have a square number
   LR: 0.0004
   weight_decay: 0.0
   scheduler_gamma: 0.95
@@ -31,9 +28,9 @@ trainer_params:
   max_epochs: 101
 
 logging_params:
-  ckpt_save_dir: "ckpts_gdn/FREQSH_32_32_gdn_bs64_lr4e-4"
+  ckpt_save_dir: "ckpts_gdn/CLDHGH_32_16_gdn_bs256_lr4e-4"
   save_dir: "logs/"
-  name: "FREQSH_32_32_gdn_bs64_lr4e-4"
+  name: "CLDHGH_32_16_gdn_bs256_lr4e-4"
   manual_seed: 1265
 
 
