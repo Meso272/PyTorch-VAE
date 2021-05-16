@@ -3,7 +3,7 @@ model_params:
   in_channels: 1
   input_size: 32
   latent_dim: 16
-  reg_weight: 100
+  reg_weight: 10
   hidden_dims: [32,64,128,256]
   wasserstein_deg: 2.0
   num_projections: 200

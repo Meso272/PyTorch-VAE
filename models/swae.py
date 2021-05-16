@@ -347,8 +347,8 @@ class SWAE(BaseVAE):
         z = args[2]
 
         batch_size = input.size(0)
-        bias_corr = batch_size *  (batch_size - 1)
-        reg_weight = self.reg_weight / bias_corr
+        #bias_corr = batch_size *  (batch_size - 1)
+        #reg_weight = self.reg_weight / bias_corr
 
         recons_loss_l2 = F.mse_loss(recons, input)
         recons_loss_l1 = F.l1_loss(recons, input)
