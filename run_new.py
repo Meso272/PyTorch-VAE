@@ -84,7 +84,7 @@ if __name__=='__main__':
                  num_sanity_val_steps=5,
                  checkpoint_callback=True,
                  callbacks=checkpoint_callback,
-                 accelerator=args.acc,
+                 accelerator=args.accelerator,
                  **config['trainer_params'])
 
     print(f"======= Training {config['model_params']['name']} =======")
