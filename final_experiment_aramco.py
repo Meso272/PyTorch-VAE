@@ -51,8 +51,7 @@ for j,idx in enumerate(idxrange):
         filename="aramco-snapshot-%d.f32" % idx
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb*coeff
-        if latent_eb<1e-3 and latent_eb>0:
-            latent_eb=1e-3
+        
         if(compress_mode!=2 or i==0):
             if compress_mode!=5:
                 comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -mx 0.0386 -mi -0.0512 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
