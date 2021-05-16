@@ -80,9 +80,10 @@ for j,idx in enumerate(idxrange):
                             try:
 
                                 lines=f.read().splitlines()
+                                print(lines)
                                 latent_cr=eval(lines[7].split("=")[-1])
                             except:
-                                print(lines)
+                                
                                 latent_cr=0
                         os.system("rm -f %s_t2.5.txt" % pid)
                         os.system("rm -f %s*sz3*")
