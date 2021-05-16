@@ -347,8 +347,8 @@ class SWAE(BaseVAE):
         z = args[2]
 
         batch_size = input.size(0)
-        #bias_corr = batch_size *  (batch_size - 1)
-        bias_corr=1
+        bias_corr = batch_size *  (batch_size - 1)
+        #bias_corr=1
         reg_weight = self.reg_weight / bias_corr
 
         recons_loss_l2 = F.mse_loss(recons, input)
@@ -357,10 +357,7 @@ class SWAE(BaseVAE):
         swd_loss = self.compute_swd(z, self.p, reg_weight)
 
         loss = recons_loss_l2 + recons_loss_l1 + swd_loss
-        print("rloss")
-        print((recons_loss_l2 + recons_loss_l1).detach().cpu().numpy())
-        print("sloss")
-        print(swd_loss.detach().cpu().numpy())
+        
         return {'loss': loss, 'Reconstruction_Loss':(recons_loss_l2 + recons_loss_l1), 'SWD': swd_loss}
 
     def get_random_projections(self, latent_dim: int, num_samples: int) -> Tensor:
