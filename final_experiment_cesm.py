@@ -87,6 +87,7 @@ for j,idx in enumerate(idxrange):
                                 latent_cr=0
                         os.system("rm -f %s_t2.5.txt" % pid)
                         os.system("rm -f %s*sz3*")
+                        print(latent_cr)
                         if latent_cr==0:
                             latent_cr=1
                     data[i+1][j+1][0]=latent_cr
