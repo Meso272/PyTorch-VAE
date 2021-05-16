@@ -71,7 +71,7 @@ for j,idx in enumerate(idxrange):
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
                     latent_cr=eval(f.read().splitlines()[-1])
-                    if latent_cr==0:
+                    if latent_cr<=1:
                         comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
                         os.system(comm)
                         with open("%s_t2.5.txt" % pid,"r") as f:
