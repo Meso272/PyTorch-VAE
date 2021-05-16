@@ -20,9 +20,9 @@ if len(sys.argv)>=9:
     else:
         preset_latent_rate=float(sys.argv[8])
 print(eps)
-ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2]
-#ebs=[i*1e-4 for i in range(1,10)]#+[i*1e-3 for i in range(1,10)]
+ebs=[i*1e-4 for i in range(1,10)]#+[i*1e-3 for i in range(1,10)]
 idxrange=[x for x in range(1510,1600,10)]+[1599]
 #idxrange=[1520,1540]
 datafolder="/home/jliu447/lossycompression/aramco" 
