@@ -19,6 +19,11 @@ if __name__=='__main__':
                     metavar='FILE',
                     help =  'path to the config file',
                     default='configs/vae.yaml')
+    parser.add_argument('--acc',  '-a',
+                    dest="accelerator",
+                    metavar='ACC',
+                    help =  'accelerator',
+                    default='ddp')
 
     args = parser.parse_args()
     with open(args.filename, 'r') as file:
@@ -79,7 +84,7 @@ if __name__=='__main__':
                  num_sanity_val_steps=5,
                  checkpoint_callback=True,
                  callbacks=checkpoint_callback,
-                 accelerator='ddp',
+                 accelerator=args.acc,
                  **config['trainer_params'])
 
     print(f"======= Training {config['model_params']['name']} =======")

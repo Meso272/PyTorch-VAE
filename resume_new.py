@@ -23,6 +23,11 @@ if __name__=='__main__':
                     metavar='FILE',
                     help =  'path to the checkpoint file',
                     )
+    parser.add_argument('--acc',  '-a',
+                    dest="accelerator",
+                    metavar='ACC',
+                    help =  'accelerator',
+                    default='ddp')
     args = parser.parse_args()
     with open(args.filename, 'r') as file:
         try:
@@ -79,7 +84,7 @@ if __name__=='__main__':
                  #early_stop_callback = False,
                  checkpoint_callback=True,
                  callbacks=checkpoint_callback,
-                 accelerator='ddp',
+                 accelerator=args.acc,
                  **config['trainer_params'])
 
     print(f"======= Training {config['model_params']['name']} =======")
