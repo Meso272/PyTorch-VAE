@@ -18,8 +18,8 @@ if len(sys.argv)>=9:
         sz3_bs=int(sys.argv[8])
     else:
         preset_latent_rate=float(sys.argv[8])
-#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[1e-2]
+ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[1e-2]
 #ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]
 idxrange=[x for x in range(300,352)]
 
