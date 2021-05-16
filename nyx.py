@@ -46,7 +46,7 @@ class NYX(Dataset):
                         picts.append(pict)
         #print(count)
         self.picts=np.array(picts,dtype=np.float32)
-        #print(self.picts.shape[0])
+        print(self.picts.shape[0])
 
         
     def __len__(self):
