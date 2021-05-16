@@ -356,6 +356,8 @@ class SWAE(BaseVAE):
         swd_loss = self.compute_swd(z, self.p, reg_weight)
 
         loss = recons_loss_l2 + recons_loss_l1 + swd_loss
+        print("rloss: %f" % recons_loss_l2 + recons_loss_l1)
+        print("sloss: %f" % swd_loss)
         return {'loss': loss, 'Reconstruction_Loss':(recons_loss_l2 + recons_loss_l1), 'SWD': swd_loss}
 
     def get_random_projections(self, latent_dim: int, num_samples: int) -> Tensor:
