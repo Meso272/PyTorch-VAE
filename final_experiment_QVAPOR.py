@@ -19,9 +19,9 @@ if len(sys.argv)>=9:
     else:
         preset_latent_rate=float(sys.argv[8])
 print(eps)
-ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
 #ebs=[1e-2]
-#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]
+ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]
 idxrange=[x for x in range(41,49)]
 #idxrange=[41,42]
 datafolder="/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang" 
@@ -50,8 +50,7 @@ for j,idx in enumerate(idxrange):
         filename="QVAPORf%d.bin" % idx
         filepath=os.path.join(datafolder,filename)
         latent_eb=eb*coeff
-        if latent_eb<1e-3 and latent_eb>0:
-            latent_eb=1e-3
+        
         if(compress_mode!=2 or i==0):
             if compress_mode!=5:
                 comm="python3 predict.py -c %s -k %s -i %s -d 3 -e %f -l %sl.dat -r %sr.dat -s %d -p 1 -x 100 -y 500 -z 500 -mx 0.02368359 -mi 0 -eps %f >%s_t1.txt" % (configpath,ckptpath,filepath,latent_eb,pid,pid,blocksize,eps,pid)
@@ -70,18 +69,20 @@ for j,idx in enumerate(idxrange):
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
                     latent_cr=eval(f.read().splitlines()[-1])
-                    if latent_cr==0:
+                    if latent_cr<=1:
                         comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
                         os.system(comm)
                         with open("%s_t2.5.txt" % pid,"r") as f:
                             try:
                                 lines=f.read().splitlines()
+                                print(lines)
                                 latent_cr=eval(lines[7].split("=")[-1])
                             except:
                                 latent_cr=0
+                        print(latent_cr)
                         os.system("rm -f %s_t2.5.txt" % pid)
                         os.system("rm -f %s*sz3*")
-                        if latent_cr==0:
+                        if latent_cr<=1:
                             latent_cr=1
                     data[i+1][j+1][0]=latent_cr
                 os.system("rm -f %s_t2.txt" % pid)
