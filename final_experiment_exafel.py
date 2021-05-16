@@ -77,6 +77,7 @@ for j,idx in enumerate(idxrange):
                             except:
 
                                 latent_cr=0
+                        print(latent_cr)
                         os.system("rm -f %s_t2.5.txt" % pid)
                         os.system("rm -f %s*sz3*")
                         if latent_cr==0:
