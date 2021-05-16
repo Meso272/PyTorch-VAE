@@ -1,4 +1,4 @@
-pythoimport os
+import os
 import sys
 import numpy as np
 configpath=sys.argv[1]
