@@ -1,4 +1,4 @@
-import os
+pythoimport os
 import sys
 import numpy as np
 configpath=sys.argv[1]
@@ -66,7 +66,7 @@ for j,idx in enumerate(idxrange):
                 os.system(comm)
                 with open("%s_t2.txt" % pid,"r") as f:
                     latent_cr=eval(f.read().splitlines()[-1])
-                    if latent_cr==0:
+                    if latent_cr<=1:
                         comm="sz_demo %sl.dat -1 %d %f %d 0 1 &>%s_t2.5.txt"% (pid,latent_nbele,latent_eb,latent_nbele,pid)
                         os.system(comm)
                         with open("%s_t2.5.txt" % pid,"r") as f:
@@ -74,6 +74,7 @@ for j,idx in enumerate(idxrange):
                                 lines=f.read().splitlines()
                                 latent_cr=eval(lines[7].split("=")[-1])
                             except:
+                                print(lines)
                                 latent_cr=0
                         os.system("rm -f %s_t2.5.txt" % pid)
                         os.system("rm -f %s*sz3*")
