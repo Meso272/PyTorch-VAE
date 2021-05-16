@@ -38,7 +38,7 @@ class VAEXperiment(pl.LightningModule):
     def forward(self, input: Tensor, **kwargs) -> Tensor:
         return self.model(input, **kwargs)
 
-    def training_step(self, batch, batch_idx, optimizer_idx = 0):
+    def training_step(self, batch, batch_idx, optimizer_idx = 0,scalar=True):
         real_img, labels = batch
         self.curr_device = real_img.device
 
@@ -51,7 +51,10 @@ class VAEXperiment(pl.LightningModule):
             self.logger.experiment.log({key: val.item() for key, val in train_loss.items()})
         except:
             pass
-        return train_loss
+        if scalar:
+            return train_loss['loss']
+        else:
+            return train_loss
 
     def validation_step(self, batch, batch_idx, optimizer_idx = 0):
         real_img, labels = batch
