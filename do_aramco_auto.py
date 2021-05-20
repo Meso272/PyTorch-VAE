@@ -3,8 +3,8 @@ import numpy as np
 
 datafolder="/home/jliu447/lossycompression/aramco"
 
-#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
-ebs=[1e-3,1e-2]
+ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[1e-3,1e-2]
 cr=np.zeros((29,11),dtype=np.float32)
 psnr=np.zeros((29,11),dtype=np.float32)
 ctime=np.zeros((29,11),dtype=np.float32)
@@ -40,7 +40,7 @@ for i,eb in enumerate(ebs):
             cr[i+1][y_index]=r
             psnr[i+1][y_index]=p
             ctime[i+1][y_index]=ct
-            ctime[i+1][y_index]=dt
+            dtime[i+1][y_index]=dt
 
         
         os.system("rm -f auto_aramco.txt")
