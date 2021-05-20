@@ -33,7 +33,7 @@ for i,eb in enumerate(ebs):
             print(lines[-10])
             p=eval(lines[-2].split(',')[4].split(':')[-1])
             
-            r=eval(lines[-2].split(',')[1].split(':')[-1])
+            r=eval(lines[-2].split(',')[1].split(' ')[-1])
             ct=eval(lines[-2].split(',')[2].split(':')[-1])
             dt=eval(lines[-10].split(':')[-1].split('s')[0])
             
