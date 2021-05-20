@@ -29,13 +29,13 @@ for i,eb in enumerate(ebs):
        
         with open("auto_aramco.txt","r") as f:
             lines=f.read().splitlines()
-            print(lines[-1])
-            print(lines[-9])
-            p=eval(lines[-1].split(',')[4].split(':')[-1])
+            print(lines[-2])
+            print(lines[-10])
+            p=eval(lines[-2].split(',')[4].split(':')[-1])
             
-            r=eval(lines[-1].split(',')[1].split(':')[-1])
-            ct=eval(lines[-1].split(',')[2].split(':')[-1])
-            dt=eval(lines[-9].split(':')[-1].split('s')[0])
+            r=eval(lines[-2].split(',')[1].split(':')[-1])
+            ct=eval(lines[-2].split(',')[2].split(':')[-1])
+            dt=eval(lines[-10].split(':')[-1].split('s')[0])
             
             cr[i+1][y_index]=r
             psnr[i+1][y_index]=p
