@@ -252,7 +252,7 @@ if args.gpu:
     torch.cuda.empty_cache()
 
 if error_bound>0 or args.split>0:
-    #start=time.clock()
+    start=time.clock()
     if error_bound>0:
         ql,dl=compress(latents,error_bound)
         if args.transpose:
@@ -266,7 +266,7 @@ if error_bound>0 or args.split>0:
             dl=dl.reshape((latent_size,-1)).transpose()
         else:
             dl=dl.reshape((-1,latent_size))
-    #totaltime+=time.clock()-start
+    
     with torch.no_grad():
     
         if args.gpu:
@@ -291,6 +291,7 @@ if error_bound>0 or args.split>0:
         else:
             
             predict=test.decode(torch.from_numpy(dl)).detach().numpy()
+    totaltime+=time.clock()-start
 
 
 
