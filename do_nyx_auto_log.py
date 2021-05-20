@@ -40,7 +40,7 @@ for i,eb in enumerate(ebs):
 
 
         
-        os.system("rm -f auto_%s.txt" %)
+        os.system("rm -f auto_%s.txt" % field)
 
 
 np.savetxt("autores/sz_nyxlog10_cr.txt",cr,delimiter='\t')
