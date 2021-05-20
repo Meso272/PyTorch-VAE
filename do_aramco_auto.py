@@ -44,7 +44,7 @@ for i,eb in enumerate(ebs):
         os.system("rm -f auto_aramco.txt")
 
 
-np.savetxt("sz_aramco_cr.txt",cr,delimiter='\t')
-np.savetxt("sz_aramco_psnr.txt",psnr,delimiter='\t')
-np.savetxt("sz_aramco_ctime.txt",ctime,delimiter='\t')
-np.savetxt("sz_aramco_dtime.txt",dtime,delimiter='\t')
+np.savetxt("autores/sz_aramco_cr.txt",cr,delimiter='\t')
+np.savetxt("autores/sz_aramco_psnr.txt",psnr,delimiter='\t')
+np.savetxt("autores/sz_aramco_ctime.txt",ctime,delimiter='\t')
+np.savetxt("autores/sz_aramco_dtime.txt",dtime,delimiter='\t')
