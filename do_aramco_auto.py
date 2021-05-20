@@ -29,6 +29,8 @@ for i,eb in enumerate(ebs):
        
         with open("auto_aramco.txt","r") as f:
             lines=f.read().splitlines()
+            print(lines[-1])
+            print(lines[-9])
             p=eval(lines[-1].split(',')[4].split(':')[-1])
             
             r=eval(lines[-1].split(',')[1].split(':')[-1])
