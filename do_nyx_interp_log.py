@@ -44,4 +44,4 @@ for i,eb in enumerate(ebs):
 np.savetxt("interpres/sz_nyxlog10_cr.txt",cr,delimiter='\t')
 np.savetxt("interpres/sz_nyxlog10_psnr.txt",psnr,delimiter='\t')
 np.savetxt("interpres/sz_nyxlog10_ctime.txt",ctime,delimiter='\t')
-np.savetxt("interpres/sz_nyxlog10_dtime.txt",ctime,delimiter='\t')
+np.savetxt("interpres/sz_nyxlog10_dtime.txt",dtime,delimiter='\t')
