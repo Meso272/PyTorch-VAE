@@ -29,13 +29,11 @@ for i,eb in enumerate(ebs):
         os.system(comm)
         with open("interp_%s.txt" % field,"r") as f:
             lines=f.read().splitlines()
-            print(lines[-2])
-            print(lines[-10])
-            p=eval(lines[-2].split(',')[4].split(':')[-1])
+            p=eval(lines[-3].split(',')[0].split('=')[-1])
             
-            r=eval(lines[-2].split(',')[1].split(' ')[-1])
-            ct=eval(lines[-2].split(',')[2].split(':')[-1])
-            dt=eval(lines[-10].split(':')[-1].split('s')[0])
+            r=eval(lines[-3].split(',')[-1].split('=')[-1])
+            ct=eval(lines[-2].split('=')[-1])
+            dt=eval(lines[-1].split('=')[-1])
             
             
             cr[i+1][j-40]=r
