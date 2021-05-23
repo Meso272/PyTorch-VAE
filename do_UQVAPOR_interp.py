@@ -4,7 +4,8 @@ import sys
 
 datafolder="/home/jliu447/lossycompression/Hurricane/clean-data-Jinyang"
 
-ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+#ebs=[i*1e-4 for i in range(1,10)]+[i*1e-3 for i in range(1,10)]+[i*1e-2 for i in range(1,11)]
+ebs=[1e-3]
 field=sys.argv[1]
 #fields=["CLOUD","PRECIP","QGRAUP","QRAIN","QVAPOR","U","W","P","QCLOUD","QICE","QSNOW","TC","V"]
 
